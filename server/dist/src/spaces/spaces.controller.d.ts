@@ -30,9 +30,9 @@ export declare class SpacesController {
             };
         } & {
             id: string;
-            space_id: string;
             role: string;
             user_id: string;
+            space_id: string;
             joined_at: Date;
         })[];
     } & {
@@ -49,9 +49,9 @@ export declare class SpacesController {
     } | null>;
     invite(id: string, email: string, req: any): Promise<{
         id: string;
-        space_id: string;
         role: string;
         user_id: string;
+        space_id: string;
         joined_at: Date;
     }>;
     update(id: string, updateSpaceDto: UpdateSpaceDto, req: any): Promise<{

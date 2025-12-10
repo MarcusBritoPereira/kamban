@@ -33,7 +33,8 @@ export class CreateSpaceDialogComponent {
         error: (err) => {
           console.error(err);
           this.isSubmitting = false;
-          alert('Erro ao criar espaço.');
+          const msg = err.error?.message || err.message || 'Erro desconhecido';
+          alert(`Erro ao criar espaço: ${msg} (${err.status})`);
         }
       });
     }

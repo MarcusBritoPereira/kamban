@@ -26,6 +26,7 @@ import {
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('v1/spaces')
 export class SpacesController {
+
   constructor(
     private readonly spacesService: SpacesService,
     private readonly permissionsService: PermissionsService,
