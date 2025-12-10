@@ -1,0 +1,116 @@
+<div class="p-8 h-full overflow-y-auto bg-gray-50 text-gray-900 font-sans">
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800 flex items-center tracking-tight">
+            <span class="mr-3 bg-purple-100 p-2 rounded-lg text-2xl">👥</span> Gerenciamento de Pessoas
+        </h1>
+
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr
+                            class="bg-gray-50 border-b border-gray-200 text-gray-500 text-xs font-semibold uppercase tracking-wider">
+                            <th class="px-6 py-4">Usuário</th>
+                            <th class="px-6 py-4">Email</th>
+                            <th class="px-6 py-4">Função</th>
+                            <th class="px-6 py-4">Última Atividade</th>
+                            <th class="px-6 py-4 text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                        <tr *ngFor="let user of paginatedUsers()"
+                            class="group hover:bg-gray-50 transition-colors duration-150">
+                            <td class="px-6 py-4">
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-9 h-9 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mr-3 text-sm font-bold text-white shadow-sm ring-2 ring-white">
+                                        {{ user.name.charAt(0).toUpperCase() }}
+                                    </div>
+                                    <span
+                                        class="font-medium text-gray-900 group-hover:text-purple-700 transition-colors">{{
+                                        user.name }}</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-gray-500 text-sm">{{ user.email }}</td>
+                            <td class="px-6 py-4">
+                                <!-- Display Mode -->
+                                <span *ngIf="editingUserId() !== user.id"
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border shadow-sm"
+                                    [ngClass]="{
+                                        'bg-purple-50 text-purple-700 border-purple-200': user.role === 'admin',
+                                        'bg-blue-50 text-blue-700 border-blue-200': user.role === 'gestor',
+                                        'bg-gray-50 text-gray-600 border-gray-200': user.role === 'editor'
+                                    }">
+                                    {{ user.role }}
+                                </span>
+
+                                <!-- Edit Mode -->
+                                <div *ngIf="editingUserId() === user.id"
+                                    class="flex items-center space-x-2 animate-fadeIn">
+                                    <select [(ngModel)]="selectedRole"
+                                        class="bg-white border border-gray-300 rounded-md px-2 py-1 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent shadow-sm">
+                                        <option value="admin">Admin</option>
+                                        <option value="gestor">Gestor</option>
+                                        <option value="editor">Editor</option>
+                                    </select>
+                                    <button (click)="saveRole(user.id)"
+                                        class="text-green-600 hover:text-green-700 hover:bg-green-50 rounded p-1 transition-colors">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button (click)="cancelEditRole()"
+                                        class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded p-1 transition-colors">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 text-gray-500 text-sm">
+                                {{ user.last_active_at ? (user.last_active_at | date:'dd/MM/yy HH:mm') : 'Nunca' }}
+                            </td>
+                            <td class="px-6 py-4 text-right space-x-2">
+                                <button *ngIf="editingUserId() !== user.id" (click)="startEditRole(user)"
+                                    class="text-gray-400 hover:text-purple-600 transition-colors p-1.5 rounded-md hover:bg-purple-50"
+                                    title="Editar Função">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button (click)="deleteUser(user.id)"
+                                    class="text-gray-400 hover:text-red-600 transition-colors p-1.5 rounded-md hover:bg-red-50"
+                                    title="Excluir Usuário">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr *ngIf="users().length === 0 && !isLoading()">
+                            <td colspan="5"
+                                class="py-12 text-center text-gray-400 flex flex-col items-center justify-center">
+                                <i class="far fa-folder-open text-4xl mb-3 text-gray-300"></i>
+                                <span class="text-sm font-medium">Nenhum usuário encontrado.</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Footer -->
+            <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between"
+                *ngIf="totalPages() > 1">
+                <span class="text-sm text-gray-500">
+                    Página <span class="font-medium text-gray-700">{{ currentPage() }}</span> de <span
+                        class="font-medium text-gray-700">{{ totalPages() }}</span>
+                    <span class="mx-2 text-gray-300">|</span>
+                    Total de <span class="font-medium text-gray-700">{{ users().length }}</span> usuários
+                </span>
+                <div class="flex space-x-2">
+                    <button (click)="prevPage()" [disabled]="currentPage() === 1"
+                        class="px-3 py-1.5 bg-white border border-gray-300 text-gray-600 text-sm font-medium rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm">
+                        <i class="fas fa-chevron-left mr-1"></i> Anterior
+                    </button>
+                    <button (click)="nextPage()" [disabled]="currentPage() === totalPages()"
+                        class="px-3 py-1.5 bg-white border border-gray-300 text-gray-600 text-sm font-medium rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm">
+                        Próxima <i class="fas fa-chevron-right ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

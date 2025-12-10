@@ -1,0 +1,45 @@
+<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 h-full flex flex-col">
+    <div class="flex justify-between items-center mb-6 px-2">
+        <h2 class="text-xl font-bold text-gray-800 capitalize flex items-center">
+            <i class="far fa-calendar-alt mr-2 text-gray-400"></i>
+            {{ currentMonth | date:'MMMM yyyy':'':'pt-BR' }}
+        </h2>
+        <div class="flex space-x-2">
+            <button (click)="prevMonth()" class="text-gray-500 hover:text-gray-800 p-1 transition-colors"><i
+                    class="fas fa-chevron-left"></i></button>
+            <button (click)="nextMonth()" class="text-gray-500 hover:text-gray-800 p-1 transition-colors"><i
+                    class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+
+    <div cdkDropListGroup
+        class="grid grid-cols-7 gap-px bg-gray-200 border border-gray-200 rounded-lg overflow-hidden flex-1">
+        <!-- Week Header -->
+        <div *ngFor="let day of weekDays" class="bg-gray-50 p-2 text-center text-xs font-bold text-gray-500 uppercase">
+            {{ day }}
+        </div>
+
+        <!-- Days -->
+        <div *ngFor="let day of daysInMonth" cdkDropList [cdkDropListData]="day"
+            [cdkDropListDisabled]="day && isPastDate(day)" (cdkDropListDropped)="drop($event)"
+            class="bg-white min-h-[100px] p-2 hover:bg-gray-50 transition-colors relative group"
+            [ngClass]="{'bg-gray-50/50': !day, 'bg-gray-100 opacity-60': day && isPastDate(day)}">
+
+            <span *ngIf="day" class="text-sm font-medium text-gray-700 block mb-2">{{ day | date:'d' }}</span>
+
+            <div *ngIf="day" class="space-y-1">
+                <div *ngFor="let task of getTasksForDay(day)" cdkDrag [cdkDragData]="task"
+                    class="text-[10px] px-2 py-1 rounded bg-blue-100 text-blue-700 truncate border border-blue-200 hover:border-blue-300 cursor-pointer transition-colors shadow-sm cursor-move select-none"
+                    title="{{ task.title }}" (click)="taskClick.emit(task); $event.stopPropagation()">
+                    {{ task.title }}
+                </div>
+            </div>
+
+            <!-- Add Button on Hover -->
+            <button *ngIf="day && !isPastDate(day)"
+                class="absolute bottom-2 right-2 text-gray-400 hover:text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                <i class="fas fa-plus"></i>
+            </button>
+        </div>
+    </div>
+</div>

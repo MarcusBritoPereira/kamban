@@ -1,0 +1,88 @@
+<div class="h-full overflow-y-auto custom-scrollbar p-6">
+    <!-- Group by Status Loops (Hardcoded for MVP common statuses or dynamic?) -->
+    <!-- Let's iterate tasks directly for now, maybe add grouping later to keep it simple and robust -->
+
+    <!-- Table Header -->
+    <div
+        class="grid grid-cols-12 gap-4 px-4 py-2 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider sticky top-0 bg-white z-10 shadow-sm">
+        <div class="col-span-6">Nome</div>
+        <div class="col-span-2">Responsável</div>
+        <div class="col-span-2">Data de vencimento</div>
+        <div class="col-span-1">Prioridade</div>
+        <div class="col-span-1 text-right"><i
+                class="fas fa-plus cursor-pointer hover:text-gray-900 transition-colors"></i></div>
+    </div>
+
+    <!-- Task Rows -->
+    <div class="divide-y divide-gray-100">
+        <div *ngFor="let task of tasks" (click)="onTaskClick(task)"
+            class="grid grid-cols-12 gap-4 px-4 py-3 hover:bg-gray-50 transition-colors group items-center bg-white border-b border-gray-50 last:border-0 cursor-pointer">
+
+            <!-- Name Column -->
+            <div class="col-span-6 flex items-center min-w-0">
+                <button class="mr-3 text-gray-400 hover:text-green-500 transition-colors">
+                    <i class="far fa-check-circle text-lg"></i>
+                </button>
+                <div class="truncate text-sm text-gray-700 font-medium group-hover:text-gray-900 transition-colors">{{
+                    task.title }}</div>
+                <!-- Icons/Tags mock -->
+                <i *ngIf="task.description" class="fas fa-align-left text-gray-400 text-xs ml-2"></i>
+            </div>
+
+            <!-- Assignee -->
+            <div class="col-span-2 flex -space-x-2">
+                <div *ngIf="task.assignees?.length === 0" class="text-gray-400 text-sm italic">--</div>
+                <div *ngFor="let assignee of task.assignees"
+                    class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-[10px] text-blue-800 ring-2 ring-white font-bold"
+                    title="{{assignee.user.name}}">
+                    {{ assignee.user.name.charAt(0) }}
+                </div>
+            </div>
+
+            <!-- Due Date -->
+            <div class="col-span-2 text-sm">
+                <span *ngIf="task.deadline"
+                    [ngClass]="{'text-red-500 font-medium bg-red-50 px-2 py-0.5 rounded': isOverdue(task.deadline), 'text-gray-600': !isOverdue(task.deadline)}"
+                    class="">
+                    {{ task.deadline | date:'dd/MM/yy' }}
+                </span>
+                <span *ngIf="!task.deadline" class="text-gray-400 italic">--</span>
+            </div>
+
+            <!-- Priority -->
+            <div class="col-span-1 flex items-center space-x-2">
+                <i class="fas fa-flag text-xs" [ngClass]="{
+                    'text-red-600': task.priority === 'urgent',
+                    'text-orange-500': task.priority === 'high',
+                    'text-yellow-500': task.priority === 'medium',
+                    'text-blue-400': task.priority === 'low',
+                    'text-gray-300': !task.priority
+                }"></i>
+                <span class="text-xs text-gray-600 capitalize">
+                    {{ task.priority === 'low' ? 'Baixa' :
+                    task.priority === 'medium' ? 'Média' :
+                    task.priority === 'high' ? 'Alta' :
+                    task.priority === 'urgent' ? 'Urgente' : 'Normal' }}
+                </span>
+            </div>
+
+            <!-- Actions -->
+            <div class="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+                <button class="text-gray-400 hover:text-gray-600 transition-colors"><i
+                        class="fas fa-ellipsis-h"></i></button>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="tasks.length === 0" class="px-4 py-12 text-center text-gray-400 text-sm">
+            <div class="mb-2 text-2xl">📝</div>
+            Nenhuma tarefa nesta lista.
+        </div>
+
+        <!-- Add Task Row Stub -->
+        <div
+            class="px-4 py-3 flex items-center text-gray-500 hover:text-gray-800 cursor-pointer hover:bg-gray-50 transition-colors border-t border-gray-100">
+            <i class="fas fa-plus mr-3"></i> Adicionar Tarefa
+        </div>
+    </div>
+</div>

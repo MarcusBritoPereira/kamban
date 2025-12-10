@@ -1,0 +1,2 @@
+<router-outlet />
+<app-create-space-dialog *ngIf="dataService.createSpaceDialogVisible()" (close)="dataService.createSpaceDialogVisible.set(false)" />

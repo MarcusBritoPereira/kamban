@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  admin
+  gestor
+  editor
+  leitor
+}
+
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  password_hash String
+  role          Role
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  last_active_at DateTime @default(now())
+
+  task_assignees TaskAssignee[]
+  spaces         Space[]      @relation("UserSpaces")
+  member_of      SpaceMember[]
+
+  @@map("users")
+}
+
+model Space {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  owner_id    String
+  
+  owner       User     @relation("UserSpaces", fields: [owner_id], references: [id])
+  folders     Folder[]
+  tags        Tag[]
+  members     SpaceMember[]
+
+  @@map("spaces")
+}
+
+model SpaceMember {
+  id        String   @id @default(uuid())
+  space_id  String
+  user_id   String
+  role      String   @default("editor")
+  joined_at DateTime @default(now())
+
+  space     Space    @relation(fields: [space_id], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([space_id, user_id])
+  @@map("space_members")
+}
+
+model Folder {
+  id          String   @id @default(uuid())
+  space_id    String
+  name        String
+  description String?
+
+  space       Space    @relation(fields: [space_id], references: [id], onDelete: Cascade)
+  lists       List[]
+
+  @@map("folders")
+}
+
+model List {
+  id        String   @id @default(uuid())
+  folder_id String
+  name      String
+
+  folder    Folder   @relation(fields: [folder_id], references: [id], onDelete: Cascade)
+  tasks     Task[]
+
+  @@map("lists")
+}
+
+model Task {
+  id          String    @id @default(uuid())
+  list_id     String
+  title       String
+  description String?
+  deadline    DateTime?
+  status      String    
+  priority    String?   @default("medium")
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  list        List      @relation(fields: [list_id], references: [id], onDelete: Cascade)
+  assignees   TaskAssignee[]
+  tags        TaskTag[]
+  attachments Attachment[]
+
+  @@map("tasks")
+}
+
+model TaskAssignee {
+  task_id String
+  user_id String
+
+  task    Task   @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@id([task_id, user_id])
+  @@map("task_assignees")
+}
+
+model Tag {
+  id       String    @id @default(uuid())
+  space_id String?   
+  name     String
+  color    String
+
+  space    Space?     @relation(fields: [space_id], references: [id])
+  tasks    TaskTag[]
+
+  @@map("tags")
+}
+
+model TaskTag {
+  task_id String
+  tag_id  String
+
+  task    Task @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  tag     Tag  @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+
+  @@id([task_id, tag_id])
+  @@map("task_tags")
+}
+
+model Attachment {
+  id          String   @id @default(uuid())
+  task_id     String
+  file_url    String
+  file_name   String
+  file_type   String
+  uploaded_by String? 
+
+  task        Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
+
+  @@map("attachments")
+}

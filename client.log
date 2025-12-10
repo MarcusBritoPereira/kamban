@@ -1,0 +1,883 @@
+
+> client@0.0.0 start
+> ng serve
+
+- Building...
+
+Initial chunk files | Names                      |  Raw size
+polyfills.js        | polyfills                  |  88.09 kB | 
+main.js             | main                       |  53.78 kB | 
+styles.css          | styles                     |  37.45 kB | 
+chunk-PHRM37T2.js   | -                          |  16.05 kB | 
+chunk-QCTZSG3L.js   | -                          |   5.23 kB | 
+chunk-CK6Q4KCE.js   | -                          |   4.89 kB | 
+chunk-SHAOKUVO.js   | -                          | 938 bytes | 
+
+                    | Initial total              | 206.40 kB
+
+Lazy chunk files    | Names                      |  Raw size
+chunk-7K3C2OIV.js   | task-list-view-component   |  47.20 kB | 
+chunk-HYSYYBD7.js   | user-management-component  |  12.10 kB | 
+chunk-VNYWMPCH.js   | spaces-dashboard-component |   8.43 kB | 
+chunk-66XXZ5LP.js   | settings-component         |   5.92 kB | 
+chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
+
+Application bundle generation complete. [1.452 seconds]
+
+Watch mode enabled. Watching for file changes...
+  ➜  Local:   http://localhost:4200/
+  ➜  press h + enter to show help
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                    | Raw size
+main.js             | main                     | 53.78 kB | 
+chunk-RHGD4YPO.js   | -                        | 16.16 kB | 
+
+Lazy chunk files    | Names                    | Raw size
+chunk-Q2PRDGKN.js   | task-list-view-component | 47.20 kB | 
+
+Application bundle generation complete. [0.574 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                    | Raw size
+main.js             | main                     | 53.78 kB | 
+chunk-A7GNFRNL.js   | -                        | 16.18 kB | 
+
+Lazy chunk files    | Names                    | Raw size
+chunk-BJ2ZQD6Q.js   | task-list-view-component | 47.20 kB | 
+
+Application bundle generation complete. [0.243 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                    | Raw size
+main.js             | main                     | 53.78 kB | 
+chunk-33OABQIS.js   | -                        | 16.14 kB | 
+
+Lazy chunk files    | Names                    | Raw size
+chunk-CX6GZWE6.js   | task-list-view-component | 47.20 kB | 
+
+Application bundle generation complete. [0.349 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Application bundle generation failed. [0.406 seconds]
+
+✘ [ERROR] TS2304: Cannot find name 'Output'. [plugin angular-compiler]
+
+    src/app/components/task-table/task-table.component.ts:13:3:
+      13 │   @Output() taskClick = new EventEmitter<any>();
+         ╵    ~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'EventEmitter'. [plugin angular-compiler]
+
+    src/app/components/task-table/task-table.component.ts:13:28:
+      13 │   @Output() taskClick = new EventEmitter<any>();
+         ╵                             ~~~~~~~~~~~~
+
+
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                      |  Raw size
+polyfills.js        | polyfills                  |  88.09 kB | 
+main.js             | main                       |  53.78 kB | 
+styles.css          | styles                     |  37.45 kB | 
+chunk-33OABQIS.js   | -                          |  16.14 kB | 
+chunk-QCTZSG3L.js   | -                          |   5.23 kB | 
+chunk-CK6Q4KCE.js   | -                          |   4.89 kB | 
+chunk-SHAOKUVO.js   | -                          | 938 bytes | 
+
+                    | Initial total              | 206.48 kB
+
+Lazy chunk files    | Names                      |  Raw size
+chunk-VN66LEA7.js   | task-list-view-component   |  47.38 kB | 
+chunk-HYSYYBD7.js   | user-management-component  |  12.10 kB | 
+chunk-VNYWMPCH.js   | spaces-dashboard-component |   8.43 kB | 
+chunk-66XXZ5LP.js   | settings-component         |   5.92 kB | 
+chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
+
+Application bundle generation complete. [0.234 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                    | Raw size
+main.js             | main                     | 53.78 kB | 
+
+Lazy chunk files    | Names                    | Raw size
+chunk-XEXOM552.js   | task-list-view-component | 47.82 kB | 
+
+Application bundle generation complete. [0.096 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Application bundle generation failed. [0.343 seconds]
+
+✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:12:24:
+      12 │       <div [formGroup]="taskForm" class="bg-brand-dark w-full max-...
+         ╵                         ~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:125:37:
+      125 │ ...                 <div *ngIf="files.length > 0" class="mt-4 spa...
+          ╵                                 ~~~~~
+
+
+✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:126:53:
+      126 │ ...    <div *ngFor="let file of files" class="flex items-center j...
+          ╵                                 ~~~~~
+
+
+✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:33:
+      146 │                      [disabled]="taskForm.invalid || isSubmitting"
+          ╵                                  ~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:53:
+      146 │                      [disabled]="taskForm.invalid || isSubmitting"
+          ╵                                                      ~~~~~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:148:24:
+      148 │                      {{ isSubmitting ? 'Criando...' : 'Criar Tare...
+          ╵                         ~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:191:17:
+      191 │             this.taskForm.patchValue({
+          ╵                  ~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:209:21:
+      209 │                 this.files.push(event.target.files[i]);
+          ╵                      ~~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:13:
+      215 │         this.files = this.files.filter(f => f !== file);
+          ╵              ~~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:26:
+      215 │         this.files = this.files.filter(f => f !== file);
+          ╵                           ~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'f' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:39:
+      215 │         this.files = this.files.filter(f => f !== file);
+          ╵                                        ^
+
+
+✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:219:17:
+      219 │         if (this.taskForm.valid) {
+          ╵                  ~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:220:17:
+      220 │             this.isSubmitting = true;
+          ╵                  ~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:223:35:
+      223 │             const formValue = this.taskForm.value;
+          ╵                                    ~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'dataService' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:232:17:
+      232 │             this.dataService.createTask(this.listId, taskData).su...
+          ╵                  ~~~~~~~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'task' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:233:23:
+      233 │                 next: (task) => {
+          ╵                        ~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:235:29:
+      235 │                     if (this.files.length > 0) {
+          ╵                              ~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:245:24:
+      245 │                 error: (err) => {
+          ╵                         ~~~
+
+
+✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:248:25:
+      248 │                     this.isSubmitting = false;
+          ╵                          ~~~~~~~~~~~~
+
+
+- Changes detected. Rebuilding...
+
+Application bundle generation failed. [0.247 seconds]
+
+✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:12:24:
+      12 │       <div [formGroup]="taskForm" class="bg-brand-dark w-full max-...
+         ╵                         ~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:125:37:
+      125 │ ...                 <div *ngIf="files.length > 0" class="mt-4 spa...
+          ╵                                 ~~~~~
+
+
+✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:126:53:
+      126 │ ...    <div *ngFor="let file of files" class="flex items-center j...
+          ╵                                 ~~~~~
+
+
+✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:33:
+      146 │                      [disabled]="taskForm.invalid || isSubmitting"
+          ╵                                  ~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:53:
+      146 │                      [disabled]="taskForm.invalid || isSubmitting"
+          ╵                                                      ~~~~~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:148:24:
+      148 │                      {{ isSubmitting ? 'Criando...' : 'Criar Tare...
+          ╵                         ~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:191:17:
+      191 │             this.taskForm.patchValue({
+          ╵                  ~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:209:21:
+      209 │                 this.files.push(event.target.files[i]);
+          ╵                      ~~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:13:
+      215 │         this.files = this.files.filter(f => f !== file);
+          ╵              ~~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:26:
+      215 │         this.files = this.files.filter(f => f !== file);
+          ╵                           ~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'f' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:39:
+      215 │         this.files = this.files.filter(f => f !== file);
+          ╵                                        ^
+
+
+✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:219:17:
+      219 │         if (this.taskForm.valid) {
+          ╵                  ~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:220:17:
+      220 │             this.isSubmitting = true;
+          ╵                  ~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:222:35:
+      222 │             const formValue = this.taskForm.value;
+          ╵                                    ~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'dataService' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:233:21:
+      233 │                 this.dataService.updateTask(this.task.id, taskDat...
+          ╵                      ~~~~~~~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'updatedTask' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:234:27:
+      234 │                     next: (updatedTask) => {
+          ╵                            ~~~~~~~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:239:28:
+      239 │                     error: (err) => {
+          ╵                             ~~~
+
+
+✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:242:29:
+      242 │                         this.isSubmitting = false;
+          ╵                              ~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'dataService' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:246:21:
+      246 │                 this.dataService.createTask(this.listId, taskData...
+          ╵                      ~~~~~~~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'task' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:247:27:
+      247 │                     next: (task) => {
+          ╵                            ~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:248:33:
+      248 │                         if (this.files.length > 0) {
+          ╵                                  ~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:254:28:
+      254 │                     error: (err) => {
+          ╵                             ~~~
+
+
+✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:257:29:
+      257 │                         this.isSubmitting = false;
+          ╵                              ~~~~~~~~~~~~
+
+
+- Changes detected. Rebuilding...
+
+Application bundle generation failed. [0.206 seconds]
+
+✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:12:24:
+      12 │       <div [formGroup]="taskForm" class="bg-brand-dark w-full max-...
+         ╵                         ~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:125:37:
+      125 │ ...                 <div *ngIf="files.length > 0" class="mt-4 spa...
+          ╵                                 ~~~~~
+
+
+✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:126:53:
+      126 │ ...    <div *ngFor="let file of files" class="flex items-center j...
+          ╵                                 ~~~~~
+
+
+✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:33:
+      146 │                      [disabled]="taskForm.invalid || isSubmitting"
+          ╵                                  ~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:53:
+      146 │                      [disabled]="taskForm.invalid || isSubmitting"
+          ╵                                                      ~~~~~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:148:25:
+      148 │                       {{ isSubmitting ? (task ? 'Salvando...' : '...
+          ╵                          ~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:191:17:
+      191 │             this.taskForm.patchValue({
+          ╵                  ~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:209:21:
+      209 │                 this.files.push(event.target.files[i]);
+          ╵                      ~~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:13:
+      215 │         this.files = this.files.filter(f => f !== file);
+          ╵              ~~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:26:
+      215 │         this.files = this.files.filter(f => f !== file);
+          ╵                           ~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'f' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:39:
+      215 │         this.files = this.files.filter(f => f !== file);
+          ╵                                        ^
+
+
+✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:219:17:
+      219 │         if (this.taskForm.valid) {
+          ╵                  ~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:220:17:
+      220 │             this.isSubmitting = true;
+          ╵                  ~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:222:35:
+      222 │             const formValue = this.taskForm.value;
+          ╵                                    ~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'dataService' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:233:21:
+      233 │                 this.dataService.updateTask(this.task.id, taskDat...
+          ╵                      ~~~~~~~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'updatedTask' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:234:27:
+      234 │                     next: (updatedTask) => {
+          ╵                            ~~~~~~~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:239:28:
+      239 │                     error: (err) => {
+          ╵                             ~~~
+
+
+✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:242:29:
+      242 │                         this.isSubmitting = false;
+          ╵                              ~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2339: Property 'dataService' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:246:21:
+      246 │                 this.dataService.createTask(this.listId, taskData...
+          ╵                      ~~~~~~~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'task' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:247:27:
+      247 │                     next: (task) => {
+          ╵                            ~~~~
+
+
+✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:248:33:
+      248 │                         if (this.files.length > 0) {
+          ╵                                  ~~~~~
+
+
+✘ [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:254:28:
+      254 │                     error: (err) => {
+          ╵                             ~~~
+
+
+✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+
+    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:257:29:
+      257 │                         this.isSubmitting = false;
+          ╵                              ~~~~~~~~~~~~
+
+
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                      |  Raw size
+polyfills.js        | polyfills                  |  88.09 kB | 
+main.js             | main                       |  53.78 kB | 
+styles.css          | styles                     |  37.45 kB | 
+chunk-TNWEZXXF.js   | -                          |  17.01 kB | 
+chunk-QCTZSG3L.js   | -                          |   5.23 kB | 
+chunk-CK6Q4KCE.js   | -                          |   4.89 kB | 
+chunk-SHAOKUVO.js   | -                          | 938 bytes | 
+
+                    | Initial total              | 207.35 kB
+
+Lazy chunk files    | Names                      |  Raw size
+chunk-G35TUVQB.js   | task-list-view-component   |  47.82 kB | 
+chunk-HYSYYBD7.js   | user-management-component  |  12.10 kB | 
+chunk-VNYWMPCH.js   | spaces-dashboard-component |   8.43 kB | 
+chunk-66XXZ5LP.js   | settings-component         |   5.92 kB | 
+chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
+
+Application bundle generation complete. [0.376 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                    | Raw size
+main.js             | main                     | 53.78 kB | 
+
+Lazy chunk files    | Names                    | Raw size
+chunk-VJ3BRID7.js   | task-list-view-component | 47.85 kB | 
+
+Application bundle generation complete. [0.263 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                    | Raw size
+main.js             | main                     | 53.78 kB | 
+
+Lazy chunk files    | Names                    | Raw size
+chunk-A6IDUUYM.js   | task-list-view-component | 47.88 kB | 
+
+Application bundle generation complete. [0.219 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Application bundle generation failed. [0.156 seconds]
+
+✘ [ERROR] NG9: Property 'onTaskSelected' does not exist on type 'TaskListViewComponent'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.html:88:84:
+      88 │ ...w === 'list'" [tasks]="tasks" (taskClick)="onTaskSelected($event)"
+         ╵                                               ~~~~~~~~~~~~~~
+
+  Error occurs in the template of component TaskListViewComponent.
+
+    src/app/pages/task-list-view/task-list-view.component.ts:15:15:
+      15 │   templateUrl: './task-list-view.component.html',
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+- Changes detected. Rebuilding...
+
+Application bundle generation failed. [0.270 seconds]
+
+✘ [ERROR] NG9: Property 'onTaskSelected' does not exist on type 'TaskListViewComponent'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.html:88:84:
+      88 │ ...w === 'list'" [tasks]="tasks" (taskClick)="onTaskSelected($event)"
+         ╵                                               ~~~~~~~~~~~~~~
+
+  Error occurs in the template of component TaskListViewComponent.
+
+    src/app/pages/task-list-view/task-list-view.component.ts:15:15:
+      15 │   templateUrl: './task-list-view.component.html',
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'closeInviteDialog' does not exist on type 'TaskListViewComponent'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.html:96:17:
+      96 │         (close)="closeInviteDialog()"></app-invite-member-dialog>
+         ╵                  ~~~~~~~~~~~~~~~~~
+
+  Error occurs in the template of component TaskListViewComponent.
+
+    src/app/pages/task-list-view/task-list-view.component.ts:15:15:
+      15 │   templateUrl: './task-list-view.component.html',
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'onTaskSelected'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:73:4:
+      73 │     onTaskSelected(task: any) {
+         ╵     ~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'task'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:73:19:
+      73 │     onTaskSelected(task: any) {
+         ╵                    ~~~~
+
+
+✘ [ERROR] TS1005: ',' expected. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:73:23:
+      73 │     onTaskSelected(task: any) {
+         ╵                        ^
+
+
+✘ [ERROR] TS2693: 'any' only refers to a type, but is being used as a value here. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:73:25:
+      73 │     onTaskSelected(task: any) {
+         ╵                          ~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:73:30:
+      73 │     onTaskSelected(task: any) {
+         ╵                               ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'task'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:74:26:
+      74 │       this.selectedTask = task;
+         ╵                           ~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'openInviteDialog'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:78:4:
+      78 │     openInviteDialog() {
+         ╵     ~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:78:23:
+      78 │     openInviteDialog() {
+         ╵                        ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'closeInviteDialog'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:82:4:
+      82 │     closeInviteDialog() {
+         ╵     ~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:82:24:
+      82 │     closeInviteDialog() {
+         ╵                         ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'canInvite'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:86:4:
+      86 │     canInvite(): boolean {
+         ╵     ~~~~~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:86:15:
+      86 │     canInvite(): boolean {
+         ╵                ^
+
+
+✘ [ERROR] TS1434: Unexpected keyword or identifier. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:86:17:
+      86 │     canInvite(): boolean {
+         ╵                  ~~~~~~~
+
+
+✘ [ERROR] TS2693: 'boolean' only refers to a type, but is being used as a value here. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:86:17:
+      86 │     canInvite(): boolean {
+         ╵                  ~~~~~~~
+
+
+✘ [ERROR] TS1005: '}' expected. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:90:0:
+      90 │ 
+         ╵ ^
+
+
+- Changes detected. Rebuilding...
+
+Application bundle generation failed. [0.202 seconds]
+
+✘ [ERROR] NG9: Property 'onTaskSelected' does not exist on type 'TaskListViewComponent'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.html:88:84:
+      88 │ ...w === 'list'" [tasks]="tasks" (taskClick)="onTaskSelected($event)"
+         ╵                                               ~~~~~~~~~~~~~~
+
+  Error occurs in the template of component TaskListViewComponent.
+
+    src/app/pages/task-list-view/task-list-view.component.ts:15:15:
+      15 │   templateUrl: './task-list-view.component.html',
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] NG9: Property 'closeInviteDialog' does not exist on type 'TaskListViewComponent'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.html:96:17:
+      96 │         (close)="closeInviteDialog()"></app-invite-member-dialog>
+         ╵                  ~~~~~~~~~~~~~~~~~
+
+  Error occurs in the template of component TaskListViewComponent.
+
+    src/app/pages/task-list-view/task-list-view.component.ts:15:15:
+      15 │   templateUrl: './task-list-view.component.html',
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'closeInviteDialog'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:73:4:
+      73 │     closeInviteDialog() {
+         ╵     ~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:73:24:
+      73 │     closeInviteDialog() {
+         ╵                         ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'canInvite'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:77:4:
+      77 │     canInvite(): boolean {
+         ╵     ~~~~~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:77:15:
+      77 │     canInvite(): boolean {
+         ╵                ^
+
+
+✘ [ERROR] TS1434: Unexpected keyword or identifier. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:77:17:
+      77 │     canInvite(): boolean {
+         ╵                  ~~~~~~~
+
+
+✘ [ERROR] TS2693: 'boolean' only refers to a type, but is being used as a value here. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:77:17:
+      77 │     canInvite(): boolean {
+         ╵                  ~~~~~~~
+
+
+✘ [ERROR] TS1005: '}' expected. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:81:0:
+      81 │ 
+         ╵ ^
+
+
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                      |  Raw size
+polyfills.js        | polyfills                  |  88.09 kB | 
+main.js             | main                       |  53.78 kB | 
+styles.css          | styles                     |  37.45 kB | 
+chunk-TNWEZXXF.js   | -                          |  17.01 kB | 
+chunk-QCTZSG3L.js   | -                          |   5.23 kB | 
+chunk-CK6Q4KCE.js   | -                          |   4.89 kB | 
+chunk-SHAOKUVO.js   | -                          | 938 bytes | 
+
+                    | Initial total              | 207.35 kB
+
+Lazy chunk files    | Names                      |  Raw size
+chunk-VSXHJ2SO.js   | task-list-view-component   |  48.43 kB | 
+chunk-HYSYYBD7.js   | user-management-component  |  12.10 kB | 
+chunk-VNYWMPCH.js   | spaces-dashboard-component |   8.43 kB | 
+chunk-66XXZ5LP.js   | settings-component         |   5.92 kB | 
+chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
+
+Application bundle generation complete. [0.243 seconds]
+
+Page reload sent to client(s).

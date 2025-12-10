@@ -1,0 +1,99 @@
+<div class="h-full flex flex-col text-gray-900 bg-white">
+    <!-- Header / Toolbar -->
+    <div class="flex flex-col border-b border-gray-200 bg-white">
+
+        <!-- Top Row: Breadcrumbs/Title & Actions -->
+        <div class="px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <!-- Icon? -->
+                <h1 class="text-xl font-bold text-gray-800 flex items-center">
+                    <span class="mr-2 text-gray-400">#</span>
+                    {{ currentList?.name || 'Carregando...' }}
+                </h1>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button (click)="onSearch($event)"
+                    class="text-gray-500 hover:text-gray-900 text-sm font-medium transition-colors"><i
+                        class="fas fa-search mr-1"></i>
+                    Pesquisar</button>
+                <button (click)="openTaskDialog()"
+                    class="text-gray-500 hover:text-gray-900 text-sm font-medium transition-colors"><i
+                        class="fas fa-filter mr-1"></i>
+                    Ocultar</button>
+                <button (click)="openTaskDialog()"
+                    class="text-gray-500 hover:text-gray-900 text-sm font-medium transition-colors"><i
+                        class="fas fa-cog mr-1"></i>
+                    Personalizar</button>
+
+                <button (click)="openTaskDialog()"
+                    class="bg-pink-600 hover:bg-pink-700 text-white font-medium py-1.5 px-4 rounded-md flex items-center text-sm transition-colors shadow-sm">
+                    Add Tarefa <i class="fas fa-chevron-down ml-2 text-xs"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tabs Row -->
+        <div class="px-6 flex items-center space-x-6 text-sm font-medium text-gray-500">
+            <button (click)="setView('list')" [class.text-pink-600]="currentView === 'list'"
+                [class.border-b-2]="currentView === 'list'" [class.border-pink-600]="currentView === 'list'"
+                class="pb-3 hover:text-gray-900 flex items-center transition-all">
+                <i class="fas fa-list mr-2"></i> Lista
+            </button>
+            <button (click)="setView('kanban')" [class.text-pink-600]="currentView === 'kanban'"
+                [class.border-b-2]="currentView === 'kanban'" [class.border-pink-600]="currentView === 'kanban'"
+                class="pb-3 hover:text-gray-900 flex items-center transition-all">
+                <i class="fas fa-columns mr-2"></i> Quadro
+            </button>
+            <!-- 'Equipe' tab skipped as not requested but in screenshot -->
+            <button (click)="setView('calendar')" [class.text-pink-600]="currentView === 'calendar'"
+                [class.border-b-2]="currentView === 'calendar'" [class.border-pink-600]="currentView === 'calendar'"
+                class="pb-3 hover:text-gray-900 flex items-center transition-all">
+                <i class="far fa-calendar mr-2"></i> Calendário
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters/Sub-toolbar (Mocked) -->
+    <div *ngIf="currentView === 'list' || currentView === 'kanban'"
+        class="px-6 py-3 border-b border-gray-200 flex items-center space-x-2 text-xs bg-gray-50">
+        <div class="flex items-center space-x-2">
+            <button
+                class="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-full flex items-center hover:bg-gray-100 transition-colors shadow-sm">
+                <i class="fas fa-layer-group mr-2 text-gray-400"></i> Grupo: Status
+            </button>
+            <button
+                class="bg-white border border-gray-300 text-gray-700 px-3 py-1 rounded-full flex items-center hover:bg-gray-100 transition-colors shadow-sm">
+                <i class="fas fa-code-branch mr-2 text-gray-400"></i> Subtarefas
+            </button>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center space-x-2">
+            <button class="text-gray-500 hover:text-gray-900 transition-colors"><i class="fas fa-filter mr-1"></i>
+                Filtro</button>
+            <button (click)="toggleSort()" class="text-gray-500 hover:text-gray-900 transition-colors"><i
+                    class="fas fa-sort mr-1"></i>
+                Classificar</button>
+            <input (input)="onSearch($event)" type="text" placeholder="Pesquisar..."
+                class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-700 focus:outline-none focus:border-pink-500 focus:ring-1 focus:ring-pink-500 w-32 shadow-sm transition-all"
+                [value]="searchTerm">
+        </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="flex-1 overflow-hidden bg-white relative">
+        <app-kanban-board *ngIf="currentView === 'kanban'" [listId]="listId" [tasks]="filteredTasks"
+            (taskClick)="onTaskSelected($event)" (addTask)="openTaskDialog($event)"
+            class="h-full block"></app-kanban-board>
+        <app-task-table *ngIf="currentView === 'list'" [tasks]="filteredTasks" (taskClick)="onTaskSelected($event)"
+            class="h-full block overflow-hidden"></app-task-table>
+        <app-task-calendar *ngIf="currentView === 'calendar'" [tasks]="filteredTasks"
+            (taskClick)="onTaskSelected($event)" class="h-full block"></app-task-calendar>
+    </div>
+
+    <app-create-task-dialog *ngIf="showTaskDialog" [listId]="listId" [listName]="currentList?.name || 'Lista'"
+        [task]="selectedTask" [initialStatus]="initialDialogStatus" (close)="closeTaskDialog()" (created)="loadTasks()">
+    </app-create-task-dialog>
+    <app-invite-member-dialog *ngIf="showInviteDialog" [spaceId]="spaceId"
+        (close)="closeInviteDialog()"></app-invite-member-dialog>
+</div>
