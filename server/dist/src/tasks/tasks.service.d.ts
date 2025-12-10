@@ -8,9 +8,9 @@ export declare class TasksService {
     constructor(prisma: PrismaService);
     create(createTaskDto: CreateTaskDto): Promise<{
         id: string;
-        description: string | null;
         created_at: Date;
         updated_at: Date;
+        description: string | null;
         list_id: string;
         title: string;
         deadline: Date | null;
@@ -39,6 +39,7 @@ export declare class TasksService {
                 created_at: Date;
                 updated_at: Date;
                 last_active_at: Date;
+                avatar_url: string | null;
             };
         } & {
             user_id: string;
@@ -46,9 +47,9 @@ export declare class TasksService {
         })[];
     } & {
         id: string;
-        description: string | null;
         created_at: Date;
         updated_at: Date;
+        description: string | null;
         list_id: string;
         title: string;
         deadline: Date | null;
@@ -77,6 +78,7 @@ export declare class TasksService {
                 created_at: Date;
                 updated_at: Date;
                 last_active_at: Date;
+                avatar_url: string | null;
             };
         } & {
             user_id: string;
@@ -84,9 +86,9 @@ export declare class TasksService {
         })[];
     } & {
         id: string;
-        description: string | null;
         created_at: Date;
         updated_at: Date;
+        description: string | null;
         list_id: string;
         title: string;
         deadline: Date | null;
@@ -95,9 +97,9 @@ export declare class TasksService {
     }) | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
     update(id: string, updateTaskDto: UpdateTaskDto): import(".prisma/client").Prisma.Prisma__TaskClient<{
         id: string;
-        description: string | null;
         created_at: Date;
         updated_at: Date;
+        description: string | null;
         list_id: string;
         title: string;
         deadline: Date | null;
@@ -106,9 +108,9 @@ export declare class TasksService {
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     remove(id: string): import(".prisma/client").Prisma.Prisma__TaskClient<{
         id: string;
-        description: string | null;
         created_at: Date;
         updated_at: Date;
+        description: string | null;
         list_id: string;
         title: string;
         deadline: Date | null;

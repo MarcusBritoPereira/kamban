@@ -46,7 +46,7 @@ export class SidebarComponent implements OnInit {
     spaceId: '' // needed for referencing space map if needed
   };
 
-  constructor(public dataService: DataService, public authService: AuthService) { }
+  constructor(public dataService: DataService, public authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.dataService.getSpaces().subscribe();
@@ -207,6 +207,17 @@ export class SidebarComponent implements OnInit {
         this.folders.update(current => ({ ...current, [spaceId]: folders }));
       });
     }
+  }
+
+  navigateToSpace(space: Space, event: Event) {
+    // When clicking the space name, navigate to the space view
+    // Do NOT stop propagation if we want it to also toggle expansion? 
+    // User expectation: Clicking name usually selects it. 
+    // Let's assume we navigate AND expand (if not expanded).
+
+    // Actually, let's keep it simple: Arrow expands, Name navigates.
+    // But expanding when navigating is nice too.
+    this.router.navigate(['/spaces', space.id]);
   }
 
   toggleFolder(folderId: string) {

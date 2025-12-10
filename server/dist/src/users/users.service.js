@@ -22,6 +22,7 @@ let UsersService = class UsersService {
             select: {
                 id: true,
                 name: true,
+                avatar_url: true,
                 email: true,
                 role: true,
                 last_active_at: true,
@@ -50,6 +51,12 @@ let UsersService = class UsersService {
         return this.prisma.user.update({
             where: { id },
             data: { last_active_at: new Date() },
+        });
+    }
+    updateAvatar(id, avatarUrl) {
+        return this.prisma.user.update({
+            where: { id },
+            data: { avatar_url: avatarUrl },
         });
     }
 };

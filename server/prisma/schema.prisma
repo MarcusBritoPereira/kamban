@@ -23,6 +23,7 @@ model User {
   created_at    DateTime @default(now())
   updated_at    DateTime @updatedAt
   last_active_at DateTime @default(now())
+  avatar_url     String?
 
   task_assignees TaskAssignee[]
   spaces         Space[]      @relation("UserSpaces")

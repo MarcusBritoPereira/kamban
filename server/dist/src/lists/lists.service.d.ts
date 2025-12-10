@@ -6,27 +6,27 @@ export declare class ListsService {
     constructor(prisma: PrismaService);
     create(createListDto: CreateListDto): Promise<{
         id: string;
-        folder_id: string;
         name: string;
+        folder_id: string;
     }>;
     findAll(folderId?: string): import(".prisma/client").Prisma.PrismaPromise<{
         id: string;
-        folder_id: string;
         name: string;
+        folder_id: string;
     }[]>;
     findOne(id: string): import(".prisma/client").Prisma.Prisma__ListClient<{
         id: string;
-        folder_id: string;
         name: string;
+        folder_id: string;
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
     update(id: string, updateListDto: UpdateListDto): import(".prisma/client").Prisma.Prisma__ListClient<{
         id: string;
-        folder_id: string;
         name: string;
+        folder_id: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     remove(id: string): import(".prisma/client").Prisma.Prisma__ListClient<{
         id: string;
-        folder_id: string;
         name: string;
+        folder_id: string;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
 }

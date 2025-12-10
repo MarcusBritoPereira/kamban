@@ -13,6 +13,7 @@ export declare class AuthService {
         created_at: Date;
         updated_at: Date;
         last_active_at: Date;
+        avatar_url: string | null;
     }>;
     validateUser(email: string, pass: string): Promise<any>;
     login(user: any): Promise<{
@@ -22,6 +23,7 @@ export declare class AuthService {
             name: any;
             email: any;
             role: any;
+            avatar_url: any;
         };
     }>;
 }

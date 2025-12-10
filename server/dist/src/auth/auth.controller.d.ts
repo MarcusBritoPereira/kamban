@@ -11,6 +11,7 @@ export declare class AuthController {
             name: any;
             email: any;
             role: any;
+            avatar_url: any;
         };
     }>;
     register(createUserDto: CreateUserDto): Promise<{
@@ -21,5 +22,6 @@ export declare class AuthController {
         created_at: Date;
         updated_at: Date;
         last_active_at: Date;
+        avatar_url: string | null;
     }>;
 }

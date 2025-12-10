@@ -13,7 +13,7 @@ export class HeaderComponent {
   user = this.authService.currentUser;
   userParams = computed(() => {
     const u = this.user();
-    return u ? { name: u.name, email: u.email } : null;
+    return u ? { name: u.name, email: u.email, avatar_url: u.avatar_url } : null;
   });
 
   constructor(public authService: AuthService) { }

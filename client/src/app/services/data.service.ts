@@ -165,4 +165,10 @@ export class DataService {
   deleteUser(userId: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/users/${userId}`);
   }
+
+  uploadAvatar(userId: string, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${this.apiUrl}/users/${userId}/avatar`, formData);
+  }
 }

@@ -1,4 +1,5 @@
 <div class="h-screen w-64 bg-brand-dark text-brand-white flex flex-col overflow-hidden border-r border-white/5">
+    <!-- Header -->
     <div class="p-6 border-b border-white/5 flex items-center">
         <div
             class="w-8 h-8 rounded bg-brand-yellow flex items-center justify-center mr-3 shadow-[0_0_15px_rgba(248,197,53,0.3)]">
@@ -7,6 +8,7 @@
         <h1 class="text-xl font-bold tracking-tight text-white">Up&Up Tarefas</h1>
     </div>
 
+    <!-- Navigation -->
     <nav class="flex-1 p-4 overflow-y-auto space-y-6">
         <!-- Spaces Section -->
         <div>
@@ -24,12 +26,152 @@
                 <div *ngFor="let space of spaces()">
                     <!-- Space Item -->
                     <div class="flex items-center justify-between px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer group transition-all duration-200"
-                        [ngClass]="{'bg-white/5': isSpaceExpanded(space.id!)}" (click)="toggleSpace(space.id!)">
-                        <div class="flex items-center overflow-hidden">
-                            <span class="mr-2 text-gray-400 text-[10px] transition-transform duration-200"
-                                [class.rotate-90]="isSpaceExpanded(space.id!)">▶</span>
+                        [ngClass]="{'bg-white/5': isSpaceExpanded(space.id!)}">
+                        <div class="flex items-center overflow-hidden w-full">
+                            <span
+                                class="mr-2 text-gray-400 text-[10px] transition-transform duration-200 p-1 hover:text-white"
+                                [class.rotate-90]="isSpaceExpanded(space.id!)"
+                                (click)="$event.stopPropagation(); toggleSpace(space.id!)">▶</span>
+
+                            <span class="text-sm font-medium text-gray-300 group-hover:text-white truncate flex-1"
+                                (click)="navigateToSpace(space, $event)">
+                                {{ space.name }}
+                            </span>
                         </div>
-                        <app-create-task-dialog *ngIf="selectedListForTask" [listName]="selectedListForTask.name"
-                            (created)="handleTaskCreated()" (close)="closeTaskDialog()">
-                        </app-create-task-dialog>
+                        <div class="hidden group-hover:flex items-center space-x-1">
+                            <button (click)="initiateCreateFolder(space.id!, $event)"
+                                class="p-1 hover:bg-white/10 rounded text-gray-400 hover:text-brand-yellow"
+                                title="Nova Pasta">
+                                <span class="text-xs">+</span>
+                            </button>
+                            <button (click)="initiateRenameSpace(space, $event)"
+                                class="p-1 hover:bg-white/10 rounded text-gray-400 hover:text-brand-yellow"
+                                title="Renomear">
+                                <span class="text-[10px]">✎</span>
+                            </button>
+                        </div>
                     </div>
+
+                    <!-- Folders (Nested) -->
+                    <div *ngIf="isSpaceExpanded(space.id!)" class="ml-2 pl-2 border-l border-white/5 space-y-1 mt-1">
+                        <div *ngFor="let folder of getFoldersForSpace(space.id!)">
+                            <!-- Folder Item -->
+                            <div class="flex items-center justify-between px-3 py-1.5 hover:bg-white/5 rounded-md cursor-pointer group/folder transition-all duration-200"
+                                (click)="toggleFolder(folder.id!)">
+                                <div class="flex items-center overflow-hidden">
+                                    <span class="mr-2 text-gray-500 text-[8px] transition-transform duration-200"
+                                        [class.rotate-90]="isFolderExpanded(folder.id!)">▶</span>
+                                    <span class="text-sm text-gray-400 group-hover/folder:text-gray-200 truncate">
+                                        {{ folder.name }}
+                                    </span>
+                                </div>
+                                <div class="hidden group-hover/folder:flex items-center space-x-1">
+                                    <button (click)="initiateCreateList(folder, $event)"
+                                        class="p-0.5 hover:bg-white/10 rounded text-gray-500 hover:text-brand-yellow"
+                                        title="Nova Lista">
+                                        <span class="text-xs">+</span>
+                                    </button>
+                                    <button (click)="initiateRenameFolder(folder, $event)"
+                                        class="p-0.5 hover:bg-white/10 rounded text-gray-500 hover:text-brand-yellow"
+                                        title="Renomear">
+                                        <span class="text-[9px]">✎</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Lists (Nested) -->
+                            <div *ngIf="isFolderExpanded(folder.id!)"
+                                class="ml-2 pl-2 border-l border-white/5 space-y-0.5 mt-0.5">
+                                <div *ngFor="let list of getListsForFolder(folder.id!)"
+                                    class="flex items-center justify-between px-3 py-1.5 hover:bg-white/5 rounded-md cursor-pointer group/list transition-all duration-200"
+                                    [routerLink]="['/spaces', space.id!, 'folders', folder.id!, 'lists', list.id!]"
+                                    routerLinkActive="bg-brand-yellow/10 text-brand-yellow">
+                                    <span class="text-sm text-gray-500 group-hover/list:text-gray-300 truncate"
+                                        [class.text-brand-yellow]="false">
+                                        # {{ list.name }}
+                                    </span>
+                                    <div class="hidden group-hover/list:flex items-center space-x-1">
+                                        <button (click)="initiateRenameList(list, space.id!, $event)"
+                                            class="p-0.5 hover:bg-white/10 rounded text-gray-600 hover:text-brand-yellow"
+                                            title="Renomear">
+                                            <span class="text-[9px]">✎</span>
+                                        </button>
+                                        <button (click)="initiateCreateTask(list, $event)"
+                                            class="p-0.5 hover:bg-white/10 rounded text-green-500 hover:text-green-400"
+                                            title="Nova Tarefa">
+                                            <span class="text-[10px]">✓</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Empty State for Folder -->
+                                <div *ngIf="getListsForFolder(folder.id!).length === 0"
+                                    class="px-3 py-1 text-xs text-gray-600 italic">
+                                    Sem listas
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Empty State for Space -->
+                        <div *ngIf="getFoldersForSpace(space.id!).length === 0"
+                            class="px-3 py-1 text-xs text-gray-600 italic">
+                            Sem pastas
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- User Footer -->
+    <div class="p-4 border-t border-white/5 bg-black/20">
+        <div class="flex items-center justify-between group cursor-pointer" (click)="toggleUserMenu()">
+            <div class="flex items-center">
+                <div
+                    class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-yellow to-brand-orange flex items-center justify-center text-brand-black font-bold mr-3 overflow-hidden">
+                    <img *ngIf="currentUser()?.avatar_url" [src]="'http://localhost:3000' + currentUser()?.avatar_url"
+                        class="w-full h-full object-cover">
+                    <span *ngIf="!currentUser()?.avatar_url">{{ (currentUser()?.name?.charAt(0) || 'U') | uppercase
+                        }}</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium text-white truncate max-w-[100px]">{{ currentUser()?.name ||
+                        'Usuário' }}</span>
+                    <span class="text-xs text-gray-500 truncate max-w-[100px]">{{ currentUser()?.email }}</span>
+                </div>
+            </div>
+            <span class="text-gray-500">⋮</span>
+        </div>
+
+        <!-- Dropdown Menu -->
+        <div *ngIf="showUserMenu()"
+            class="absolute bottom-16 left-4 w-56 bg-[#1E1E1E] border border-white/10 rounded-lg shadow-xl py-1 z-50 animate-in fade-in slide-in-from-bottom-2">
+            <div class="px-4 py-2 border-b border-white/5">
+                <p class="text-sm font-medium text-white">{{ currentUser()?.name }}</p>
+                <p class="text-xs text-gray-500 uppercase tracking-wider mt-0.5">{{ currentUser()?.role }}</p>
+            </div>
+
+            <a *ngIf="isAdmin()" routerLink="/users"
+                class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-brand-yellow transition-colors">
+                Gerenciar Usuários
+            </a>
+            <a routerLink="/settings"
+                class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
+                Configurações
+            </a>
+            <button (click)="logout()"
+                class="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-white/5 hover:text-red-300 transition-colors">
+                Sair
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Global Dialogs (Outside Loop) -->
+<app-create-task-dialog *ngIf="showTaskDialog && selectedListForTask" [listName]="selectedListForTask.name"
+    (created)="handleTaskCreated()" (close)="closeTaskDialog()">
+</app-create-task-dialog>
+
+<!-- Simple Input Dialog (Rename/Create Folder/List) -->
+<app-simple-input-dialog *ngIf="dialogConfig.visible" [title]="dialogConfig.title" [label]="dialogConfig.label"
+    [placeholder]="dialogConfig.placeholder" [value]="dialogConfig.initialValue" (submit)="handleDialogSubmit($event)"
+    (close)="closeDialog()">
+</app-simple-input-dialog>

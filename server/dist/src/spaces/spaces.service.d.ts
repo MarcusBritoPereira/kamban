@@ -28,8 +28,8 @@ export declare class SpacesService {
             };
         } & {
             id: string;
-            space_id: string;
             role: string;
+            space_id: string;
             user_id: string;
             joined_at: Date;
         })[];
@@ -41,8 +41,8 @@ export declare class SpacesService {
     })[]>;
     addMember(spaceId: string, email: string): Promise<{
         id: string;
-        space_id: string;
         role: string;
+        space_id: string;
         user_id: string;
         joined_at: Date;
     }>;

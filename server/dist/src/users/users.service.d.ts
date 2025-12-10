@@ -10,6 +10,7 @@ export declare class UsersService {
         role: import(".prisma/client").$Enums.Role;
         created_at: Date;
         last_active_at: Date;
+        avatar_url: string | null;
     }[]>;
     findOne(id: string): import(".prisma/client").Prisma.Prisma__UserClient<{
         id: string;
@@ -20,6 +21,7 @@ export declare class UsersService {
         created_at: Date;
         updated_at: Date;
         last_active_at: Date;
+        avatar_url: string | null;
     } | null, null, import("@prisma/client/runtime/library").DefaultArgs>;
     update(id: string, data: {
         role?: Role;
@@ -34,6 +36,7 @@ export declare class UsersService {
         created_at: Date;
         updated_at: Date;
         last_active_at: Date;
+        avatar_url: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     remove(id: string): import(".prisma/client").Prisma.Prisma__UserClient<{
         id: string;
@@ -44,6 +47,7 @@ export declare class UsersService {
         created_at: Date;
         updated_at: Date;
         last_active_at: Date;
+        avatar_url: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
     updateLastActivity(id: string): import(".prisma/client").Prisma.Prisma__UserClient<{
         id: string;
@@ -54,5 +58,17 @@ export declare class UsersService {
         created_at: Date;
         updated_at: Date;
         last_active_at: Date;
+        avatar_url: string | null;
+    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
+    updateAvatar(id: string, avatarUrl: string): import(".prisma/client").Prisma.Prisma__UserClient<{
+        id: string;
+        name: string;
+        email: string;
+        password_hash: string;
+        role: import(".prisma/client").$Enums.Role;
+        created_at: Date;
+        updated_at: Date;
+        last_active_at: Date;
+        avatar_url: string | null;
     }, never, import("@prisma/client/runtime/library").DefaultArgs>;
 }

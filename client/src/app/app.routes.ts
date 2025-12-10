@@ -20,6 +20,10 @@ export const routes: Routes = [
                         loadComponent: () => import('./pages/spaces/spaces-dashboard/spaces-dashboard.component').then(m => m.SpacesDashboardComponent)
                     },
                     {
+                        path: ':spaceId',
+                        loadComponent: () => import('./pages/spaces/space-details/space-details.component').then(m => m.SpaceDetailsComponent)
+                    },
+                    {
                         path: ':spaceId/folders/:folderId/lists/:listId',
                         loadComponent: () => import('./pages/task-list-view/task-list-view.component').then(m => m.TaskListViewComponent)
                     }
