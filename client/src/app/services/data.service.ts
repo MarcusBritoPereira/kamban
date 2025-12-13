@@ -27,6 +27,7 @@ export interface TaskList { // Renamed from List to avoid conflict
   id?: string;
   folder_id: string;
   name: string;
+  folder?: any;
 }
 
 export interface Task {
@@ -35,7 +36,14 @@ export interface Task {
   title: string;
   description?: string;
   deadline?: string;
-  status: 'todo' | 'doing' | 'done';
+  status: 'todo' | 'doing' | 'done' | 'planned' | 'in_review' | 'approved' | 'rejected' | 'waiting';
+  priority?: 'urgent' | 'high' | 'normal' | 'low';
+  tags?: any[]; // Simplified for now
+  list?: {
+    id?: string;
+    name: string;
+    folder?: { name: string; space_id: string; space?: { name: string } };
+  };
 }
 
 @Injectable({
@@ -137,25 +145,65 @@ export class DataService {
   }
 
   // Tasks
-  getTasks(listId: string): Observable<Task[]> {
-    return this.http.get<Task[]>(`${this.apiUrl}/lists/${listId}/tasks`);
+  getListTasks(listId: string, page: number = 1, limit: number = 20): Observable<{ data: Task[], meta: any }> {
+    return this.http.get<{ data: Task[], meta: any }>(`${this.apiUrl}/tasks?list_id=${listId}&page=${page}&limit=${limit}`);
+  }
+
+  getMyTasks(page: number = 1, limit: number = 20): Observable<{ data: Task[], meta: any }> {
+    return this.http.get<{ data: Task[], meta: any }>(`${this.apiUrl}/tasks/me?page=${page}&limit=${limit}`);
+  }
+
+  getUserTasks(userId: string, page: number = 1, limit: number = 50): Observable<{ data: Task[], meta: any }> {
+    return this.http.get<{ data: Task[], meta: any }>(`${this.apiUrl}/tasks/user/${userId}?page=${page}&limit=${limit}`);
+  }
+
+  getSpaceMembers(spaceId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/spaces/${spaceId}/members`);
   }
 
   createTask(listId: string, data: any): Observable<Task> {
-    return this.http.post<Task>(`${this.apiUrl}/lists/${listId}/tasks`, { ...data, list_id: listId }).pipe(
+    const payload = { ...data, list_id: listId };
+    return this.http.post<Task>(`${this.apiUrl}/tasks`, payload).pipe(
       tap(() => this.taskUpdatesSubject.next())
     );
   }
 
   updateTask(taskId: string, data: any): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl}/tasks/${taskId}`, data).pipe(
+    return this.http.patch<Task>(`${this.apiUrl}/tasks/${taskId}`, data).pipe(
       tap(() => this.taskUpdatesSubject.next())
     );
+  }
+
+  uploadAttachment(taskId: string, file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${this.apiUrl}/tasks/${taskId}/attachments`, formData);
+  }
+
+  deleteAttachment(attachmentId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/attachments/${attachmentId}`);
+  }
+
+  // Notifications
+  getNotifications(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/notifications`);
+  }
+
+  markNotificationAsRead(id: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/notifications/${id}/read`, {});
+  }
+
+  markAllNotificationsAsRead(): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/notifications/read-all`, {});
   }
 
   // Users (Admin)
   getUsers(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/users`);
+  }
+
+  getDirectory(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/users/directory`);
   }
 
   updateUser(userId: string, data: any): Observable<any> {
@@ -166,9 +214,81 @@ export class DataService {
     return this.http.delete(`${this.apiUrl}/users/${userId}`);
   }
 
-  uploadAvatar(userId: string, file: File): Observable<any> {
+  // Companies
+  getCompanies(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/companies`);
+  }
+
+  getCompany(id: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/companies/${id}`);
+  }
+
+  createCompany(data: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/companies`, data);
+  }
+
+  updateCompany(id: string, data: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/companies/${id}`, data);
+  }
+
+  deleteCompany(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/companies/${id}`);
+  }
+
+  addCompanyMember(companyId: string, userId: string, role: string): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/companies/${companyId}/members`, { userId, role });
+  }
+
+  removeCompanyMember(companyId: string, userId: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/companies/${companyId}/members/${userId}`);
+  }
+
+  uploadAvatar(userId: string, file: File): Observable<{ avatar_url: string }> {
     const formData = new FormData();
     formData.append('file', file);
-    return this.http.post(`${this.apiUrl}/users/${userId}/avatar`, formData);
+    return this.http.post<{ avatar_url: string }>(`${this.apiUrl}/users/${userId}/avatar`, formData);
+  }
+
+  // Tags
+  getSpaceTags(spaceId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/spaces/${spaceId}/tags`);
+  }
+
+  createTag(spaceId: string, data: { name: string, color: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/spaces/${spaceId}/tags`, data);
+  }
+
+  updateTag(tagId: string, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/tags/${tagId}`, data);
+  }
+
+  deleteTag(tagId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/tags/${tagId}`);
+  }
+
+  addTagToTask(taskId: string, data: { name: string, color: string }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/tasks/${taskId}/tags`, data);
+  }
+
+  removeTagFromTask(taskId: string, tagId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/tasks/${taskId}/tags/${tagId}`);
+  }
+
+  // Activities
+  getTaskActivities(taskId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/tasks/${taskId}/activities`);
+  }
+
+  addTaskComment(taskId: string, content: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/tasks/${taskId}/comments`, { content });
+  }
+
+  // Dashboard
+  getDashboardMetrics(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/dashboard/metrics`);
+  }
+
+  getProductionMetrics(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/dashboard/production`);
   }
 }

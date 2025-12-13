@@ -3,21 +3,76 @@
         <!-- Breadcrumbs or Page Title could go here -->
         Dashboard
     </h2>
+    <div class="flex items-center">
+        <!-- Notifications Bell -->
+        <div class="relative mr-6">
+            <button (click)="toggleNotifications()"
+                class="relative p-2 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-100 focus:outline-none">
+                <i class="fas fa-bell text-xl"></i>
+                <span *ngIf="unreadCount() > 0"
+                    class="absolute top-1 right-1 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full border-2 border-white">
+                    {{ unreadCount() }}
+                </span>
+            </button>
 
-    <div class="flex items-center space-x-4" *ngIf="userParams() as u">
-        <div class="text-right mr-2">
-            <p class="text-sm font-medium text-gray-900">{{ u.name }}</p>
-            <p class="text-xs text-gray-500">{{ u.email }}</p>
+            <!-- Dropdown -->
+            <div *ngIf="showNotifications"
+                class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl overflow-hidden z-50 border border-gray-100 animate-fadeIn origin-top-right">
+                <div class="p-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                    <h3 class="font-bold text-gray-700 text-sm">Notificações</h3>
+                    <button *ngIf="unreadCount() > 0" (click)="markAllRead()"
+                        class="text-[10px] text-pink-600 hover:text-pink-800 font-bold uppercase tracking-wider">
+                        Ler todas
+                    </button>
+                </div>
+                <div class="max-h-80 overflow-y-auto custom-scrollbar">
+                    <div *ngIf="notifications().length === 0" class="p-8 text-center text-gray-400">
+                        <i class="far fa-bell-slash text-2xl mb-2 opacity-50"></i>
+                        <p class="text-xs">Nenhuma notificação</p>
+                    </div>
+
+                    <div *ngFor="let note of notifications()" (click)="markAsRead(note)"
+                        class="p-3 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors flex items-start gap-3 relative"
+                        [class.bg-white]="note.read" [class.bg-blue-50]="!note.read">
+
+                        <div class="mt-0.5" [ngClass]="{'text-pink-500': !note.read, 'text-gray-400': note.read}">
+                            <i class="fas"
+                                [ngClass]="note.type === 'assignment' ? 'fa-user-plus' : 'fa-info-circle'"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-semibold text-gray-800 truncate">{{ note.title }}</p>
+                            <p class="text-xs text-gray-600 mt-0.5 line-clamp-2 leading-relaxed">{{ note.message }}</p>
+                            <p class="text-[10px] text-gray-400 mt-1.5 font-medium">{{ note.created_at | date:'dd/MM
+                                HH:mm' }}</p>
+                        </div>
+                        <div *ngIf="!note.read" class="w-1.5 h-1.5 rounded-full bg-pink-500 mt-2 shrink-0"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backdrop for closing -->
+            <div *ngIf="showNotifications" (click)="showNotifications = false"
+                class="fixed inset-0 z-40 cursor-default"></div>
         </div>
 
-        <div
-            class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-yellow to-brand-orange flex items-center justify-center text-brand-black font-bold overflow-hidden shadow-md">
-            <img *ngIf="u.avatar_url" [src]="'http://localhost:3000' + u.avatar_url" class="w-full h-full object-cover">
-            <span *ngIf="!u.avatar_url">{{ (u.name?.charAt(0) || 'U') | uppercase }}</span>
-        </div>
+        <!-- User Profile -->
+        <div class="flex items-center space-x-4" *ngIf="userParams() as u">
+            <div class="text-right mr-2">
+                <p class="text-sm font-medium text-gray-900">{{ u.name }}</p>
+                <p class="text-xs text-gray-500">{{ u.email }}</p>
+            </div>
 
-        <button (click)="authService.logout()" class="text-gray-500 hover:text-red-600 transition-colors" title="Sair">
-            <i class="fas fa-sign-out-alt"></i> Sair
-        </button>
+            <div
+                class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-yellow to-brand-orange flex items-center justify-center text-brand-black font-bold overflow-hidden shadow-md">
+                <img *ngIf="u.avatar_url" [src]="'http://localhost:3000' + u.avatar_url"
+                    class="w-full h-full object-cover">
+                <span *ngIf="!u.avatar_url">{{ (u.name?.charAt(0) || 'U') | uppercase }}</span>
+            </div>
+
+            <button (click)="authService.logout()" class="text-gray-500 hover:text-red-600 transition-colors"
+                title="Sair">
+                <i class="fas fa-sign-out-alt"></i> Sair
+            </button>
+        </div>
     </div>
 </header>

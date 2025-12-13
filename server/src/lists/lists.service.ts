@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ListsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async create(createListDto: CreateListDto) {
     const { folder_id, ...data } = createListDto;
@@ -34,7 +34,16 @@ export class ListsService {
   }
 
   findOne(id: string) {
-    return this.prisma.list.findUnique({ where: { id } });
+    return this.prisma.list.findUnique({
+      where: { id },
+      include: {
+        folder: {
+          include: {
+            space: true,
+          },
+        },
+      },
+    });
   }
 
   update(id: string, updateListDto: UpdateListDto) {

@@ -2,6 +2,7 @@ import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService, Folder, Space } from '../../../services/data.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
     selector: 'app-space-details',
@@ -19,7 +20,7 @@ import { DataService, Folder, Space } from '../../../services/data.service';
                 <p class="text-sm text-gray-500">Folders</p>
              </div>
           </div>
-          <button class="text-gray-400 hover:text-gray-600">
+          <button *ngIf="canManage()" class="text-gray-400 hover:text-gray-600">
              <i class="fas fa-ellipsis-h"></i>
           </button>
        </header>
@@ -46,10 +47,34 @@ export class SpaceDetailsComponent implements OnInit {
     space = signal<Space | undefined>(undefined);
     folders = signal<Folder[]>([]);
 
+    currentUser = this.authService.currentUser;
+
+    currentUserRole = computed(() => {
+        const space = this.space();
+        const user = this.currentUser();
+        if (!space || !user) return null;
+
+        if (space.owner_id === user.id) return 'owner';
+
+        const member = space.members?.find((m: any) => m.user_id === user.id);
+        return member ? member.role : null;
+    });
+
+    canManage = computed(() => {
+        const role = this.currentUserRole();
+        return role === 'owner' || role === 'admin';
+    });
+
+    canEdit = computed(() => {
+        const role = this.currentUserRole();
+        return role === 'owner' || role === 'admin' || role === 'editor';
+    });
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
-        private dataService: DataService
+        private dataService: DataService,
+        public authService: AuthService
     ) { }
 
     ngOnInit() {
@@ -74,21 +99,8 @@ export class SpaceDetailsComponent implements OnInit {
     }
 
     openFolder(folder: Folder) {
-        // User logic: Clicking folder opens what? 
-        // Usually the first list or a "folder view". 
-        // Given existing routes: /spaces/:spaceId/folders/:folderId/lists/:listId
-        // We need to fetch lists to navigate to the first one, or create a route for just folder.
-        // For now, let's fetch lists and go to first one, or show empty state.
-
-        this.dataService.getLists(folder.id!).subscribe(lists => {
-            if (lists.length > 0) {
-                this.router.navigate(['/spaces', this.spaceId, 'folders', folder.id, 'lists', lists[0].id]);
-            } else {
-                // If no lists, maybe just stay or show notification. 
-                // Or navigate to a 'create list' route if we had one.
-                console.log('Empty folder');
-            }
-        });
+        // Navigate to Folder Details (Lists Grid)
+        this.router.navigate(['/spaces', this.spaceId, 'folders', folder.id]);
     }
 
     goBack() {

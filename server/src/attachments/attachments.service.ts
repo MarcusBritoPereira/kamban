@@ -4,9 +4,9 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AttachmentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
-  async create(taskId: string, createAttachmentDto: CreateAttachmentDto) {
+  async create(taskId: string, data: { file_url: string, file_name: string, file_type: string, uploaded_by: string }) {
     const task = await this.prisma.task.findUnique({ where: { id: taskId } });
     if (!task) {
       throw new NotFoundException(`Task with ID ${taskId} not found`);
@@ -14,8 +14,11 @@ export class AttachmentsService {
 
     return this.prisma.attachment.create({
       data: {
-        ...createAttachmentDto,
-        task: { connect: { id: taskId } },
+        task_id: taskId,
+        file_url: data.file_url,
+        file_name: data.file_name,
+        file_type: data.file_type,
+        uploaded_by: data.uploaded_by,
       },
     });
   }

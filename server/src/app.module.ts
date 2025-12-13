@@ -10,9 +10,16 @@ import { TasksModule } from './tasks/tasks.module';
 import { AttachmentsModule } from './attachments/attachments.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { UsersModule } from './users/users.module';
+import { TagsModule } from './tags/tags.module';
+import { ActivitiesModule } from './activities/activities.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LastActivityInterceptor } from './auth/last-activity.interceptor';
+import { NotificationsModule } from './notifications/notifications.module';
+import { CompaniesModule } from './companies/companies.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -25,6 +32,15 @@ import { LastActivityInterceptor } from './auth/last-activity.interceptor';
     AttachmentsModule,
     PermissionsModule,
     UsersModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'),
+      serveRoot: '/uploads',
+    }),
+    NotificationsModule,
+    TagsModule,
+    ActivitiesModule,
+    CompaniesModule,
+    DashboardModule
   ],
   controllers: [AppController],
   providers: [
@@ -35,4 +51,4 @@ import { LastActivityInterceptor } from './auth/last-activity.interceptor';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }

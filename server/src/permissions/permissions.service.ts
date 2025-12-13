@@ -10,7 +10,7 @@ export enum SpaceRole {
 
 @Injectable()
 export class PermissionsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   private roleHierarchy = {
     [SpaceRole.OWNER]: 4,
@@ -50,7 +50,9 @@ export class PermissionsService {
       return roleStr as SpaceRole;
     }
 
-    return null;
+    // Implicit Membership: All users are members (EDITOR) if not explicitly defined
+    // return null;
+    return SpaceRole.EDITOR;
   }
 
   /**

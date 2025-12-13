@@ -31,10 +31,28 @@ export class TaskListViewComponent implements OnInit {
 
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
-      this.listId = params.get('listId') || '';
-      this.spaceId = this.route.snapshot.paramMap.get('spaceId') ||
-        this.route.parent?.snapshot.paramMap.get('spaceId') ||
-        this.route.parent?.parent?.snapshot.paramMap.get('spaceId') || '';
+      console.log('TaskListView: Route params:', params);
+      const rawId = params.get('listId');
+
+      if (!rawId || rawId === 'undefined' || rawId === 'null') {
+        console.error('TaskListView: Invalid listId detected:', rawId);
+        this.listId = '';
+        return;
+      }
+
+      this.listId = rawId;
+
+      // Try to get spaceId from params first
+      const rawSpaceId = params.get('spaceId');
+      if (rawSpaceId) {
+        this.spaceId = rawSpaceId;
+      } else {
+        // Fallback to snapshot parent lookup
+        this.spaceId = this.route.snapshot.paramMap.get('spaceId') ||
+          this.route.parent?.snapshot.paramMap.get('spaceId') || '';
+      }
+
+      console.log('TaskListView: listId:', this.listId, 'spaceId:', this.spaceId);
 
       if (this.listId) {
         this.loadListDetails();
@@ -42,7 +60,6 @@ export class TaskListViewComponent implements OnInit {
       }
     });
 
-    // Subscribe to global task updates (e.g. from sidebar creation)
     this.dataService.taskUpdates$.subscribe(() => {
       if (this.listId) {
         this.loadTasks();
@@ -53,13 +70,52 @@ export class TaskListViewComponent implements OnInit {
   loadListDetails() {
     this.dataService.getList(this.listId).subscribe(list => {
       this.currentList = list;
+      // Backup: Ensure spaceId is set if missing from route, assuming list has folder->space_id
+      if (!this.spaceId && list.folder?.space_id) {
+        this.spaceId = list.folder.space_id;
+        console.log('TaskListView: spaceId set from list details:', this.spaceId);
+      }
     });
   }
 
-  loadTasks() {
-    this.dataService.getTasks(this.listId).subscribe(tasks => {
-      this.tasks = tasks;
+  // Pagination State
+  page = 1;
+  limit = 50;
+  total = 0;
+  isLoading = false;
+  hasMore = false;
+
+  loadTasks(reset: boolean = true) {
+    if (reset) {
+      this.page = 1;
+      this.tasks = [];
+    }
+
+    this.isLoading = true;
+    this.dataService.getListTasks(this.listId, this.page, this.limit).subscribe({
+      next: (res) => {
+        if (reset) {
+          this.tasks = res.data;
+        } else {
+          this.tasks = [...this.tasks, ...res.data];
+        }
+
+        this.total = res.meta.total;
+        this.hasMore = this.page < res.meta.lastPage;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading tasks:', err);
+        this.isLoading = false;
+      }
     });
+  }
+
+  loadMore() {
+    if (!this.isLoading && this.hasMore) {
+      this.page++;
+      this.loadTasks(false);
+    }
   }
 
   searchTerm: string = '';

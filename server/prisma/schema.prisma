@@ -24,10 +24,15 @@ model User {
   updated_at    DateTime @updatedAt
   last_active_at DateTime @default(now())
   avatar_url     String?
+  reset_token    String?
+  reset_token_expires DateTime?
 
   task_assignees TaskAssignee[]
   spaces         Space[]      @relation("UserSpaces")
   member_of      SpaceMember[]
+  notifications  Notification[]
+  activities     TaskActivity[]
+  companies      CompanyMember[]
 
   @@map("users")
 }
@@ -98,6 +103,7 @@ model Task {
   assignees   TaskAssignee[]
   tags        TaskTag[]
   attachments Attachment[]
+  activities  TaskActivity[]
 
   @@map("tasks")
 }
@@ -147,4 +153,66 @@ model Attachment {
   task        Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
 
   @@map("attachments")
+}
+
+model Notification {
+  id         String   @id @default(uuid())
+  user_id    String
+  title      String
+  message    String
+  read       Boolean  @default(false)
+  type       String   @default("info") // 'assignment', 'mention', 'info'
+  link       String?  // URL to redirect (e.g., /metrics)
+  created_at DateTime @default(now())
+
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model TaskActivity {
+  id          String   @id @default(uuid())
+  task_id     String
+  user_id     String
+  type        String   // 'system' | 'comment'
+  content     String   // The message or log description
+  created_at  DateTime @default(now())
+
+  task        Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("task_activities")
+}
+
+model Company {
+  id              String          @id @default(uuid())
+  name            String
+  status          String          @default("active") // active, inactive
+  niche           String?
+  investment      Decimal?        @db.Decimal(10, 2)
+  partnership_type String?        @map("partnership_type")
+  start_date      DateTime?       @map("start_date")
+  contract_due    DateTime?       @map("contract_due")
+  contract_value  Decimal?        @map("contract_value") @db.Decimal(10, 2)
+  content_quota   Int?            @map("content_quota")
+  created_at      DateTime        @default(now()) @map("created_at")
+  updated_at      DateTime        @updatedAt @map("updated_at")
+
+  members         CompanyMember[]
+
+  @@map("companies")
+}
+
+model CompanyMember {
+  id          String   @id @default(uuid())
+  company_id  String   @map("company_id")
+  user_id     String   @map("user_id")
+  role        String   // Filmmaker, Editor, Designer, Marketing Consultant
+  joined_at   DateTime @default(now()) @map("joined_at")
+
+  company     Company  @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([company_id, user_id])
+  @@map("company_members")
 }

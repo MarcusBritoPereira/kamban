@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class SpacesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   create(createSpaceDto: CreateSpaceDto, ownerId: string) {
     return this.prisma.space.create({
@@ -62,6 +62,57 @@ export class SpacesService {
         },
       },
     });
+  }
+
+  async findMembers(spaceId: string) {
+    // Get members
+    const members = await this.prisma.spaceMember.findMany({
+      where: { space_id: spaceId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatar_url: true,
+          },
+        },
+      },
+    });
+
+    // Get owner
+    const space = await this.prisma.space.findUnique({
+      where: { id: spaceId },
+      include: {
+        owner: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            avatar_url: true
+          }
+        }
+      }
+    });
+
+    if (space && space.owner) {
+      // Check if owner is already in members (unlikely but safe to check)
+      const ownerInMembers = members.find(m => m.user.id === space.owner.id);
+      if (!ownerInMembers) {
+        // Mock a member object for the owner
+        const ownerAsMember = {
+          id: 'owner-' + space.owner.id, // dummy id
+          space_id: spaceId,
+          user_id: space.owner.id,
+          role: 'owner',
+          joined_at: new Date(),
+          user: space.owner
+        };
+        return [ownerAsMember, ...members];
+      }
+    }
+
+    return members;
   }
 
   async addMember(spaceId: string, email: string) {

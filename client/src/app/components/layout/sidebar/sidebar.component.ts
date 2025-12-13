@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { DataService, Space, Folder, TaskList } from '../../../services/data.service';
 import { AuthService } from '../../../services/auth.service';
 import { SimpleInputDialogComponent } from '../../dialogs/simple-input-dialog/simple-input-dialog.component';
@@ -135,9 +135,12 @@ export class SidebarComponent implements OnInit {
   }
 
   // Rich Task Creation
-  initiateCreateTask(list: TaskList, event: Event) {
+  selectedSpaceIdForTask: string | null = null;
+
+  initiateCreateTask(list: TaskList, spaceId: string, event: Event) {
     event.stopPropagation();
     this.selectedListForTask = list;
+    this.selectedSpaceIdForTask = spaceId;
     this.showTaskDialog = true;
   }
 
@@ -151,6 +154,7 @@ export class SidebarComponent implements OnInit {
   closeTaskDialog() {
     this.showTaskDialog = false;
     this.selectedListForTask = null;
+    this.selectedSpaceIdForTask = null;
   }
 
   handleDialogSubmit(value: string) {
@@ -162,11 +166,19 @@ export class SidebarComponent implements OnInit {
     if (mode === 'renameSpace') {
       this.dataService.updateSpace(targetId, { name: value }).subscribe();
     } else if (mode === 'createFolder') {
-      this.dataService.createFolder(targetId, { name: value }).subscribe(folder => {
-        // Refresh folders for this space
-        this.dataService.getFolders(targetId).subscribe(folders => {
-          this.folders.update(current => ({ ...current, [targetId]: folders }));
-        });
+      console.log('Dialog Submitted: createFolder', { targetId, value });
+      this.dataService.createFolder(targetId, { name: value }).subscribe({
+        next: (folder) => {
+          console.log('Folder created success:', folder);
+          // Refresh folders for this space
+          this.dataService.getFolders(targetId).subscribe(folders => {
+            this.folders.update(current => ({ ...current, [targetId]: folders }));
+          });
+        },
+        error: (err) => {
+          console.error('Folder creation failed:', err);
+          alert('Erro ao criar pasta: ' + (err.error?.message || err.message));
+        }
       });
     } else if (mode === 'renameFolder') {
       this.dataService.updateFolder(targetId, { name: value }).subscribe(() => {
@@ -209,16 +221,7 @@ export class SidebarComponent implements OnInit {
     }
   }
 
-  navigateToSpace(space: Space, event: Event) {
-    // When clicking the space name, navigate to the space view
-    // Do NOT stop propagation if we want it to also toggle expansion? 
-    // User expectation: Clicking name usually selects it. 
-    // Let's assume we navigate AND expand (if not expanded).
 
-    // Actually, let's keep it simple: Arrow expands, Name navigates.
-    // But expanding when navigating is nice too.
-    this.router.navigate(['/spaces', space.id]);
-  }
 
   toggleFolder(folderId: string) {
     this.expandedFolders[folderId] = !this.expandedFolders[folderId];

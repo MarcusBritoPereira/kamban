@@ -59,6 +59,21 @@ export class SpacesController {
     return this.spacesService.findOne(id);
   }
 
+  @Get(':id/members')
+  async getMembers(@Param('id') id: string, @Request() req: any) {
+    const user = req.user as { sub: string };
+    // Check access (Viewer or above can see members)
+    const hasAccess = await this.permissionsService.hasAccess(
+      user.sub,
+      id,
+      SpaceRole.VIEWER,
+    );
+    if (!hasAccess)
+      throw new ForbiddenException('You do not have access to this space');
+
+    return this.spacesService.findMembers(id);
+  }
+
   @Roles(Role.admin, Role.gestor)
   @Post(':id/members')
   async invite(

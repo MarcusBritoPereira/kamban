@@ -99,4 +99,15 @@ export class TaskCalendarComponent implements OnInit {
         d.getFullYear() === date.getFullYear();
     });
   }
+
+  getPriorityClass(priority: string): string {
+    switch (priority) {
+      case 'urgent': return 'text-red-600';
+      case 'high': return 'text-yellow-500';
+      case 'normal':
+      case 'medium': return 'text-blue-500';
+      case 'low': return 'text-gray-400';
+      default: return 'text-blue-500';
+    }
+  }
 }

@@ -1,8 +1,7 @@
 import { IsNotEmpty, IsString, IsOptional, IsUUID } from 'class-validator';
 
 export class CreateFolderDto {
-  @IsNotEmpty()
-  @IsUUID()
+  @IsOptional()
   space_id: string;
 
   @IsNotEmpty()

@@ -30,6 +30,12 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get('directory')
+  @Roles(Role.admin, Role.gestor, Role.editor, Role.leitor) // Accessible to all authenticated
+  getDirectory() {
+    return this.usersService.getDirectory();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);

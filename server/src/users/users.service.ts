@@ -21,6 +21,18 @@ export class UsersService {
     });
   }
 
+  getDirectory() {
+    return this.prisma.user.findMany({
+      select: {
+        id: true,
+        name: true,
+        avatar_url: true,
+        email: true // Optional: might be needed for identification
+      },
+      orderBy: { name: 'asc' },
+    });
+  }
+
   findOne(id: string) {
     return this.prisma.user.findUnique({
       where: { id },

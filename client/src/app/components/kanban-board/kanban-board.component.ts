@@ -17,7 +17,12 @@ export class KanbanBoardComponent implements OnChanges {
   @Output() addTask = new EventEmitter<string>();
 
   todo: any[] = [];
+  planned: any[] = [];
   doing: any[] = [];
+  in_review: any[] = [];
+  approved: any[] = [];
+  rejected: any[] = [];
+  waiting: any[] = [];
   done: any[] = [];
 
   constructor(private dataService: DataService) { }
@@ -31,7 +36,12 @@ export class KanbanBoardComponent implements OnChanges {
   filterTasks() {
     if (!this.tasks) return;
     this.todo = this.tasks.filter(t => t.status === 'todo');
+    this.planned = this.tasks.filter(t => t.status === 'planned');
     this.doing = this.tasks.filter(t => t.status === 'doing');
+    this.in_review = this.tasks.filter(t => t.status === 'in_review');
+    this.approved = this.tasks.filter(t => t.status === 'approved');
+    this.rejected = this.tasks.filter(t => t.status === 'rejected');
+    this.waiting = this.tasks.filter(t => t.status === 'waiting');
     this.done = this.tasks.filter(t => t.status === 'done');
   }
 
@@ -47,15 +57,16 @@ export class KanbanBoardComponent implements OnChanges {
       );
 
       const task = event.container.data[event.currentIndex];
-      let newStatus: 'todo' | 'doing' | 'done' = 'todo';
+      let newStatus: string = 'todo';
 
-      if (event.container.data === this.todo) {
-        newStatus = 'todo';
-      } else if (event.container.data === this.doing) {
-        newStatus = 'doing';
-      } else if (event.container.data === this.done) {
-        newStatus = 'done';
-      }
+      if (event.container.data === this.todo) newStatus = 'todo';
+      else if (event.container.data === this.planned) newStatus = 'planned';
+      else if (event.container.data === this.doing) newStatus = 'doing';
+      else if (event.container.data === this.in_review) newStatus = 'in_review';
+      else if (event.container.data === this.approved) newStatus = 'approved';
+      else if (event.container.data === this.rejected) newStatus = 'rejected';
+      else if (event.container.data === this.waiting) newStatus = 'waiting';
+      else if (event.container.data === this.done) newStatus = 'done';
 
       // Optimistic update locally (already done by transferArrayItem)
       task.status = newStatus;

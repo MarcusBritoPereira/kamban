@@ -89,10 +89,20 @@
             class="h-full block overflow-hidden"></app-task-table>
         <app-task-calendar *ngIf="currentView === 'calendar'" [tasks]="filteredTasks"
             (taskClick)="onTaskSelected($event)" class="h-full block"></app-task-calendar>
+
+        <!-- Load More / Pagination -->
+        <div *ngIf="hasMore" class="p-4 flex justify-center border-t border-gray-100">
+            <button (click)="loadMore()" [disabled]="isLoading"
+                class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-md text-sm font-medium transition-colors border border-gray-200 disabled:opacity-50">
+                <i *ngIf="isLoading" class="fas fa-spinner fa-spin mr-2"></i>
+                {{ isLoading ? 'Carregando...' : 'Carregar Mais' }}
+            </button>
+        </div>
     </div>
 
     <app-create-task-dialog *ngIf="showTaskDialog" [listId]="listId" [listName]="currentList?.name || 'Lista'"
-        [task]="selectedTask" [initialStatus]="initialDialogStatus" (close)="closeTaskDialog()" (created)="loadTasks()">
+        [task]="selectedTask" [initialStatus]="initialDialogStatus" [spaceId]="spaceId" (close)="closeTaskDialog()"
+        (created)="loadTasks()">
     </app-create-task-dialog>
     <app-invite-member-dialog *ngIf="showInviteDialog" [spaceId]="spaceId"
         (close)="closeInviteDialog()"></app-invite-member-dialog>

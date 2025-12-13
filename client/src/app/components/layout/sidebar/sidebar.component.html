@@ -10,6 +10,39 @@
 
     <!-- Navigation -->
     <nav class="flex-1 p-4 overflow-y-auto space-y-6">
+        <!-- My Tasks Link -->
+        <div class="mb-6 space-y-1">
+            <!-- Dashboard Link -->
+            <a routerLink="/dashboard" routerLinkActive="text-brand-yellow bg-white/5"
+                class="flex items-center px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
+                <span class="mr-3 text-lg group-hover:scale-110 transition-transform">📊</span>
+                Dashboard
+            </a>
+            <a routerLink="/dashboard" [queryParams]="{tab: 'production'}"
+                routerLinkActive="text-brand-yellow bg-white/5"
+                class="flex items-center px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors group ml-4 border-l border-white/10">
+                <span class="mr-3 text-lg group-hover:scale-110 transition-transform">📈</span>
+                Produção
+            </a>
+            <a routerLink="/my-tasks" routerLinkActive="text-brand-yellow bg-white/5"
+                class="flex items-center px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
+                <span class="mr-3 text-lg group-hover:scale-110 transition-transform">📋</span>
+                Minhas Tarefas
+            </a>
+            <a routerLink="/team" routerLinkActive="bg-pink-50 text-pink-600 font-semibold"
+                class="group flex items-center px-2 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                <i class="fas fa-users mr-3 text-gray-400 group-hover:text-gray-500 transition-colors"
+                    routerLinkActive="text-pink-500"></i>
+                Equipes
+            </a>
+            <a routerLink="/companies" routerLinkActive="bg-pink-50 text-pink-600 font-semibold"
+                class="group flex items-center px-2 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-50 hover:text-gray-900 transition-colors">
+                <i class="fas fa-building mr-3 text-gray-400 group-hover:text-gray-500 transition-colors"
+                    routerLinkActive="text-pink-500"></i>
+                Empresas
+            </a>
+        </div>
+
         <!-- Spaces Section -->
         <div>
             <div class="mb-3 px-2 flex justify-between items-center group">
@@ -27,14 +60,13 @@
                     <!-- Space Item -->
                     <div class="flex items-center justify-between px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer group transition-all duration-200"
                         [ngClass]="{'bg-white/5': isSpaceExpanded(space.id!)}">
-                        <div class="flex items-center overflow-hidden w-full">
+                        <div class="flex items-center overflow-hidden w-full" [routerLink]="['/spaces', space.id]">
                             <span
                                 class="mr-2 text-gray-400 text-[10px] transition-transform duration-200 p-1 hover:text-white"
                                 [class.rotate-90]="isSpaceExpanded(space.id!)"
                                 (click)="$event.stopPropagation(); toggleSpace(space.id!)">▶</span>
 
-                            <span class="text-sm font-medium text-gray-300 group-hover:text-white truncate flex-1"
-                                (click)="navigateToSpace(space, $event)">
+                            <span class="text-sm font-medium text-gray-300 group-hover:text-white truncate flex-1">
                                 {{ space.name }}
                             </span>
                         </div>
@@ -96,7 +128,7 @@
                                             title="Renomear">
                                             <span class="text-[9px]">✎</span>
                                         </button>
-                                        <button (click)="initiateCreateTask(list, $event)"
+                                        <button (click)="initiateCreateTask(list, space.id!, $event)"
                                             class="p-0.5 hover:bg-white/10 rounded text-green-500 hover:text-green-400"
                                             title="Nova Tarefa">
                                             <span class="text-[10px]">✓</span>
@@ -167,7 +199,8 @@
 
 <!-- Global Dialogs (Outside Loop) -->
 <app-create-task-dialog *ngIf="showTaskDialog && selectedListForTask" [listName]="selectedListForTask.name"
-    (created)="handleTaskCreated()" (close)="closeTaskDialog()">
+    [listId]="selectedListForTask.id!" [spaceId]="selectedSpaceIdForTask!" (created)="handleTaskCreated()"
+    (close)="closeTaskDialog()">
 </app-create-task-dialog>
 
 <!-- Simple Input Dialog (Rename/Create Folder/List) -->

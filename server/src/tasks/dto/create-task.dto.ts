@@ -4,11 +4,11 @@ import {
   IsOptional,
   IsUUID,
   IsDateString,
+  IsArray,
 } from 'class-validator';
 
 export class CreateTaskDto {
-  @IsNotEmpty()
-  @IsUUID()
+  @IsOptional()
   list_id: string;
 
   @IsNotEmpty()
@@ -30,4 +30,14 @@ export class CreateTaskDto {
   @IsOptional()
   @IsString()
   priority?: string;
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  assigneeIds?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tagIds?: string[];
 }
