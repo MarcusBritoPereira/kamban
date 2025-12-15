@@ -1,211 +1,98 @@
-<div class="flex space-x-6 h-full overflow-x-auto pb-4 p-6 bg-white text-gray-900">
+<div cdkDropListGroup cdkScrollable
+    class="flex space-x-6 h-full overflow-x-auto pb-4 p-6 bg-white text-gray-900 items-start">
 
-    <!-- PENDENTE (todo) -->
-    <div class="w-80 flex-shrink-0 flex flex-col max-h-full">
+    <!-- Dynamic Column Generation -->
+    <div *ngFor="let col of columns; trackBy: trackByColumn" class="w-80 flex-shrink-0 flex flex-col max-h-full">
+
+        <!-- Header -->
         <div class="flex items-center justify-between mb-4 px-1">
             <div class="flex items-center">
-                <span
-                    class="bg-gray-500 text-white text-xs font-bold px-2 py-0.5 rounded uppercase mr-2">Pendente</span>
-                <span class="text-gray-500 text-sm font-medium">{{todo.length}}</span>
+                <span class="text-white text-xs font-bold px-2 py-0.5 rounded uppercase mr-2"
+                    [ngClass]="col.colorClass">
+                    {{ col.title }}
+                </span>
+                <span class="text-gray-500 text-sm font-medium">{{ col.items.length }}</span>
             </div>
-            <button (click)="addTask.emit('todo')" class="text-gray-400 hover:text-gray-900 transition-colors"><i
-                    class="fas fa-plus"></i></button>
+            <button (click)="onAddClick(col.id)" class="text-gray-400 hover:text-gray-900 transition-colors">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
-        <div cdkDropList #todoList="cdkDropList" [cdkDropListData]="todo"
-            [cdkDropListConnectedTo]="[plannedList, doingList, inReviewList, approvedList, rejectedList, waitingList, doneList]"
-            class="flex-1 space-y-3 overflow-y-auto min-h-[100px] pr-2 custom-scrollbar"
-            (cdkDropListDropped)="drop($event)">
-            <ng-container *ngTemplateOutlet="taskCard; context: { $implicit: todo }"></ng-container>
-        </div>
-    </div>
 
-    <!-- PLANEJADO (planned) -->
-    <div class="w-80 flex-shrink-0 flex flex-col max-h-full">
-        <div class="flex items-center justify-between mb-4 px-1">
-            <div class="flex items-center">
-                <span
-                    class="bg-indigo-500 text-white text-xs font-bold px-2 py-0.5 rounded uppercase mr-2">Planejado</span>
-                <span class="text-gray-500 text-sm font-medium">{{planned.length}}</span>
-            </div>
-            <button (click)="addTask.emit('planned')" class="text-gray-400 hover:text-gray-900 transition-colors"><i
-                    class="fas fa-plus"></i></button>
-        </div>
-        <div cdkDropList #plannedList="cdkDropList" [cdkDropListData]="planned"
-            [cdkDropListConnectedTo]="[todoList, doingList, inReviewList, approvedList, rejectedList, waitingList, doneList]"
+        <!-- Drop List -->
+        <div cdkDropList [id]="col.id" [cdkDropListData]="col.items"
             class="flex-1 space-y-3 overflow-y-auto min-h-[100px] pr-2 custom-scrollbar"
-            (cdkDropListDropped)="drop($event)">
-            <ng-container *ngTemplateOutlet="taskCard; context: { $implicit: planned }"></ng-container>
-        </div>
-    </div>
+            (cdkDropListDropped)="drop($event, col.id)">
 
-    <!-- EM ANDAMENTO (doing) -->
-    <div class="w-80 flex-shrink-0 flex flex-col max-h-full">
-        <div class="flex items-center justify-between mb-4 px-1">
-            <div class="flex items-center">
-                <span class="bg-yellow-500 text-white text-xs font-bold px-2 py-0.5 rounded uppercase mr-2">Em
-                    Andamento</span>
-                <span class="text-gray-500 text-sm font-medium">{{doing.length}}</span>
-            </div>
-            <button (click)="addTask.emit('doing')" class="text-gray-400 hover:text-gray-900 transition-colors"><i
-                    class="fas fa-plus"></i></button>
-        </div>
-        <div cdkDropList #doingList="cdkDropList" [cdkDropListData]="doing"
-            [cdkDropListConnectedTo]="[todoList, plannedList, inReviewList, approvedList, rejectedList, waitingList, doneList]"
-            class="flex-1 space-y-3 overflow-y-auto min-h-[100px] pr-2 custom-scrollbar"
-            (cdkDropListDropped)="drop($event)">
-            <ng-container *ngTemplateOutlet="taskCard; context: { $implicit: doing }"></ng-container>
-        </div>
-    </div>
+            <div *ngFor="let item of col.items; trackBy: trackByTask" cdkDrag [cdkDragData]="item"
+                (click)="taskClick.emit(item)"
+                class="bg-white p-3 rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all group cursor-move select-none mb-3">
 
-    <!-- PARA REVISÃO (in_review) -->
-    <div class="w-80 flex-shrink-0 flex flex-col max-h-full">
-        <div class="flex items-center justify-between mb-4 px-1">
-            <div class="flex items-center">
-                <span class="bg-pink-500 text-white text-xs font-bold px-2 py-0.5 rounded uppercase mr-2">Para
-                    Revisão</span>
-                <span class="text-gray-500 text-sm font-medium">{{in_review.length}}</span>
-            </div>
-            <button (click)="addTask.emit('in_review')" class="text-gray-400 hover:text-gray-900 transition-colors"><i
-                    class="fas fa-plus"></i></button>
-        </div>
-        <div cdkDropList #inReviewList="cdkDropList" [cdkDropListData]="in_review"
-            [cdkDropListConnectedTo]="[todoList, plannedList, doingList, approvedList, rejectedList, waitingList, doneList]"
-            class="flex-1 space-y-3 overflow-y-auto min-h-[100px] pr-2 custom-scrollbar"
-            (cdkDropListDropped)="drop($event)">
-            <ng-container *ngTemplateOutlet="taskCard; context: { $implicit: in_review }"></ng-container>
-        </div>
-    </div>
+                <!-- Standard Content -->
+                <ng-container *ngTemplateOutlet="cardContent; context: { $implicit: item }"></ng-container>
 
-    <!-- APROVADO (approved) -->
-    <div class="w-80 flex-shrink-0 flex flex-col max-h-full">
-        <div class="flex items-center justify-between mb-4 px-1">
-            <div class="flex items-center">
-                <span
-                    class="bg-teal-600 text-white text-xs font-bold px-2 py-0.5 rounded uppercase mr-2">Aprovado</span>
-                <span class="text-gray-500 text-sm font-medium">{{approved.length}}</span>
-            </div>
-            <button (click)="addTask.emit('approved')" class="text-gray-400 hover:text-gray-900 transition-colors"><i
-                    class="fas fa-plus"></i></button>
-        </div>
-        <div cdkDropList #approvedList="cdkDropList" [cdkDropListData]="approved"
-            [cdkDropListConnectedTo]="[todoList, plannedList, doingList, inReviewList, rejectedList, waitingList, doneList]"
-            class="flex-1 space-y-3 overflow-y-auto min-h-[100px] pr-2 custom-scrollbar"
-            (cdkDropListDropped)="drop($event)">
-            <ng-container *ngTemplateOutlet="taskCard; context: { $implicit: approved }"></ng-container>
-        </div>
-    </div>
+                <!-- Drag Preview (Critical: pointer-events-none) -->
+                <div *cdkDragPreview
+                    class="bg-white p-3 rounded-xl shadow-2xl border-2 border-pink-500 w-80 z-[99999] cursor-grabbing pointer-events-none">
+                    <ng-container *ngTemplateOutlet="cardContent; context: { $implicit: item }"></ng-container>
+                </div>
 
-    <!-- REJEITADO (rejected) -->
-    <div class="w-80 flex-shrink-0 flex flex-col max-h-full">
-        <div class="flex items-center justify-between mb-4 px-1">
-            <div class="flex items-center">
-                <span
-                    class="bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded uppercase mr-2">Rejeitado</span>
-                <span class="text-gray-500 text-sm font-medium">{{rejected.length}}</span>
-            </div>
-            <button (click)="addTask.emit('rejected')" class="text-gray-400 hover:text-gray-900 transition-colors"><i
-                    class="fas fa-plus"></i></button>
-        </div>
-        <div cdkDropList #rejectedList="cdkDropList" [cdkDropListData]="rejected"
-            [cdkDropListConnectedTo]="[todoList, plannedList, doingList, inReviewList, approvedList, waitingList, doneList]"
-            class="flex-1 space-y-3 overflow-y-auto min-h-[100px] pr-2 custom-scrollbar"
-            (cdkDropListDropped)="drop($event)">
-            <ng-container *ngTemplateOutlet="taskCard; context: { $implicit: rejected }"></ng-container>
-        </div>
-    </div>
+                <!-- Placeholder -->
+                <div *cdkDragPlaceholder
+                    class="opacity-0 bg-gray-100 border-dashed border-2 border-gray-300 rounded-xl mb-3">
+                </div>
 
-    <!-- EM ESPERA (waiting) -->
-    <div class="w-80 flex-shrink-0 flex flex-col max-h-full">
-        <div class="flex items-center justify-between mb-4 px-1">
-            <div class="flex items-center">
-                <span class="bg-amber-700 text-white text-xs font-bold px-2 py-0.5 rounded uppercase mr-2">Em
-                    Espera</span>
-                <span class="text-gray-500 text-sm font-medium">{{waiting.length}}</span>
             </div>
-            <button (click)="addTask.emit('waiting')" class="text-gray-400 hover:text-gray-900 transition-colors"><i
-                    class="fas fa-plus"></i></button>
-        </div>
-        <div cdkDropList #waitingList="cdkDropList" [cdkDropListData]="waiting"
-            [cdkDropListConnectedTo]="[todoList, plannedList, doingList, inReviewList, approvedList, rejectedList, doneList]"
-            class="flex-1 space-y-3 overflow-y-auto min-h-[100px] pr-2 custom-scrollbar"
-            (cdkDropListDropped)="drop($event)">
-            <ng-container *ngTemplateOutlet="taskCard; context: { $implicit: waiting }"></ng-container>
-        </div>
-    </div>
-
-    <!-- CONCLUÍDO (done) -->
-    <div class="w-80 flex-shrink-0 flex flex-col max-h-full">
-        <div class="flex items-center justify-between mb-4 px-1">
-            <div class="flex items-center">
-                <span
-                    class="bg-green-600 text-white text-xs font-bold px-2 py-0.5 rounded uppercase mr-2">Concluído</span>
-                <span class="text-gray-500 text-sm font-medium">{{done.length}}</span>
-            </div>
-            <button (click)="addTask.emit('done')" class="text-gray-400 hover:text-gray-900 transition-colors"><i
-                    class="fas fa-plus"></i></button>
-        </div>
-        <div cdkDropList #doneList="cdkDropList" [cdkDropListData]="done"
-            [cdkDropListConnectedTo]="[todoList, plannedList, doingList, inReviewList, approvedList, rejectedList, waitingList]"
-            class="flex-1 space-y-3 overflow-y-auto min-h-[100px] pr-2 custom-scrollbar"
-            (cdkDropListDropped)="drop($event)">
-            <ng-container *ngTemplateOutlet="taskCard; context: { $implicit: done }"></ng-container>
         </div>
     </div>
 
 </div>
 
-<!-- Reusable Task Card Template to avoid code duplication -->
-<ng-template #taskCard let-items>
-    <div *ngFor="let item of items" cdkDrag (click)="taskClick.emit(item)"
-        class="bg-white p-3 rounded-xl shadow-sm border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all group cursor-move select-none mb-3">
+<!-- Reusable Card Content Template (Saved from previous version, slightly cleaned) -->
+<ng-template #cardContent let-item>
+    <!-- Title -->
+    <div class="font-bold text-gray-800 text-sm mb-2 uppercase tracking-wide leading-snug">
+        {{item.title}}
+    </div>
 
-        <!-- Title -->
-        <div class="font-bold text-gray-800 text-sm mb-2 uppercase tracking-wide leading-snug">
-            {{item.title}}
+    <!-- Tags -->
+    <div class="flex flex-wrap gap-1 mb-2" *ngIf="item.tags?.length">
+        <span *ngFor="let t of item.tags" class="px-1.5 py-0.5 rounded text-[9px] font-bold text-white"
+            [style.background-color]="t.tag.color">
+            {{ t.tag.name }}
+        </span>
+    </div>
+
+    <!-- Desc Icon -->
+    <div class="mb-3 text-gray-400 text-xs" *ngIf="item.description">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex items-center space-x-2 mt-auto">
+        <!-- Avatar -->
+        <div class="relative">
+            <div
+                class="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-[9px] text-white font-bold">
+                MR
+            </div>
         </div>
 
-        <!-- Tags -->
-        <div class="flex flex-wrap gap-1 mb-2" *ngIf="item.tags?.length">
-            <span *ngFor="let t of item.tags" class="px-1.5 py-0.5 rounded text-[9px] font-bold text-white"
-                [style.background-color]="t.tag.color">
-                {{ t.tag.name }}
-            </span>
+        <!-- Date -->
+        <div *ngIf="item.deadline"
+            class="flex items-center px-2 py-1 rounded border border-gray-200 bg-white text-xs text-gray-600 space-x-1 shadow-sm">
+            <i class="far fa-clock text-gray-400 text-[10px]"></i>
+            <span class="font-medium text-[10px]">{{item.deadline | date:'EEE':'' :'pt-BR'}}</span>
         </div>
 
-        <!-- Desc Icon -->
-        <div class="mb-3 text-gray-400 text-xs" *ngIf="item.description">
-            <i class="fas fa-bars"></i>
-        </div>
-
-        <!-- Footer -->
-        <div class="flex items-center space-x-2 mt-auto">
-            <!-- Avatar -->
-            <div class="relative">
-                <div
-                    class="w-6 h-6 rounded-full bg-purple-600 flex items-center justify-center text-[9px] text-white font-bold">
-                    MR
-                </div>
-                <!-- Online Status Dot Mock -->
-                <!-- <div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-white"></div> -->
-            </div>
-
-            <!-- Date -->
-            <div *ngIf="item.deadline"
-                class="flex items-center px-2 py-1 rounded border border-gray-200 bg-white text-xs text-gray-600 space-x-1 shadow-sm">
-                <i class="far fa-calendar-alt text-gray-400 text-[10px]"></i>
-                <span class="font-medium text-[10px]">{{item.deadline | date:'EEE':'' :'pt-BR'}}</span>
-            </div>
-
-            <!-- Priority -->
-            <div class="w-6 h-6 flex items-center justify-center rounded border border-gray-200 bg-white text-gray-400 shadow-sm"
-                *ngIf="item.priority">
-                <i class="fas fa-flag text-[10px]" [ngClass]="{
-                'text-red-500': item.priority === 'urgent',
-                'text-yellow-500': item.priority === 'high',
-                'text-blue-500': item.priority === 'medium' || item.priority === 'normal' || !item.priority,
-                'text-gray-400': item.priority === 'low'
-            }"></i>
-            </div>
+        <!-- Priority -->
+        <div class="w-6 h-6 flex items-center justify-center rounded border border-gray-200 bg-white text-gray-400 shadow-sm"
+            *ngIf="item.priority">
+            <i class="fas fa-flag text-[10px]" [ngClass]="{
+            'text-red-500': item.priority === 'urgent',
+            'text-yellow-500': item.priority === 'high',
+            'text-blue-500': item.priority === 'medium' || item.priority === 'normal' || !item.priority,
+            'text-gray-400': item.priority === 'low'
+        }"></i>
         </div>
     </div>
 </ng-template>

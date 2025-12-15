@@ -45,7 +45,6 @@ interface TaskGroup {
        <!-- Tabs -->
        <div class="px-8 border-b border-gray-200 flex items-center gap-8 bg-white">
            <button class="py-4 text-sm font-medium text-gray-500 hover:text-gray-800 border-b-2 border-transparent hover:border-gray-200 transition-colors">Chat</button>
-           <button class="py-4 text-sm font-medium text-gray-500 hover:text-gray-800 border-b-2 border-transparent hover:border-gray-200 transition-colors">Calendário</button>
            <button class="py-4 text-sm font-bold text-gray-900 border-b-2 border-gray-900">Tarefas atribuídas a {{ parseFirstName(user?.name) }}</button>
        </div>
 
@@ -53,7 +52,7 @@ interface TaskGroup {
        <div class="px-8 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
            <div class="flex items-center gap-2 overflow-x-auto">
                <button class="px-3 py-1.5 bg-pink-100 text-pink-700 rounded-full text-xs font-bold flex items-center border border-pink-200">
-                   <i class="fas fa-calendar-alt mr-2"></i> Data de vencimento
+                   <i class="fas fa-clock mr-2"></i> Data de vencimento
                </button>
                <button class="px-3 py-1.5 bg-white text-gray-600 rounded-full text-xs font-medium border border-gray-200 hover:bg-gray-50 transition-colors flex items-center">
                    <i class="fas fa-code-branch mr-2"></i> Subtarefas
@@ -226,10 +225,9 @@ export class MemberProfileComponent implements OnInit {
         });
 
         this.taskGroups = [
-            { title: 'Em atraso', tasks: groups.overdue, color: 'text-red-500', icon: 'fas fa-exclamation-circle', isOpen: true },
-            { title: 'Hoje', tasks: groups.today, color: 'text-green-500', icon: 'fas fa-calendar-day', isOpen: true },
-            { title: 'Próximos dias', tasks: groups.upcoming, color: 'text-gray-900', icon: 'fas fa-calendar-alt', isOpen: true },
-            { title: 'Sem prazo', tasks: groups.noDate, color: 'text-gray-500', icon: 'far fa-calendar', isOpen: false },
+            { title: 'Hoje', tasks: groups.today, color: 'text-green-500', icon: 'fas fa-star', isOpen: true },
+            { title: 'Próximos dias', tasks: groups.upcoming, color: 'text-gray-900', icon: 'fas fa-clock', isOpen: true },
+            { title: 'Sem prazo', tasks: groups.noDate, color: 'text-gray-500', icon: 'far fa-circle', isOpen: false },
         ].filter(g => g.tasks.length > 0);
     }
 

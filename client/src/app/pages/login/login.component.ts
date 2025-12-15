@@ -30,7 +30,12 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/spaces']);
+          const user = this.authService.currentUser();
+          if (user?.role === 'admin') {
+            this.router.navigate(['/spaces']);
+          } else {
+            this.router.navigate(['/my-tasks']);
+          }
         },
         error: (err) => {
           this.error = 'Login falhou. Verifique suas credenciais.';

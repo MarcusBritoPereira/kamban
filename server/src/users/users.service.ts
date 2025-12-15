@@ -46,10 +46,18 @@ export class UsersService {
     });
   }
 
-  remove(id: string) {
-    return this.prisma.user.delete({
-      where: { id },
-    });
+  async remove(id: string) {
+    // Delete spaces owned by user first (to satisfy constraints)
+    // The Schema doesn't have Cascade on Owner->Space, but Space->Folder->List->Task DOES cascade.
+    // So deleting the Space is enough.
+    return this.prisma.$transaction([
+      this.prisma.space.deleteMany({
+        where: { owner_id: id },
+      }),
+      this.prisma.user.delete({
+        where: { id },
+      }),
+    ]);
   }
 
   updateLastActivity(id: string) {

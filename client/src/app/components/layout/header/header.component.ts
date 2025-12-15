@@ -55,8 +55,33 @@ export class HeaderComponent implements OnInit {
         );
       });
     }
+
     if (notification.link) {
-      this.router.navigateByUrl(notification.link);
+      console.log('Header: Notification clicked', notification.link);
+      if (notification.link.startsWith('/tasks/')) {
+        // Handle legacy/direct links by fetching context
+        const taskId = notification.link.split('/').pop();
+        if (taskId) {
+          this.dataService.getTask(taskId).subscribe({
+            next: (task) => {
+              console.log('Header: Resolved legacy task', task);
+              if (task && task.list && task.list.folder) {
+                const url = `/spaces/${task.list.folder.space_id}/folders/${task.list.folder.id}/lists/${task.list.id}?openTask=${task.id}`;
+                console.log('Header: Redirecting to', url);
+                this.router.navigateByUrl(url);
+              } else {
+                console.warn('Could not resolve context for task:', taskId, task);
+                // Fallback: try direct navigation if backend supports simple view? No, we need context.
+                alert('Não foi possível localizar o contexto desta tarefa antiga.');
+              }
+            },
+            error: (err) => console.error('Error resolving task link:', err)
+          });
+        }
+      } else {
+        console.log('Header: Direct navigation to', notification.link);
+        this.router.navigateByUrl(notification.link);
+      }
       this.showNotifications = false;
     }
   }

@@ -4,880 +4,2260 @@
 
 - Building...
 
-Initial chunk files | Names                      |  Raw size
-polyfills.js        | polyfills                  |  88.09 kB | 
-main.js             | main                       |  53.78 kB | 
-styles.css          | styles                     |  37.45 kB | 
-chunk-PHRM37T2.js   | -                          |  16.05 kB | 
-chunk-QCTZSG3L.js   | -                          |   5.23 kB | 
-chunk-CK6Q4KCE.js   | -                          |   4.89 kB | 
-chunk-SHAOKUVO.js   | -                          | 938 bytes | 
+Application bundle generation failed. [3.460 seconds]
 
-                    | Initial total              | 206.40 kB
+✘ [ERROR] NG5002: Unexpected closing tag "p". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags [plugin angular-compiler]
 
-Lazy chunk files    | Names                      |  Raw size
-chunk-7K3C2OIV.js   | task-list-view-component   |  47.20 kB | 
-chunk-HYSYYBD7.js   | user-management-component  |  12.10 kB | 
-chunk-VNYWMPCH.js   | spaces-dashboard-component |   8.43 kB | 
-chunk-66XXZ5LP.js   | settings-component         |   5.92 kB | 
-chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
+    src/app/pages/my-tasks/my-tasks.component.ts:20:69:
+      20 │ ...  < p class="text-gray-500 text-sm mt-1" > Tarefas para você </p>
+         ╵                                                                ~~~~
 
-Application bundle generation complete. [1.452 seconds]
+
+✘ [ERROR] NG5002: Unexpected closing tag "button". It may happen when the tag has already been closed by another tag. For more info see https://www.w3.org/TR/html5/syntax.html#closing-elements-that-have-implied-end-tags [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:34:4:
+      34 │     </button>
+         ╵     ~~~~~~~~~
+
+
+✘ [ERROR] NG5002: Unexpected character "EOF" [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:97:26:
+      97 │                           `
+         ╵                           ^
+
+
+✘ [ERROR] TS-992001: component is missing a template [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:11:0:
+      11 │ @Component({
+         ╵ ~~~~~~~~~~~~
+
 
 Watch mode enabled. Watching for file changes...
+- Changes detected. Rebuilding...
+
+Application bundle generation failed. [1.649 seconds]
+
+✘ [ERROR] TS-992001: component is missing a template [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.ts:11:0:
+      11 │ @Component({
+         ╵ ~~~~~~~~~~~~
+
+
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                      |  Raw size
+main.js             | main                       |  99.11 kB | 
+polyfills.js        | polyfills                  |  88.09 kB | 
+chunk-TLBGWUTP.js   | -                          |  83.53 kB | 
+styles.css          | styles                     |  58.98 kB | 
+chunk-4HH5VAD4.js   | -                          |   9.09 kB | 
+chunk-U33U6W3X.js   | -                          |   4.99 kB | 
+chunk-SHAOKUVO.js   | -                          | 938 bytes | 
+
+                    | Initial total              | 344.71 kB
+
+Lazy chunk files    | Names                      |  Raw size
+chunk-B2MIU5UY.js   | companies-list-component   |  57.79 kB | 
+chunk-CNT3O4PK.js   | company-details-component  |  51.47 kB | 
+chunk-UYR7YGHE.js   | -                          |  36.36 kB | 
+chunk-CURFJLXV.js   | team-component             |  30.94 kB | 
+chunk-Z2MHLYIW.js   | dashboard-component        |  29.08 kB | 
+chunk-AM5XMLEP.js   | task-list-view-component   |  23.49 kB | 
+chunk-ECEWG3EB.js   | member-profile-component   |  20.30 kB | 
+chunk-FQWAL2CN.js   | spaces-dashboard-component |  17.66 kB | 
+chunk-EZXIBMGQ.js   | user-management-component  |  16.65 kB | 
+chunk-6BIGRFTE.js   | my-tasks-component         |  13.29 kB | 
+chunk-5R6FI65R.js   | settings-component         |  10.71 kB | 
+chunk-2SZBD7BK.js   | space-details-component    |   6.88 kB | 
+chunk-R7K4UKXJ.js   | folder-details-component   |   6.10 kB | 
+chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
+
+Application bundle generation complete. [1.513 seconds]
+
   ➜  Local:   http://localhost:4200/
-  ➜  press h + enter to show help
 - Changes detected. Rebuilding...
 
-Initial chunk files | Names                    | Raw size
-main.js             | main                     | 53.78 kB | 
-chunk-RHGD4YPO.js   | -                        | 16.16 kB | 
 
-Lazy chunk files    | Names                    | Raw size
-chunk-Q2PRDGKN.js   | task-list-view-component | 47.20 kB | 
+No output file changes.
 
-Application bundle generation complete. [0.574 seconds]
-
-Page reload sent to client(s).
-- Changes detected. Rebuilding...
-
-Initial chunk files | Names                    | Raw size
-main.js             | main                     | 53.78 kB | 
-chunk-A7GNFRNL.js   | -                        | 16.18 kB | 
-
-Lazy chunk files    | Names                    | Raw size
-chunk-BJ2ZQD6Q.js   | task-list-view-component | 47.20 kB | 
-
-Application bundle generation complete. [0.243 seconds]
-
-Page reload sent to client(s).
-- Changes detected. Rebuilding...
-
-Initial chunk files | Names                    | Raw size
-main.js             | main                     | 53.78 kB | 
-chunk-33OABQIS.js   | -                        | 16.14 kB | 
-
-Lazy chunk files    | Names                    | Raw size
-chunk-CX6GZWE6.js   | task-list-view-component | 47.20 kB | 
-
-Application bundle generation complete. [0.349 seconds]
-
-Page reload sent to client(s).
-- Changes detected. Rebuilding...
-
-Application bundle generation failed. [0.406 seconds]
-
-✘ [ERROR] TS2304: Cannot find name 'Output'. [plugin angular-compiler]
-
-    src/app/components/task-table/task-table.component.ts:13:3:
-      13 │   @Output() taskClick = new EventEmitter<any>();
-         ╵    ~~~~~~
-
-
-✘ [ERROR] TS2304: Cannot find name 'EventEmitter'. [plugin angular-compiler]
-
-    src/app/components/task-table/task-table.component.ts:13:28:
-      13 │   @Output() taskClick = new EventEmitter<any>();
-         ╵                             ~~~~~~~~~~~~
-
+Application bundle generation complete. [2.633 seconds]
 
 - Changes detected. Rebuilding...
 
-Initial chunk files | Names                      |  Raw size
-polyfills.js        | polyfills                  |  88.09 kB | 
-main.js             | main                       |  53.78 kB | 
-styles.css          | styles                     |  37.45 kB | 
-chunk-33OABQIS.js   | -                          |  16.14 kB | 
-chunk-QCTZSG3L.js   | -                          |   5.23 kB | 
-chunk-CK6Q4KCE.js   | -                          |   4.89 kB | 
-chunk-SHAOKUVO.js   | -                          | 938 bytes | 
+Application bundle generation failed. [4.293 seconds]
 
-                    | Initial total              | 206.48 kB
+✘ [ERROR] TS2306: File '/Users/marcuspereira/Documents/Project_Up/client/src/app/pages/my-tasks/my-tasks.component.ts' is not a module. [plugin angular-compiler]
 
-Lazy chunk files    | Names                      |  Raw size
-chunk-VN66LEA7.js   | task-list-view-component   |  47.38 kB | 
-chunk-HYSYYBD7.js   | user-management-component  |  12.10 kB | 
-chunk-VNYWMPCH.js   | spaces-dashboard-component |   8.43 kB | 
-chunk-66XXZ5LP.js   | settings-component         |   5.92 kB | 
-chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
+    src/app/app.routes.ts:61:44:
+      61 │ ...() => import('./pages/my-tasks/my-tasks.component').then(m => m...
+         ╵                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Application bundle generation complete. [0.234 seconds]
 
-Page reload sent to client(s).
-- Changes detected. Rebuilding...
+✘ [ERROR] TS2349: This expression is not callable.
+  Type 'String' has no call signatures. [plugin angular-compiler]
 
-Initial chunk files | Names                    | Raw size
-main.js             | main                     | 53.78 kB | 
+    src/app/pages/my-tasks/my-tasks.component.ts:0:0:
+      0 │ 
+        ╵ ^
 
-Lazy chunk files    | Names                    | Raw size
-chunk-XEXOM552.js   | task-list-view-component | 47.82 kB | 
 
-Application bundle generation complete. [0.096 seconds]
+✘ [ERROR] TS2304: Cannot find name 'div'. [plugin angular-compiler]
 
-Page reload sent to client(s).
-- Changes detected. Rebuilding...
+    src/app/pages/my-tasks/my-tasks.component.ts:17:4:
+      17 │   < div class="h-full flex flex-col bg-gray-50" >
+         ╵     ~~~
 
-Application bundle generation failed. [0.343 seconds]
 
-✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:12:24:
-      12 │       <div [formGroup]="taskForm" class="bg-brand-dark w-full max-...
-         ╵                         ~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:17:8:
+      17 │   < div class="h-full flex flex-col bg-gray-50" >
+         ╵         ~~~~~
 
 
-✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:125:37:
-      125 │ ...                 <div *ngIf="files.length > 0" class="mt-4 spa...
-          ╵                                 ~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:17:13:
+      17 │   < div class="h-full flex flex-col bg-gray-50" >
+         ╵              ^
 
 
-✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:126:53:
-      126 │ ...    <div *ngFor="let file of files" class="flex items-center j...
-          ╵                                 ~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:18:6:
+      18 │     <!--Header -->
+         ╵       ~~
 
 
-✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2552: Cannot find name 'Header'. Did you mean 'Headers'? [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:33:
-      146 │                      [disabled]="taskForm.invalid || isSubmitting"
-          ╵                                  ~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:18:8:
+      18 │     <!--Header -->
+         ╵         ~~~~~~
 
+  'Headers' is declared here.
 
-✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    node_modules/typescript/lib/lib.dom.d.ts:13535:12:
+      13535 │ declare var Headers: {
+            ╵             ~~~~~~~
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:53:
-      146 │                      [disabled]="taskForm.invalid || isSubmitting"
-          ╵                                                      ~~~~~~~~~~~~
 
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:18:15:
+      18 │     <!--Header -->
+         ╵                ~~
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:148:24:
-      148 │                      {{ isSubmitting ? 'Criando...' : 'Criar Tare...
-          ╵                         ~~~~~~~~~~~~
 
+✘ [ERROR] TS1109: Expression expected. [plugin angular-compiler]
 
-✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:18:17:
+      18 │     <!--Header -->
+         ╵                  ^
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:191:17:
-      191 │             this.taskForm.patchValue({
-          ╵                  ~~~~~~~~
 
+✘ [ERROR] Expected identifier but found "{"
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:19:6:
+      19 │ class {
+         ╵       ^
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:209:21:
-      209 │                 this.files.push(event.target.files[i]);
-          ╵                      ~~~~~
 
+✘ [ERROR] TS2304: Cannot find name 'div'. [plugin angular-compiler]
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:19:7:
+      19 │       <div class="px-8 py-6 bg-white border-b border-gray-200 flex...
+         ╵        ~~~
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:13:
-      215 │         this.files = this.files.filter(f => f !== file);
-          ╵              ~~~~~
 
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:19:11:
+      19 │       <div class="px-8 py-6 bg-white border-b border-gray-200 flex...
+         ╵            ~~~~~
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:26:
-      215 │         this.files = this.files.filter(f => f !== file);
-          ╵                           ~~~~~
 
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
-✘ [ERROR] TS7006: Parameter 'f' implicitly has an 'any' type. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:19:16:
+      19 │       <div class="px-8 py-6 bg-white border-b border-gray-200 flex...
+         ╵                 ^
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:39:
-      215 │         this.files = this.files.filter(f => f !== file);
-          ╵                                        ^
 
+✘ [ERROR] TS2304: Cannot find name 'div'. [plugin angular-compiler]
 
-✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:20:9:
+      20 │         <div>
+         ╵          ~~~
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:219:17:
-      219 │         if (this.taskForm.valid) {
-          ╵                  ~~~~~~~~
 
+✘ [ERROR] TS2304: Cannot find name 'h1'. [plugin angular-compiler]
 
-✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:21:9:
+      21 │         <h1 class="text-2xl font-bold text-gray-900 tracking-tight...
+         ╵          ~~
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:220:17:
-      220 │             this.isSubmitting = true;
-          ╵                  ~~~~~~~~~~~~
 
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
 
-✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:21:12:
+      21 │         <h1 class="text-2xl font-bold text-gray-900 tracking-tight...
+         ╵             ~~~~~
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:223:35:
-      223 │             const formValue = this.taskForm.value;
-          ╵                                    ~~~~~~~~
 
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
-✘ [ERROR] TS2339: Property 'dataService' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:21:17:
+      21 │         <h1 class="text-2xl font-bold text-gray-900 tracking-tight...
+         ╵                  ^
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:232:17:
-      232 │             this.dataService.createTask(this.listId, taskData).su...
-          ╵                  ~~~~~~~~~~~
 
+✘ [ERROR] TS2304: Cannot find name 'Minhas'. [plugin angular-compiler]
 
-✘ [ERROR] TS7006: Parameter 'task' implicitly has an 'any' type. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:21:83:
+      21 │ ... text-gray-900 tracking-tight font-display" > Minhas Tarefas </h1>
+         ╵                                                  ~~~~~~
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:233:23:
-      233 │                 next: (task) => {
-          ╵                        ~~~~
 
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:21:90:
+      21 │ ... text-gray-900 tracking-tight font-display" > Minhas Tarefas </h1>
+         ╵                                                         ~~~~~~~
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:235:29:
-      235 │                     if (this.files.length > 0) {
-          ╵                              ~~~~~
 
+✘ [ERROR] TS2304: Cannot find name 'Tarefas'. [plugin angular-compiler]
 
-✘ [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:21:90:
+      21 │ ... text-gray-900 tracking-tight font-display" > Minhas Tarefas </h1>
+         ╵                                                         ~~~~~~~
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:245:24:
-      245 │                 error: (err) => {
-          ╵                         ~~~
 
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
 
-✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:21:100:
+      21 │ ... text-gray-900 tracking-tight font-display" > Minhas Tarefas </h1>
+         ╵                                                                   ^
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:248:25:
-      248 │                     this.isSubmitting = false;
-          ╵                          ~~~~~~~~~~~~
 
+✘ [ERROR] TS2304: Cannot find name 'p'. [plugin angular-compiler]
 
-- Changes detected. Rebuilding...
+    src/app/pages/my-tasks/my-tasks.component.ts:22:12:
+      22 │           < p class="text-gray-500 text-sm mt-1" > Tarefas para vo...
+         ╵             ^
 
-Application bundle generation failed. [0.247 seconds]
 
-✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:12:24:
-      12 │       <div [formGroup]="taskForm" class="bg-brand-dark w-full max-...
-         ╵                         ~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:22:14:
+      22 │           < p class="text-gray-500 text-sm mt-1" > Tarefas para vo...
+         ╵               ~~~~~
 
 
-✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:125:37:
-      125 │ ...                 <div *ngIf="files.length > 0" class="mt-4 spa...
-          ╵                                 ~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:22:19:
+      22 │           < p class="text-gray-500 text-sm mt-1" > Tarefas para vo...
+         ╵                    ^
 
 
-✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'Tarefas'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:126:53:
-      126 │ ...    <div *ngFor="let file of files" class="flex items-center j...
-          ╵                                 ~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:22:51:
+      22 │ ...  < p class="text-gray-500 text-sm mt-1" > Tarefas para você </p>
+         ╵                                               ~~~~~~~
 
 
-✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:33:
-      146 │                      [disabled]="taskForm.invalid || isSubmitting"
-          ╵                                  ~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:22:59:
+      22 │ ...  < p class="text-gray-500 text-sm mt-1" > Tarefas para você </p>
+         ╵                                                       ~~~~
 
 
-✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'para'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:53:
-      146 │                      [disabled]="taskForm.invalid || isSubmitting"
-          ╵                                                      ~~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:22:59:
+      22 │ ...  < p class="text-gray-500 text-sm mt-1" > Tarefas para você </p>
+         ╵                                                       ~~~~
 
 
-✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'você'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:148:24:
-      148 │                      {{ isSubmitting ? 'Criando...' : 'Criar Tare...
-          ╵                         ~~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:22:64:
+      22 │ ...  < p class="text-gray-500 text-sm mt-1" > Tarefas para você </p>
+         ╵                                                            ~~~~
 
 
-✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:191:17:
-      191 │             this.taskForm.patchValue({
-          ╵                  ~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:22:64:
+      22 │ ...  < p class="text-gray-500 text-sm mt-1" > Tarefas para você </p>
+         ╵                                                            ~~~~~~~~~
 
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:209:21:
-      209 │                 this.files.push(event.target.files[i]);
-          ╵                      ~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:22:71:
+      22 │ ...  < p class="text-gray-500 text-sm mt-1" > Tarefas para você </p>
+         ╵                                                                  ^
 
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:13:
-      215 │         this.files = this.files.filter(f => f !== file);
-          ╵              ~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:23:14:
+      23 │             </div>
+         ╵               ^
 
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'View'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:26:
-      215 │         this.files = this.files.filter(f => f !== file);
-          ╵                           ~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:25:17:
+      25 │             < !--View Switcher-- >
+         ╵                  ~~~~
 
 
-✘ [ERROR] TS7006: Parameter 'f' implicitly has an 'any' type. [plugin angular-compiler]
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:39:
-      215 │         this.files = this.files.filter(f => f !== file);
-          ╵                                        ^
+    src/app/pages/my-tasks/my-tasks.component.ts:25:22:
+      25 │             < !--View Switcher-- >
+         ╵                       ~~~~~~~~
 
 
-✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'Switcher'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:219:17:
-      219 │         if (this.taskForm.valid) {
-          ╵                  ~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:25:22:
+      25 │             < !--View Switcher-- >
+         ╵                       ~~~~~~~~
 
 
-✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'div'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:220:17:
-      220 │             this.isSubmitting = true;
-          ╵                  ~~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:26:15:
+      26 │               <div class="flex bg-gray-100 p-1 rounded-lg" >
+         ╵                ~~~
 
 
-✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:222:35:
-      222 │             const formValue = this.taskForm.value;
-          ╵                                    ~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:26:19:
+      26 │               <div class="flex bg-gray-100 p-1 rounded-lg" >
+         ╵                    ~~~~~
 
 
-✘ [ERROR] TS2339: Property 'dataService' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:233:21:
-      233 │                 this.dataService.updateTask(this.task.id, taskDat...
-          ╵                      ~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:26:24:
+      26 │               <div class="flex bg-gray-100 p-1 rounded-lg" >
+         ╵                         ^
 
 
-✘ [ERROR] TS7006: Parameter 'updatedTask' implicitly has an 'any' type. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'button'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:234:27:
-      234 │                     next: (updatedTask) => {
-          ╵                            ~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:27:17:
+      27 │                 <button (click)="viewMode = 'list'"
+         ╵                  ~~~~~~
 
 
-✘ [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:239:28:
-      239 │                     error: (err) => {
-          ╵                             ~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:27:24:
+      27 │                 <button (click)="viewMode = 'list'"
+         ╵                         ^
 
 
-✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'click'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:242:29:
-      242 │                         this.isSubmitting = false;
-          ╵                              ~~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:27:25:
+      27 │                 <button (click)="viewMode = 'list'"
+         ╵                          ~~~~~
 
 
-✘ [ERROR] TS2339: Property 'dataService' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:246:21:
-      246 │                 this.dataService.createTask(this.listId, taskData...
-          ╵                      ~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:27:31:
+      27 │                 <button (click)="viewMode = 'list'"
+         ╵                                ^
 
 
-✘ [ERROR] TS7006: Parameter 'task' implicitly has an 'any' type. [plugin angular-compiler]
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:247:27:
-      247 │                     next: (task) => {
-          ╵                            ~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:27:32:
+      27 │                 <button (click)="viewMode = 'list'"
+         ╵                                 ~~~~~~~~~~~~~~~~~~~
 
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:248:33:
-      248 │                         if (this.files.length > 0) {
-          ╵                                  ~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:28:22:
+      28 │                 [class.bg - white] = "viewMode === 'list'"
+         ╵                       ^
 
 
-✘ [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
+✘ [ERROR] TS2339: Property 'bg' does not exist on type 'typeof (Anonymous class)'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:254:28:
-      254 │                     error: (err) => {
-          ╵                             ~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:28:23:
+      28 │                 [class.bg - white] = "viewMode === 'list'"
+         ╵                        ~~
 
 
-✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'white'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:257:29:
-      257 │                         this.isSubmitting = false;
-          ╵                              ~~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:28:28:
+      28 │                 [class.bg - white] = "viewMode === 'list'"
+         ╵                             ~~~~~
 
 
-- Changes detected. Rebuilding...
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
 
-Application bundle generation failed. [0.206 seconds]
+    src/app/pages/my-tasks/my-tasks.component.ts:28:37:
+      28 │                 [class.bg - white] = "viewMode === 'list'"
+         ╵                                      ~~~~~~~~~~~~~~~~~~~~~
 
-✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:12:24:
-      12 │       <div [formGroup]="taskForm" class="bg-brand-dark w-full max-...
-         ╵                         ~~~~~~~~
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:29:22:
+      29 │                 [class.shadow - sm] = "viewMode === 'list'"
+         ╵                       ^
 
-✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:125:37:
-      125 │ ...                 <div *ngIf="files.length > 0" class="mt-4 spa...
-          ╵                                 ~~~~~
+✘ [ERROR] TS2339: Property 'shadow' does not exist on type 'typeof (Anonymous class)'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:29:23:
+      29 │                 [class.shadow - sm] = "viewMode === 'list'"
+         ╵                        ~~~~~~
 
-✘ [ERROR] NG9: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:126:53:
-      126 │ ...    <div *ngFor="let file of files" class="flex items-center j...
-          ╵                                 ~~~~~
+✘ [ERROR] TS2304: Cannot find name 'sm'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:29:32:
+      29 │                 [class.shadow - sm] = "viewMode === 'list'"
+         ╵                                 ~~
 
-✘ [ERROR] NG9: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:33:
-      146 │                      [disabled]="taskForm.invalid || isSubmitting"
-          ╵                                  ~~~~~~~~
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:29:38:
+      29 │                 [class.shadow - sm] = "viewMode === 'list'"
+         ╵                                       ~~~~~~~~~~~~~~~~~~~~~
 
-✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:146:53:
-      146 │                      [disabled]="taskForm.invalid || isSubmitting"
-          ╵                                                      ~~~~~~~~~~~~
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:30:22:
+      30 │                 [class.text - pink - 600] = "viewMode === 'list'"
+         ╵                       ^
 
-✘ [ERROR] NG9: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:148:25:
-      148 │                       {{ isSubmitting ? (task ? 'Salvando...' : '...
-          ╵                          ~~~~~~~~~~~~
+✘ [ERROR] TS2339: Property 'text' does not exist on type 'typeof (Anonymous class)'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:30:23:
+      30 │                 [class.text - pink - 600] = "viewMode === 'list'"
+         ╵                        ~~~~
 
-✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:191:17:
-      191 │             this.taskForm.patchValue({
-          ╵                  ~~~~~~~~
+✘ [ERROR] TS2304: Cannot find name 'pink'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:30:30:
+      30 │                 [class.text - pink - 600] = "viewMode === 'list'"
+         ╵                               ~~~~
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:209:21:
-      209 │                 this.files.push(event.target.files[i]);
-          ╵                      ~~~~~
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:31:5:
+      31 │ class="px-4 py-2 rounded-md text-sm font-medium text-gray-600 tran...
+         ╵      ^
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:13:
-      215 │         this.files = this.files.filter(f => f !== file);
-          ╵              ~~~~~
+✘ [ERROR] TS2304: Cannot find name 'i'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:32:3:
+      32 │   <i class="fas fa-list mr-2" > </i> Lista
+         ╵    ^
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:26:
-      215 │         this.files = this.files.filter(f => f !== file);
-          ╵                           ~~~~~
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:32:5:
+      32 │   <i class="fas fa-list mr-2" > </i> Lista
+         ╵      ~~~~~
 
-✘ [ERROR] TS7006: Parameter 'f' implicitly has an 'any' type. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:215:39:
-      215 │         this.files = this.files.filter(f => f !== file);
-          ╵                                        ^
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:32:10:
+      32 │   <i class="fas fa-list mr-2" > </i> Lista
+         ╵           ^
 
-✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:219:17:
-      219 │         if (this.taskForm.valid) {
-          ╵                  ~~~~~~~~
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:32:11:
+      32 │   <i class="fas fa-list mr-2" > </i> Lista
+         ╵            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:220:17:
-      220 │             this.isSubmitting = true;
-          ╵                  ~~~~~~~~~~~~
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:32:33:
+      32 │   <i class="fas fa-list mr-2" > </i> Lista
+         ╵                                  ^
 
-✘ [ERROR] TS2339: Property 'taskForm' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:222:35:
-      222 │             const formValue = this.taskForm.value;
-          ╵                                    ~~~~~~~~
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:32:34:
+      32 │   <i class="fas fa-list mr-2" > </i> Lista
+         ╵                                   ^
 
-✘ [ERROR] TS2339: Property 'dataService' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:233:21:
-      233 │                 this.dataService.updateTask(this.task.id, taskDat...
-          ╵                      ~~~~~~~~~~~
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:33:6:
+      33 │     </button>
+         ╵       ^
 
-✘ [ERROR] TS7006: Parameter 'updatedTask' implicitly has an 'any' type. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:234:27:
-      234 │                     next: (updatedTask) => {
-          ╵                            ~~~~~~~~~~~
+✘ [ERROR] TS2304: Cannot find name 'button'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:34:6:
+      34 │     < button(click)="viewMode = 'board'"
+         ╵       ~~~~~~
 
-✘ [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:239:28:
-      239 │                     error: (err) => {
-          ╵                             ~~~
+✘ [ERROR] TS2304: Cannot find name 'click'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:34:13:
+      34 │     < button(click)="viewMode = 'board'"
+         ╵              ~~~~~
 
-✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:242:29:
-      242 │                         this.isSubmitting = false;
-          ╵                              ~~~~~~~~~~~~
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:34:19:
+      34 │     < button(click)="viewMode = 'board'"
+         ╵                    ^
 
-✘ [ERROR] TS2339: Property 'dataService' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:246:21:
-      246 │                 this.dataService.createTask(this.listId, taskData...
-          ╵                      ~~~~~~~~~~~
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:34:20:
+      34 │     < button(click)="viewMode = 'board'"
+         ╵                     ~~~~~~~~~~~~~~~~~~~~
 
-✘ [ERROR] TS7006: Parameter 'task' implicitly has an 'any' type. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:247:27:
-      247 │                     next: (task) => {
-          ╵                            ~~~~
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:35:10:
+      35 │     [class.bg - white] = "viewMode === 'board'"
+         ╵           ^
 
-✘ [ERROR] TS2339: Property 'files' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:248:33:
-      248 │                         if (this.files.length > 0) {
-          ╵                                  ~~~~~
+✘ [ERROR] TS2339: Property 'bg' does not exist on type 'typeof (Anonymous class)'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:35:11:
+      35 │     [class.bg - white] = "viewMode === 'board'"
+         ╵            ~~
 
-✘ [ERROR] TS7006: Parameter 'err' implicitly has an 'any' type. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:254:28:
-      254 │                     error: (err) => {
-          ╵                             ~~~
+✘ [ERROR] TS2304: Cannot find name 'white'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:35:16:
+      35 │     [class.bg - white] = "viewMode === 'board'"
+         ╵                 ~~~~~
 
-✘ [ERROR] TS2339: Property 'isSubmitting' does not exist on type 'CreateTaskDialogComponent'. [plugin angular-compiler]
 
-    src/app/components/dialogs/create-task-dialog/create-task-dialog.component.ts:257:29:
-      257 │                         this.isSubmitting = false;
-          ╵                              ~~~~~~~~~~~~
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:35:25:
+      35 │     [class.bg - white] = "viewMode === 'board'"
+         ╵                          ~~~~~~~~~~~~~~~~~~~~~~
 
-- Changes detected. Rebuilding...
 
-Initial chunk files | Names                      |  Raw size
-polyfills.js        | polyfills                  |  88.09 kB | 
-main.js             | main                       |  53.78 kB | 
-styles.css          | styles                     |  37.45 kB | 
-chunk-TNWEZXXF.js   | -                          |  17.01 kB | 
-chunk-QCTZSG3L.js   | -                          |   5.23 kB | 
-chunk-CK6Q4KCE.js   | -                          |   4.89 kB | 
-chunk-SHAOKUVO.js   | -                          | 938 bytes | 
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
-                    | Initial total              | 207.35 kB
+    src/app/pages/my-tasks/my-tasks.component.ts:36:10:
+      36 │     [class.shadow - sm] = "viewMode === 'board'"
+         ╵           ^
 
-Lazy chunk files    | Names                      |  Raw size
-chunk-G35TUVQB.js   | task-list-view-component   |  47.82 kB | 
-chunk-HYSYYBD7.js   | user-management-component  |  12.10 kB | 
-chunk-VNYWMPCH.js   | spaces-dashboard-component |   8.43 kB | 
-chunk-66XXZ5LP.js   | settings-component         |   5.92 kB | 
-chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
 
-Application bundle generation complete. [0.376 seconds]
+✘ [ERROR] TS2339: Property 'shadow' does not exist on type 'typeof (Anonymous class)'. [plugin angular-compiler]
 
-Page reload sent to client(s).
-- Changes detected. Rebuilding...
+    src/app/pages/my-tasks/my-tasks.component.ts:36:11:
+      36 │     [class.shadow - sm] = "viewMode === 'board'"
+         ╵            ~~~~~~
 
-Initial chunk files | Names                    | Raw size
-main.js             | main                     | 53.78 kB | 
 
-Lazy chunk files    | Names                    | Raw size
-chunk-VJ3BRID7.js   | task-list-view-component | 47.85 kB | 
+✘ [ERROR] TS2304: Cannot find name 'sm'. [plugin angular-compiler]
 
-Application bundle generation complete. [0.263 seconds]
+    src/app/pages/my-tasks/my-tasks.component.ts:36:20:
+      36 │     [class.shadow - sm] = "viewMode === 'board'"
+         ╵                     ~~
 
-Page reload sent to client(s).
-- Changes detected. Rebuilding...
 
-Initial chunk files | Names                    | Raw size
-main.js             | main                     | 53.78 kB | 
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
 
-Lazy chunk files    | Names                    | Raw size
-chunk-A6IDUUYM.js   | task-list-view-component | 47.88 kB | 
+    src/app/pages/my-tasks/my-tasks.component.ts:36:26:
+      36 │     [class.shadow - sm] = "viewMode === 'board'"
+         ╵                           ~~~~~~~~~~~~~~~~~~~~~~
 
-Application bundle generation complete. [0.219 seconds]
 
-Page reload sent to client(s).
-- Changes detected. Rebuilding...
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
-Application bundle generation failed. [0.156 seconds]
+    src/app/pages/my-tasks/my-tasks.component.ts:37:10:
+      37 │     [class.text - pink - 600] = "viewMode === 'board'"
+         ╵           ^
 
-✘ [ERROR] NG9: Property 'onTaskSelected' does not exist on type 'TaskListViewComponent'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.html:88:84:
-      88 │ ...w === 'list'" [tasks]="tasks" (taskClick)="onTaskSelected($event)"
-         ╵                                               ~~~~~~~~~~~~~~
+✘ [ERROR] TS2339: Property 'text' does not exist on type 'typeof (Anonymous class)'. [plugin angular-compiler]
 
-  Error occurs in the template of component TaskListViewComponent.
+    src/app/pages/my-tasks/my-tasks.component.ts:37:11:
+      37 │     [class.text - pink - 600] = "viewMode === 'board'"
+         ╵            ~~~~
 
-    src/app/pages/task-list-view/task-list-view.component.ts:15:15:
-      15 │   templateUrl: './task-list-view.component.html',
-         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+✘ [ERROR] TS2304: Cannot find name 'pink'. [plugin angular-compiler]
 
-- Changes detected. Rebuilding...
+    src/app/pages/my-tasks/my-tasks.component.ts:37:18:
+      37 │     [class.text - pink - 600] = "viewMode === 'board'"
+         ╵                   ~~~~
 
-Application bundle generation failed. [0.270 seconds]
 
-✘ [ERROR] NG9: Property 'onTaskSelected' does not exist on type 'TaskListViewComponent'. [plugin angular-compiler]
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.html:88:84:
-      88 │ ...w === 'list'" [tasks]="tasks" (taskClick)="onTaskSelected($event)"
-         ╵                                               ~~~~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:38:5:
+      38 │ class="px-4 py-2 rounded-md text-sm font-medium text-gray-600 tran...
+         ╵      ^
 
-  Error occurs in the template of component TaskListViewComponent.
 
-    src/app/pages/task-list-view/task-list-view.component.ts:15:15:
-      15 │   templateUrl: './task-list-view.component.html',
-         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+✘ [ERROR] TS2304: Cannot find name 'i'. [plugin angular-compiler]
 
+    src/app/pages/my-tasks/my-tasks.component.ts:39:3:
+      39 │   <i class="fas fa-columns mr-2" > </i> Quadro
+         ╵    ^
 
-✘ [ERROR] NG9: Property 'closeInviteDialog' does not exist on type 'TaskListViewComponent'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.html:96:17:
-      96 │         (close)="closeInviteDialog()"></app-invite-member-dialog>
-         ╵                  ~~~~~~~~~~~~~~~~~
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
 
-  Error occurs in the template of component TaskListViewComponent.
+    src/app/pages/my-tasks/my-tasks.component.ts:39:5:
+      39 │   <i class="fas fa-columns mr-2" > </i> Quadro
+         ╵      ~~~~~
 
-    src/app/pages/task-list-view/task-list-view.component.ts:15:15:
-      15 │   templateUrl: './task-list-view.component.html',
-         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
 
-✘ [ERROR] TS2304: Cannot find name 'onTaskSelected'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:39:10:
+      39 │   <i class="fas fa-columns mr-2" > </i> Quadro
+         ╵           ^
 
-    src/app/pages/task-list-view/task-list-view.component.ts:73:4:
-      73 │     onTaskSelected(task: any) {
-         ╵     ~~~~~~~~~~~~~~
 
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
 
-✘ [ERROR] TS2304: Cannot find name 'task'. [plugin angular-compiler]
+    src/app/pages/my-tasks/my-tasks.component.ts:39:11:
+      39 │   <i class="fas fa-columns mr-2" > </i> Quadro
+         ╵            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    src/app/pages/task-list-view/task-list-view.component.ts:73:19:
-      73 │     onTaskSelected(task: any) {
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:39:11:
+      39 │   <i class="fas fa-columns mr-2" > </i> Quadro
+         ╵            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:39:11:
+      39 │   <i class="fas fa-columns mr-2" > </i> Quadro
+         ╵            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:39:36:
+      39 │   <i class="fas fa-columns mr-2" > </i> Quadro
+         ╵                                     ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:39:37:
+      39 │   <i class="fas fa-columns mr-2" > </i> Quadro
+         ╵                                      ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:40:6:
+      40 │     </button>
+         ╵       ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:41:6:
+      41 │     </div>
+         ╵       ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:42:6:
+      42 │     </div>
+         ╵       ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'Content'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:44:9:
+      44 │     < !--Content -->
+         ╵          ~~~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:44:17:
+      44 │     < !--Content -->
+         ╵                  ~~
+
+
+✘ [ERROR] TS1109: Expression expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:44:19:
+      44 │     < !--Content -->
+         ╵                    ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'div'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:45:7:
+      45 │       <div class="flex-1 overflow-hidden p-0 md:p-8" >
+         ╵        ~~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:45:11:
+      45 │       <div class="flex-1 overflow-hidden p-0 md:p-8" >
+         ╵            ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:45:16:
+      45 │       <div class="flex-1 overflow-hidden p-0 md:p-8" >
+         ╵                 ^
+
+
+✘ [ERROR] TS2365: Operator '>' cannot be applied to types 'string' and 'number'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:45:17:
+      45 │       <div class="flex-1 overflow-hidden p-0 md:p-8" >
+         ╵                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'div'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:46:9:
+      46 │         <div * ngIf="tasks.length > 0; else emptyState" class="h-f...
+         ╵          ~~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:46:13:
+      46 │         <div * ngIf="tasks.length > 0; else emptyState" class="h-f...
+         ╵              ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'ngIf'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:46:15:
+      46 │         <div * ngIf="tasks.length > 0; else emptyState" class="h-f...
+         ╵                ~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:46:19:
+      46 │         <div * ngIf="tasks.length > 0; else emptyState" class="h-f...
+         ╵                    ^
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:46:56:
+      46 │ ..."tasks.length > 0; else emptyState" class="h-full flex flex-col" >
+         ╵                                        ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:46:61:
+      46 │ ..."tasks.length > 0; else emptyState" class="h-full flex flex-col" >
+         ╵                                             ^
+
+
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:47:12:
+      47 │           <!--List View-- >
+         ╵             ~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'List'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:47:14:
+      47 │           <!--List View-- >
+         ╵               ~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:47:19:
+      47 │           <!--List View-- >
          ╵                    ~~~~
 
 
-✘ [ERROR] TS1005: ',' expected. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'View'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:73:23:
-      73 │     onTaskSelected(task: any) {
-         ╵                        ^
+    src/app/pages/my-tasks/my-tasks.component.ts:47:19:
+      47 │           <!--List View-- >
+         ╵                    ~~~~
 
 
-✘ [ERROR] TS2693: 'any' only refers to a type, but is being used as a value here. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'ng'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:73:25:
-      73 │     onTaskSelected(task: any) {
-         ╵                          ~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:48:13:
+      48 │             <ng-container * ngIf="viewMode === 'list'" >
+         ╵              ~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:48:15:
+      48 │             <ng-container * ngIf="viewMode === 'list'" >
+         ╵                ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'container'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:48:16:
+      48 │             <ng-container * ngIf="viewMode === 'list'" >
+         ╵                 ~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'ngIf'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:48:28:
+      48 │             <ng-container * ngIf="viewMode === 'list'" >
+         ╵                             ~~~~
 
 
 ✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:73:30:
-      73 │     onTaskSelected(task: any) {
-         ╵                               ^
+    src/app/pages/my-tasks/my-tasks.component.ts:48:32:
+      48 │             <ng-container * ngIf="viewMode === 'list'" >
+         ╵                                 ^
+
+
+✘ [ERROR] TS2365: Operator '>' cannot be applied to types 'string' and 'number'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:48:33:
+      48 │             <ng-container * ngIf="viewMode === 'list'" >
+         ╵                                  ~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'app'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:15:
+      49 │               <app-task - table[tasks]="tasks"(taskClick) = "onTas...
+         ╵                ~~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:18:
+      49 │               <app-task - table[tasks]="tasks"(taskClick) = "onTas...
+         ╵                   ^
 
 
 ✘ [ERROR] TS2304: Cannot find name 'task'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:74:26:
-      74 │       this.selectedTask = task;
+    src/app/pages/my-tasks/my-tasks.component.ts:49:19:
+      49 │               <app-task - table[tasks]="tasks"(taskClick) = "onTas...
+         ╵                    ~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'table'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:26:
+      49 │               <app-task - table[tasks]="tasks"(taskClick) = "onTas...
+         ╵                           ~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'tasks'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:32:
+      49 │               <app-task - table[tasks]="tasks"(taskClick) = "onTas...
+         ╵                                 ~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:38:
+      49 │ ...       <app-task - table[tasks]="tasks"(taskClick) = "onTaskCli...
+         ╵                                   ^
+
+
+✘ [ERROR] TS2349: This expression is not callable.
+  Type 'String' has no call signatures. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:39:
+      49 │ ...   <app-task - table[tasks]="tasks"(taskClick) = "onTaskClick($...
+         ╵                                ~~~~~~~
+
+
+✘ [ERROR] TS2364: The left-hand side of an assignment expression must be a variable or a property access. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:39:
+      49 │ ...pp-task - table[tasks]="tasks"(taskClick) = "onTaskClick($event...
+         ╵                           ~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'taskClick'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:47:
+      49 │ ...ask - table[tasks]="tasks"(taskClick) = "onTaskClick($event)"(a...
+         ╵                               ~~~~~~~~~
+
+
+✘ [ERROR] TS2349: This expression is not callable.
+  Type 'String' has no call signatures. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:60:
+      49 │ ..."tasks"(taskClick) = "onTaskClick($event)"(addTask) = "openCrea...
+         ╵                         ~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2364: The left-hand side of an assignment expression must be a variable or a property access. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:60:
+      49 │ ...ks"(taskClick) = "onTaskClick($event)"(addTask) = "openCreateTa...
+         ╵                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'addTask'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:82:
+      49 │ ...ck) = "onTaskClick($event)"(addTask) = "openCreateTaskDialog()"...
+         ╵                                ~~~~~~~
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:93:
+      49 │ ...k($event)"(addTask) = "openCreateTaskDialog()" > </app-task-table>
+         ╵                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:121:
+      49 │ ...k($event)"(addTask) = "openCreateTaskDialog()" > </app-task-table>
+         ╵                                                      ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:49:122:
+      49 │ ...k($event)"(addTask) = "openCreateTaskDialog()" > </app-task-table>
+         ╵                                                       ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:50:18:
+      50 │                 </ng-container>
+         ╵                   ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'Board'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:52:21:
+      52 │                 < !--Board View-- >
+         ╵                      ~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:52:27:
+      52 │                 < !--Board View-- >
+         ╵                            ~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'View'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:52:27:
+      52 │                 < !--Board View-- >
+         ╵                            ~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'ng'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:53:19:
+      53 │                   <ng-container * ngIf="viewMode === 'board'" >
+         ╵                    ~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:53:21:
+      53 │                   <ng-container * ngIf="viewMode === 'board'" >
+         ╵                      ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'container'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:53:22:
+      53 │                   <ng-container * ngIf="viewMode === 'board'" >
+         ╵                       ~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'ngIf'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:53:34:
+      53 │                   <ng-container * ngIf="viewMode === 'board'" >
+         ╵                                   ~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:53:38:
+      53 │                   <ng-container * ngIf="viewMode === 'board'" >
+         ╵                                       ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'div'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:54:21:
+      54 │                     <div class="h-full overflow-x-auto" >
+         ╵                      ~~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:54:25:
+      54 │                     <div class="h-full overflow-x-auto" >
+         ╵                          ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:54:30:
+      54 │                     <div class="h-full overflow-x-auto" >
+         ╵                               ^
+
+
+✘ [ERROR] TS2365: Operator '>' cannot be applied to types 'string' and 'number'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:54:31:
+      54 │                     <div class="h-full overflow-x-auto" >
+         ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'app'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:23:
+      55 │                       <app-kanban - board[tasks]="tasks"(taskClick...
+         ╵                        ~~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:26:
+      55 │                       <app-kanban - board[tasks]="tasks"(taskClick...
+         ╵                           ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'kanban'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:27:
+      55 │                       <app-kanban - board[tasks]="tasks"(taskClick...
+         ╵                            ~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'board'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:36:
+      55 │ ...               <app-kanban - board[tasks]="tasks"(taskClick) = ...
+         ╵                                 ~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'tasks'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:42:
+      55 │ ...         <app-kanban - board[tasks]="tasks"(taskClick) = "onTas...
+         ╵                                 ~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:48:
+      55 │ ...     <app-kanban - board[tasks]="tasks"(taskClick) = "onTaskCli...
+         ╵                                   ^
+
+
+✘ [ERROR] TS2349: This expression is not callable.
+  Type 'String' has no call signatures. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:49:
+      55 │ ... <app-kanban - board[tasks]="tasks"(taskClick) = "onTaskClick($...
+         ╵                                ~~~~~~~
+
+
+✘ [ERROR] TS2364: The left-hand side of an assignment expression must be a variable or a property access. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:49:
+      55 │ ...-kanban - board[tasks]="tasks"(taskClick) = "onTaskClick($event...
+         ╵                           ~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'taskClick'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:57:
+      55 │ ...ban - board[tasks]="tasks"(taskClick) = "onTaskClick($event)" >...
+         ╵                               ~~~~~~~~~
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:70:
+      55 │ ...]="tasks"(taskClick) = "onTaskClick($event)" > </app-kanban-board>
+         ╵                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:70:
+      55 │ ...]="tasks"(taskClick) = "onTaskClick($event)" > </app-kanban-board>
+         ╵                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:70:
+      55 │ ...]="tasks"(taskClick) = "onTaskClick($event)" > </app-kanban-board>
+         ╵                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:95:
+      55 │ ...]="tasks"(taskClick) = "onTaskClick($event)" > </app-kanban-board>
+         ╵                                                    ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:55:96:
+      55 │ ...]="tasks"(taskClick) = "onTaskClick($event)" > </app-kanban-board>
+         ╵                                                     ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:56:26:
+      56 │                         </div>
+         ╵                           ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:57:26:
+      57 │                         </ng-container>
+         ╵                           ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:58:26:
+      58 │                         </div>
+         ╵                           ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'Load'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:60:29:
+      60 │                         < !--Load More / Pagination-- >
+         ╵                              ~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:60:34:
+      60 │                         < !--Load More / Pagination-- >
+         ╵                                   ~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'More'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:60:34:
+      60 │                         < !--Load More / Pagination-- >
+         ╵                                   ~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'Pagination'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:60:41:
+      60 │                         < !--Load More / Pagination-- >
+         ╵                                          ~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'div'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:61:27:
+      61 │                           <div * ngIf="hasMore" class="p-4 flex ju...
+         ╵                            ~~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:61:31:
+      61 │                           <div * ngIf="hasMore" class="p-4 flex ju...
+         ╵                                ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'ngIf'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:61:33:
+      61 │                           <div * ngIf="hasMore" class="p-4 flex ju...
+         ╵                                  ~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:61:37:
+      61 │ ...                    <div * ngIf="hasMore" class="p-4 flex justi...
+         ╵                                   ^
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:61:48:
+      61 │ ...       <div * ngIf="hasMore" class="p-4 flex justify-center bor...
+         ╵                                 ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:61:53:
+      61 │ ...    <div * ngIf="hasMore" class="p-4 flex justify-center border...
+         ╵                                   ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'button'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:62:29:
+      62 │                             <button (click)="loadMore()"[disabled]...
+         ╵                              ~~~~~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:62:36:
+      62 │ ...                       <button (click)="loadMore()"[disabled] =...
+         ╵                                   ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'click'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:62:37:
+      62 │ ...                    <button (click)="loadMore()"[disabled] = "i...
+         ╵                                 ~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:62:43:
+      62 │ ...                <button (click)="loadMore()"[disabled] = "isLoa...
+         ╵                                   ^
+
+
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:62:44:
+      62 │ ...              <button (click)="loadMore()"[disabled] = "isLoading"
+         ╵                                  ~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'disabled'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:62:57:
+      62 │ ...              <button (click)="loadMore()"[disabled] = "isLoading"
+         ╵                                               ~~~~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:63:5:
+      63 │ class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 rounde...
+         ╵      ^
+
+
+✘ [ERROR] TS2365: Operator '>' cannot be applied to types 'string' and 'number'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:63:6:
+      63 │ class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 rounde...
+         ╵       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'i'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:64:3:
+      64 │   <i * ngIf="isLoading" class="fas fa-spinner fa-spin mr-2" > </i>
+         ╵    ^
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:64:5:
+      64 │   <i * ngIf="isLoading" class="fas fa-spinner fa-spin mr-2" > </i>
+         ╵      ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'ngIf'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:64:7:
+      64 │   <i * ngIf="isLoading" class="fas fa-spinner fa-spin mr-2" > </i>
+         ╵        ~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:64:11:
+      64 │   <i * ngIf="isLoading" class="fas fa-spinner fa-spin mr-2" > </i>
+         ╵            ^
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:64:24:
+      64 │   <i * ngIf="isLoading" class="fas fa-spinner fa-spin mr-2" > </i>
+         ╵                         ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:64:29:
+      64 │   <i * ngIf="isLoading" class="fas fa-spinner fa-spin mr-2" > </i>
+         ╵                              ^
+
+
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:64:63:
+      64 │   <i * ngIf="isLoading" class="fas fa-spinner fa-spin mr-2" > </i>
+         ╵                                                                ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:64:64:
+      64 │   <i * ngIf="isLoading" class="fas fa-spinner fa-spin mr-2" > </i>
+         ╵                                                                 ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'isLoading'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:65:4:
+      65 │ { { isLoading ? 'Carregando...' : 'Carregar Mais' } }
+         ╵     ~~~~~~~~~
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'number'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:66:0:
+      66 │ </button>
+         ╵ ~~~~~~~~~
+
+
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:66:1:
+      66 │ </button>
+         ╵  ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:66:2:
+      66 │ </button>
+         ╵   ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:67:4:
+      67 │   </div>
+         ╵     ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'ng'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:69:4:
+      69 │   < ng - template #emptyState >
+         ╵     ~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'template'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:69:9:
+      69 │   < ng - template #emptyState >
+         ╵          ~~~~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:69:18:
+      69 │   < ng - template #emptyState >
+         ╵                   ~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'div'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:70:5:
+      70 │     <div class="flex flex-col items-center justify-center h-full t...
+         ╵      ~~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:70:9:
+      70 │     <div class="flex flex-col items-center justify-center h-full t...
+         ╵          ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:70:14:
+      70 │     <div class="flex flex-col items-center justify-center h-full t...
+         ╵               ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'i'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:71:7:
+      71 │       <i class="fas fa-check-circle text-6xl mb-4 text-gray-300" >...
+         ╵        ^
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:71:9:
+      71 │       <i class="fas fa-check-circle text-6xl mb-4 text-gray-300" >...
+         ╵          ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:71:14:
+      71 │       <i class="fas fa-check-circle text-6xl mb-4 text-gray-300" >...
+         ╵               ^
+
+
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:71:68:
+      71 │ ... <i class="fas fa-check-circle text-6xl mb-4 text-gray-300" > </i>
+         ╵                                                                   ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:71:69:
+      71 │ ... <i class="fas fa-check-circle text-6xl mb-4 text-gray-300" > </i>
+         ╵                                                                    ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'p'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:10:
+      72 │         < p class="text-lg font-medium" > Você não tem tarefas a...
+         ╵           ^
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:12:
+      72 │         < p class="text-lg font-medium" > Você não tem tarefas a...
+         ╵             ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:17:
+      72 │         < p class="text-lg font-medium" > Você não tem tarefas a...
+         ╵                  ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'Você'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:42:
+      72 │ ...class="text-lg font-medium" > Você não tem tarefas atribuída...
+         ╵                                  ~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:47:
+      72 │ ...ss="text-lg font-medium" > Você não tem tarefas atribuídas.</p>
+         ╵                                   ~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'não'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:47:
+      72 │ ...ss="text-lg font-medium" > Você não tem tarefas atribuídas.</p>
+         ╵                                   ~~~
+
+
+✘ [ERROR] TS1434: Unexpected keyword or identifier. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:51:
+      72 │ ...ss="text-lg font-medium" > Você não tem tarefas atribuídas.</p>
+         ╵                                      ~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'tem'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:51:
+      72 │ ...ss="text-lg font-medium" > Você não tem tarefas atribuídas.</p>
+         ╵                                      ~~~
+
+
+✘ [ERROR] TS1434: Unexpected keyword or identifier. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:55:
+      72 │ ...ss="text-lg font-medium" > Você não tem tarefas atribuídas.</p>
+         ╵                                          ~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'tarefas'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:55:
+      72 │ ...ss="text-lg font-medium" > Você não tem tarefas atribuídas.</p>
+         ╵                                          ~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'atribuídas'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:63:
+      72 │ ...ss="text-lg font-medium" > Você não tem tarefas atribuídas.</p>
+         ╵                                                  ~~~~~~~~~
+
+
+✘ [ERROR] TS1003: Identifier expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:74:
+      72 │ ...ss="text-lg font-medium" > Você não tem tarefas atribuídas.</p>
+         ╵                                                            ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:72:76:
+      72 │ ...ss="text-lg font-medium" > Você não tem tarefas atribuídas.</p>
+         ╵                                                              ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'div'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:73:12:
+      73 │           < div class="mt-4" >
+         ╵             ~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:73:16:
+      73 │           < div class="mt-4" >
+         ╵                 ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:73:21:
+      73 │           < div class="mt-4" >
+         ╵                      ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'button'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:74:13:
+      74 │             <button (click)="openCreateTaskDialog()" class="text-p...
+         ╵              ~~~~~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:74:20:
+      74 │             <button (click)="openCreateTaskDialog()" class="text-p...
+         ╵                     ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'click'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:74:21:
+      74 │             <button (click)="openCreateTaskDialog()" class="text-p...
+         ╵                      ~~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:74:27:
+      74 │             <button (click)="openCreateTaskDialog()" class="text-p...
+         ╵                            ^
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:74:53:
+      74 │ ...ck)="openCreateTaskDialog()" class="text-pink-600 hover:text-pi...
+         ╵                                 ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:74:58:
+      74 │ ...="openCreateTaskDialog()" class="text-pink-600 hover:text-pink-...
+         ╵                                   ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'i'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:75:15:
+      75 │               <i class="fas fa-plus mr-2" > </i> Criar uma tarefa
+         ╵                ^
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:75:17:
+      75 │               <i class="fas fa-plus mr-2" > </i> Criar uma tarefa
+         ╵                  ~~~~~
+
+
+✘ [ERROR] TS1005: '{' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:75:22:
+      75 │               <i class="fas fa-plus mr-2" > </i> Criar uma tarefa
+         ╵                       ^
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:75:23:
+      75 │               <i class="fas fa-plus mr-2" > </i> Criar uma tarefa
+         ╵                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:75:23:
+      75 │               <i class="fas fa-plus mr-2" > </i> Criar uma tarefa
+         ╵                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:75:23:
+      75 │               <i class="fas fa-plus mr-2" > </i> Criar uma tarefa
+         ╵                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:75:23:
+      75 │               <i class="fas fa-plus mr-2" > </i> Criar uma tarefa
+         ╵                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2365: Operator '<' cannot be applied to types 'boolean' and 'RegExp'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:75:23:
+      75 │               <i class="fas fa-plus mr-2" > </i> Criar uma tarefa
+         ╵                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:75:45:
+      75 │               <i class="fas fa-plus mr-2" > </i> Criar uma tarefa
+         ╵                                              ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:75:46:
+      75 │               <i class="fas fa-plus mr-2" > </i> Criar uma tarefa
+         ╵                                               ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:76:18:
+      76 │                 </button>
+         ╵                   ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:77:18:
+      77 │                 </div>
+         ╵                   ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:78:18:
+      78 │                 </div>
+         ╵                   ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:79:18:
+      79 │                 </ng-template>
+         ╵                   ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:80:18:
+      80 │                 </div>
+         ╵                   ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'Edit'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:82:21:
+      82 │                 < !--Edit Task Dialog(Reused)-- >
+         ╵                      ~~~~
+
+
+✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:82:26:
+      82 │                 < !--Edit Task Dialog(Reused)-- >
          ╵                           ~~~~
 
 
-✘ [ERROR] TS2304: Cannot find name 'openInviteDialog'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'Task'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:78:4:
-      78 │     openInviteDialog() {
-         ╵     ~~~~~~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:82:26:
+      82 │                 < !--Edit Task Dialog(Reused)-- >
+         ╵                           ~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'Dialog'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:82:31:
+      82 │                 < !--Edit Task Dialog(Reused)-- >
+         ╵                                ~~~~~~
+
+
+✘ [ERROR] TS2357: The operand of an increment or decrement operator must be a variable or a property access. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:82:31:
+      82 │                 < !--Edit Task Dialog(Reused)-- >
+         ╵                                ~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'Reused'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:82:38:
+      82 │                 < !--Edit Task Dialog(Reused)-- >
+         ╵                                       ~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'app'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:83:19:
+      83 │                   <app-create - task - dialog * ngIf="selectedTask"
+         ╵                    ~~~
+
+
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:83:22:
+      83 │                   <app-create - task - dialog * ngIf="selectedTask"
+         ╵                       ^
+
+
+✘ [ERROR] TS2304: Cannot find name 'create'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:83:23:
+      83 │                   <app-create - task - dialog * ngIf="selectedTask"
+         ╵                        ~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'task'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:83:32:
+      83 │                   <app-create - task - dialog * ngIf="selectedTask"
+         ╵                                 ~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'dialog'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:83:39:
+      83 │                   <app-create - task - dialog * ngIf="selectedTask"
+         ╵                                        ~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'ngIf'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:83:48:
+      83 │                   <app-create - task - dialog * ngIf="selectedTask"
+         ╵                                                 ~~~~
 
 
 ✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:78:23:
-      78 │     openInviteDialog() {
+    src/app/pages/my-tasks/my-tasks.component.ts:83:52:
+      83 │                   <app-create - task - dialog * ngIf="selectedTask"
+         ╵                                                     ^
+
+
+✘ [ERROR] TS2322: Type 'boolean' is not assignable to type 'string'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:83:53:
+      83 │                   <app-create - task - dialog * ngIf="selectedTask"
+         ╵                                                      ~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:83:53:
+      83 │                   <app-create - task - dialog * ngIf="selectedTask"
+         ╵                                                      ~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'task'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:84:19:
+      84 │                   [task] = "selectedTask"
+         ╵                    ~~~~
+
+
+✘ [ERROR] TS2322: Type 'boolean' is not assignable to type 'string'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:84:27:
+      84 │                   [task] = "selectedTask"
+         ╵                            ~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:84:27:
+      84 │                   [task] = "selectedTask"
+         ╵                            ~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'listId'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:85:19:
+      85 │                   [listId] = "selectedTask.list_id"
+         ╵                    ~~~~~~
+
+
+✘ [ERROR] TS2322: Type 'boolean' is not assignable to type 'string'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:85:29:
+      85 │                   [listId] = "selectedTask.list_id"
+         ╵                              ~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:85:29:
+      85 │                   [listId] = "selectedTask.list_id"
+         ╵                              ~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'spaceId'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:86:19:
+      86 │                   [spaceId] = "getSpaceId(selectedTask)"
+         ╵                    ~~~~~~~
+
+
+✘ [ERROR] TS2322: Type 'boolean' is not assignable to type 'string'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:86:30:
+      86 │                   [spaceId] = "getSpaceId(selectedTask)"
+         ╵                               ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2542: Index signature in type 'String' only permits reading. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:86:30:
+      86 │                   [spaceId] = "getSpaceId(selectedTask)"
+         ╵                               ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'listName'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:87:19:
+      87 │                   [listName] = "selectedTask.list?.name || 'Lista'"
+         ╵                    ~~~~~~~~
+
+
+✘ [ERROR] TS2349: This expression is not callable.
+  Type 'String' has no call signatures. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:87:31:
+      87 │                   [listName] = "selectedTask.list?.name || 'Lista'"
+         ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Are you missing a semicolon?
+
+    src/app/pages/my-tasks/my-tasks.component.ts:87:31:
+      87 │                   [listName] = "selectedTask.list?.name || 'Lista'"
+         ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2364: The left-hand side of an assignment expression must be a variable or a property access. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:87:31:
+      87 │                   [listName] = "selectedTask.list?.name || 'Lista'"
+         ╵                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'created'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:88:21:
+      88 │                     (created) = "loadTasks()"
+         ╵                      ~~~~~~~
+
+
+✘ [ERROR] TS2349: This expression is not callable.
+  Type 'String' has no call signatures. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:88:32:
+      88 │                     (created) = "loadTasks()"
+         ╵                                 ~~~~~~~~~~~~~
+
+  Are you missing a semicolon?
+
+    src/app/pages/my-tasks/my-tasks.component.ts:88:32:
+      88 │                     (created) = "loadTasks()"
+         ╵                                 ~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2364: The left-hand side of an assignment expression must be a variable or a property access. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:88:32:
+      88 │                     (created) = "loadTasks()"
+         ╵                                 ~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:90:23:
+      90 │                       </app-create-task-dialog>
          ╵                        ^
 
 
-✘ [ERROR] TS2304: Cannot find name 'closeInviteDialog'. [plugin angular-compiler]
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:82:4:
-      82 │     closeInviteDialog() {
-         ╵     ~~~~~~~~~~~~~~~~~
-
-
-✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
-
-    src/app/pages/task-list-view/task-list-view.component.ts:82:24:
-      82 │     closeInviteDialog() {
+    src/app/pages/my-tasks/my-tasks.component.ts:90:24:
+      90 │                       </app-create-task-dialog>
          ╵                         ^
 
 
-✘ [ERROR] TS2304: Cannot find name 'canInvite'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'Create'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:86:4:
-      86 │     canInvite(): boolean {
-         ╵     ~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:92:25:
+      92 │                     < !--Create New Task Dialog-- >
+         ╵                          ~~~~~~
 
 
 ✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:86:15:
-      86 │     canInvite(): boolean {
-         ╵                ^
+    src/app/pages/my-tasks/my-tasks.component.ts:92:32:
+      92 │                     < !--Create New Task Dialog-- >
+         ╵                                 ~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'New'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:92:32:
+      92 │                     < !--Create New Task Dialog-- >
+         ╵                                 ~~~
 
 
 ✘ [ERROR] TS1434: Unexpected keyword or identifier. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:86:17:
-      86 │     canInvite(): boolean {
-         ╵                  ~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:92:36:
+      92 │                     < !--Create New Task Dialog-- >
+         ╵                                     ~~~~
 
 
-✘ [ERROR] TS2693: 'boolean' only refers to a type, but is being used as a value here. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'Task'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:86:17:
-      86 │     canInvite(): boolean {
-         ╵                  ~~~~~~~
-
-
-✘ [ERROR] TS1005: '}' expected. [plugin angular-compiler]
-
-    src/app/pages/task-list-view/task-list-view.component.ts:90:0:
-      90 │ 
-         ╵ ^
+    src/app/pages/my-tasks/my-tasks.component.ts:92:36:
+      92 │                     < !--Create New Task Dialog-- >
+         ╵                                     ~~~~
 
 
-- Changes detected. Rebuilding...
+✘ [ERROR] TS2304: Cannot find name 'Dialog'. [plugin angular-compiler]
 
-Application bundle generation failed. [0.202 seconds]
-
-✘ [ERROR] NG9: Property 'onTaskSelected' does not exist on type 'TaskListViewComponent'. [plugin angular-compiler]
-
-    src/app/pages/task-list-view/task-list-view.component.html:88:84:
-      88 │ ...w === 'list'" [tasks]="tasks" (taskClick)="onTaskSelected($event)"
-         ╵                                               ~~~~~~~~~~~~~~
-
-  Error occurs in the template of component TaskListViewComponent.
-
-    src/app/pages/task-list-view/task-list-view.component.ts:15:15:
-      15 │   templateUrl: './task-list-view.component.html',
-         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:92:41:
+      92 │                     < !--Create New Task Dialog-- >
+         ╵                                          ~~~~~~
 
 
-✘ [ERROR] NG9: Property 'closeInviteDialog' does not exist on type 'TaskListViewComponent'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'app'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.html:96:17:
-      96 │         (close)="closeInviteDialog()"></app-invite-member-dialog>
-         ╵                  ~~~~~~~~~~~~~~~~~
-
-  Error occurs in the template of component TaskListViewComponent.
-
-    src/app/pages/task-list-view/task-list-view.component.ts:15:15:
-      15 │   templateUrl: './task-list-view.component.html',
-         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:93:23:
+      93 │                       <app-create - task - dialog * ngIf="showCrea...
+         ╵                        ~~~
 
 
-✘ [ERROR] TS2304: Cannot find name 'closeInviteDialog'. [plugin angular-compiler]
+✘ [ERROR] TS1005: '>' expected. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:73:4:
-      73 │     closeInviteDialog() {
-         ╵     ~~~~~~~~~~~~~~~~~
-
-
-✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
-
-    src/app/pages/task-list-view/task-list-view.component.ts:73:24:
-      73 │     closeInviteDialog() {
-         ╵                         ^
+    src/app/pages/my-tasks/my-tasks.component.ts:93:26:
+      93 │                       <app-create - task - dialog * ngIf="showCrea...
+         ╵                           ^
 
 
-✘ [ERROR] TS2304: Cannot find name 'canInvite'. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'create'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:77:4:
-      77 │     canInvite(): boolean {
-         ╵     ~~~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:93:27:
+      93 │                       <app-create - task - dialog * ngIf="showCrea...
+         ╵                            ~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'task'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:93:36:
+      93 │ ...                <app-create - task - dialog * ngIf="showCreateT...
+         ╵                                  ~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'dialog'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:93:43:
+      93 │ ...         <app-create - task - dialog * ngIf="showCreateTaskDialog"
+         ╵                                  ~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'ngIf'. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:93:52:
+      93 │ ...         <app-create - task - dialog * ngIf="showCreateTaskDialog"
+         ╵                                           ~~~~
 
 
 ✘ [ERROR] TS1005: ';' expected. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:77:15:
-      77 │     canInvite(): boolean {
-         ╵                ^
+    src/app/pages/my-tasks/my-tasks.component.ts:93:56:
+      93 │ ...         <app-create - task - dialog * ngIf="showCreateTaskDialog"
+         ╵                                               ^
 
 
-✘ [ERROR] TS1434: Unexpected keyword or identifier. [plugin angular-compiler]
+✘ [ERROR] TS2349: This expression is not callable.
+  Type 'String' has no call signatures. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:77:17:
-      77 │     canInvite(): boolean {
-         ╵                  ~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:93:57:
+      93 │ ...         <app-create - task - dialog * ngIf="showCreateTaskDialog"
+         ╵                                                ~~~~~~~~~~~~~~~~~~~~~~
+
+  Are you missing a semicolon?
+
+    src/app/pages/my-tasks/my-tasks.component.ts:93:57:
+      93 │ ...         <app-create - task - dialog * ngIf="showCreateTaskDialog"
+         ╵                                                ~~~~~~~~~~~~~~~~~~~~~~
 
 
-✘ [ERROR] TS2693: 'boolean' only refers to a type, but is being used as a value here. [plugin angular-compiler]
+✘ [ERROR] TS2364: The left-hand side of an assignment expression must be a variable or a property access. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:77:17:
-      77 │     canInvite(): boolean {
-         ╵                  ~~~~~~~
+    src/app/pages/my-tasks/my-tasks.component.ts:93:57:
+      93 │ ...         <app-create - task - dialog * ngIf="showCreateTaskDialog"
+         ╵                                                ~~~~~~~~~~~~~~~~~~~~~~
 
 
-✘ [ERROR] TS1005: '}' expected. [plugin angular-compiler]
+✘ [ERROR] TS2304: Cannot find name 'created'. [plugin angular-compiler]
 
-    src/app/pages/task-list-view/task-list-view.component.ts:81:0:
-      81 │ 
-         ╵ ^
+    src/app/pages/my-tasks/my-tasks.component.ts:94:25:
+      94 │                         (created) = "loadTasks(); showCreateTaskDi...
+         ╵                          ~~~~~~~
+
+
+✘ [ERROR] TS2349: This expression is not callable.
+  Type 'String' has no call signatures. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:94:36:
+      94 │ ...           (created) = "loadTasks(); showCreateTaskDialog = false"
+         ╵                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Are you missing a semicolon?
+
+    src/app/pages/my-tasks/my-tasks.component.ts:94:36:
+      94 │ ...           (created) = "loadTasks(); showCreateTaskDialog = false"
+         ╵                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2364: The left-hand side of an assignment expression must be a variable or a property access. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:94:36:
+      94 │ ...           (created) = "loadTasks(); showCreateTaskDialog = false"
+         ╵                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS1110: Type expected. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:96:27:
+      96 │                           </app-create-task-dialog>
+         ╵                            ^
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:96:28:
+      96 │                           </app-create-task-dialog>
+         ╵                             ^
+
+
+✘ [ERROR] TS2349: This expression is not callable.
+  Type 'RegExp' has no call signatures. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:97:25:
+      97 │                         </div>
+         ╵                          ~~~~~
+
+
+✘ [ERROR] TS1161: Unterminated regular expression literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:97:26:
+      97 │                         </div>
+         ╵                           ^
+
+
+✘ [ERROR] TS1160: Unterminated template literal. [plugin angular-compiler]
+
+    src/app/pages/my-tasks/my-tasks.component.ts:169:0:
+      169 │ 
+          ╵ ^
 
 
 - Changes detected. Rebuilding...
 
 Initial chunk files | Names                      |  Raw size
+main.js             | main                       |  99.11 kB | 
 polyfills.js        | polyfills                  |  88.09 kB | 
-main.js             | main                       |  53.78 kB | 
-styles.css          | styles                     |  37.45 kB | 
-chunk-TNWEZXXF.js   | -                          |  17.01 kB | 
-chunk-QCTZSG3L.js   | -                          |   5.23 kB | 
-chunk-CK6Q4KCE.js   | -                          |   4.89 kB | 
+chunk-TLBGWUTP.js   | -                          |  83.53 kB | 
+styles.css          | styles                     |  59.22 kB | 
+chunk-4HH5VAD4.js   | -                          |   9.09 kB | 
+chunk-U33U6W3X.js   | -                          |   4.99 kB | 
 chunk-SHAOKUVO.js   | -                          | 938 bytes | 
 
-                    | Initial total              | 207.35 kB
+                    | Initial total              | 344.94 kB
 
 Lazy chunk files    | Names                      |  Raw size
-chunk-VSXHJ2SO.js   | task-list-view-component   |  48.43 kB | 
-chunk-HYSYYBD7.js   | user-management-component  |  12.10 kB | 
-chunk-VNYWMPCH.js   | spaces-dashboard-component |   8.43 kB | 
-chunk-66XXZ5LP.js   | settings-component         |   5.92 kB | 
+chunk-B2MIU5UY.js   | companies-list-component   |  57.79 kB | 
+chunk-CNT3O4PK.js   | company-details-component  |  51.47 kB | 
+chunk-UYR7YGHE.js   | -                          |  36.36 kB | 
+chunk-CURFJLXV.js   | team-component             |  30.94 kB | 
+chunk-Z2MHLYIW.js   | dashboard-component        |  29.08 kB | 
+chunk-MCPXXMBZ.js   | my-tasks-component         |  26.35 kB | 
+chunk-AM5XMLEP.js   | task-list-view-component   |  23.49 kB | 
+chunk-ECEWG3EB.js   | member-profile-component   |  20.30 kB | 
+chunk-FQWAL2CN.js   | spaces-dashboard-component |  17.66 kB | 
+chunk-EZXIBMGQ.js   | user-management-component  |  16.65 kB | 
+chunk-5R6FI65R.js   | settings-component         |  10.71 kB | 
+chunk-2SZBD7BK.js   | space-details-component    |   6.88 kB | 
+chunk-R7K4UKXJ.js   | folder-details-component   |   6.10 kB | 
 chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
 
-Application bundle generation complete. [0.243 seconds]
+Application bundle generation complete. [2.586 seconds]
 
 Page reload sent to client(s).
+9:27:14 PM [vite] ✨ new dependencies optimized: @fullcalendar/angular, @fullcalendar/daygrid, @fullcalendar/timegrid, @fullcalendar/list, @fullcalendar/interaction, @fullcalendar/core/locales/pt-br
+9:27:14 PM [vite] ✨ optimized dependencies changed. reloading
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                    | Raw size
+main.js             | main                     | 99.11 kB | 
+
+Lazy chunk files    | Names                    | Raw size
+chunk-VKRVEQ6P.js   | -                        | 46.01 kB | 
+chunk-C5TMU5LT.js   | task-list-view-component | 23.49 kB | 
+chunk-MFF5VMC2.js   | my-tasks-component       | 16.62 kB | 
+
+Application bundle generation complete. [0.833 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Application bundle generation failed. [0.264 seconds]
+
+✘ [ERROR] NG5: Argument of type '"calendar"' is not assignable to parameter of type '"list" | "kanban"'. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.html:50:37:
+      50 │ ...  <button (click)="setView('calendar')" [class.text-pink-600]="...
+         ╵                               ~~~~~~~~~~
+
+  Error occurs in the template of component TaskListViewComponent.
+
+    src/app/pages/task-list-view/task-list-view.component.ts:16:15:
+      16 │   templateUrl: './task-list-view.component.html'
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] NG7: This comparison appears to be unintentional because the types '"list" | "kanban"' and '"calendar"' have no overlap. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.html:50:73:
+      50 │ ...ew('calendar')" [class.text-pink-600]="currentView === 'calendar'"
+         ╵                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Error occurs in the template of component TaskListViewComponent.
+
+    src/app/pages/task-list-view/task-list-view.component.ts:16:15:
+      16 │   templateUrl: './task-list-view.component.html'
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] NG7: This comparison appears to be unintentional because the types '"list" | "kanban"' and '"calendar"' have no overlap. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.html:51:36:
+      51 │ ...class.border-b-2]="currentView === 'calendar'" [class.border-pi...
+         ╵                       ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Error occurs in the template of component TaskListViewComponent.
+
+    src/app/pages/task-list-view/task-list-view.component.ts:16:15:
+      16 │   templateUrl: './task-list-view.component.html'
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] NG7: This comparison appears to be unintentional because the types '"list" | "kanban"' and '"calendar"' have no overlap. [plugin angular-compiler]
+
+    src/app/pages/task-list-view/task-list-view.component.html:51:89:
+      51 │ ...= 'calendar'" [class.border-pink-600]="currentView === 'calendar'"
+         ╵                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  Error occurs in the template of component TaskListViewComponent.
+
+    src/app/pages/task-list-view/task-list-view.component.ts:16:15:
+      16 │   templateUrl: './task-list-view.component.html'
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+

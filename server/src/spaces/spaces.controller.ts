@@ -35,21 +35,21 @@ export class SpacesController {
   @Roles(Role.admin, Role.gestor)
   @Post()
   create(@Body() createSpaceDto: CreateSpaceDto, @Request() req: any) {
-    const user = req.user as { sub: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
-    return this.spacesService.create(createSpaceDto, user.sub);
+    const user = req.user as { id: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+    return this.spacesService.create(createSpaceDto, user.id);
   }
 
   @Get()
   findAll(@Request() req: any) {
-    const user = req.user as { sub: string; role: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
-    return this.spacesService.findAll(user.sub, user.role);
+    const user = req.user as { id: string; role: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+    return this.spacesService.findAll(user.id, user.role);
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string, @Request() req: any) {
-    const user = req.user as { sub: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+    const user = req.user as { id: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
     const hasAccess = await this.permissionsService.hasAccess(
-      user.sub,
+      user.id,
       id,
       SpaceRole.VIEWER,
     );
@@ -61,10 +61,10 @@ export class SpacesController {
 
   @Get(':id/members')
   async getMembers(@Param('id') id: string, @Request() req: any) {
-    const user = req.user as { sub: string };
+    const user = req.user as { id: string };
     // Check access (Viewer or above can see members)
     const hasAccess = await this.permissionsService.hasAccess(
-      user.sub,
+      user.id,
       id,
       SpaceRole.VIEWER,
     );
@@ -81,10 +81,10 @@ export class SpacesController {
     @Body('email') email: string,
     @Request() req: any,
   ) {
-    const user = req.user as { sub: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+    const user = req.user as { id: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
     // Only Owner or Admin can add members
     const hasAccess = await this.permissionsService.hasAccess(
-      user.sub,
+      user.id,
       id,
       SpaceRole.ADMIN,
     );
@@ -109,9 +109,9 @@ export class SpacesController {
     @Body() updateSpaceDto: UpdateSpaceDto,
     @Request() req: any,
   ) {
-    const user = req.user as { sub: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+    const user = req.user as { id: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
     const hasAccess = await this.permissionsService.hasAccess(
-      user.sub,
+      user.id,
       id,
       SpaceRole.EDITOR,
     );
@@ -125,10 +125,16 @@ export class SpacesController {
 
   @Delete(':id')
   async remove(@Param('id') id: string, @Request() req: any) {
-    const user = req.user as { sub: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+    const user = req.user as { id: string; role: string };
+
+    // Global Admin can delete any space
+    if (user.role === 'admin') {
+      return this.spacesService.remove(id);
+    }
+
     // Only Owner can delete space
     const hasAccess = await this.permissionsService.hasAccess(
-      user.sub,
+      user.id,
       id,
       SpaceRole.OWNER,
     );

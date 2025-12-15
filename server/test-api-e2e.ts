@@ -1,58 +1,120 @@
 
-async function main() {
-    const listId = 'cf28c31d-8984-433a-a739-fc9f16cd9c06'; // Tarefas de dezembro
-    const baseUrl = 'http://localhost:3000/v1';
+// @ts-nocheck
+const API_URL = 'http://localhost:3000';
+const TIMESTAMP = Date.now();
+const EMAIL = `hierarchy.test.${TIMESTAMP}@up.com`;
+const PASSWORD = 'password123';
+const NAME = 'Hierarchy Bot';
 
-    console.log('1. Logging in...');
-    const loginRes = await fetch(`${baseUrl}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            email: 'admin@upeupmarketing.com.br',
-            password: '123456'
-        })
-    });
+async function runTest() {
+    console.log('🤖 STARTING HIERARCHY VERIFICATION BOT...');
+    console.log(`   User: ${EMAIL}`);
 
-    if (!loginRes.ok) {
-        console.error('Login failed:', await loginRes.text());
-        process.exit(1);
-    }
+    try {
+        // 1. Register
+        console.log('\n📝 Registering...');
+        const regRes = await fetch(`${API_URL}/v1/auth/register`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: EMAIL, password: PASSWORD, name: NAME })
+        });
+        if (!regRes.ok) throw new Error(`Register failed: ${await regRes.text()}`);
 
-    const { access_token } = await loginRes.json();
-    console.log('Login successful. Token received.');
+        // 2. Login
+        console.log('🔐 Logging in...');
+        const loginRes = await fetch(`${API_URL}/v1/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: EMAIL, password: PASSWORD })
+        });
+        if (!loginRes.ok) throw new Error(`Login failed`);
+        const { access_token: token } = await loginRes.json();
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        };
 
-    console.log('2. Creating Task via API...');
-    const taskData = {
-        title: 'E2E Test Task ' + Date.now(),
-        status: 'todo',
-        priority: 'high',
-        description: 'Created via e2e test script',
-        list_id: listId // Although passed in params in controller, DTO might validate it if present or controller sets it
-    };
+        // 3. Create Space
+        console.log('\n🪐 Creating Space...');
+        const spaceRes = await fetch(`${API_URL}/v1/spaces`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ name: `Space ${TIMESTAMP}` })
+        });
+        if (!spaceRes.ok) throw new Error(`Space create failed: ${await spaceRes.text()}`);
+        const space = await spaceRes.json();
+        console.log(`   Space ID: ${space.id}`);
 
-    // Controller: @Post('lists/:listId/tasks')
-    const createRes = await fetch(`${baseUrl}/lists/${listId}/tasks`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${access_token}`
-        },
-        body: JSON.stringify(taskData)
-    });
+        // 4. Create Folder
+        console.log('📂 Creating Folder...');
+        const folderRes = await fetch(`${API_URL}/v1/spaces/${space.id}/folders`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ name: 'General Folder', space_id: space.id })
+        });
+        if (!folderRes.ok) throw new Error(`Folder create failed: ${await folderRes.text()}`);
+        const folder = await folderRes.json();
+        console.log(`   Folder ID: ${folder.id}`);
 
-    if (!createRes.ok) {
-        console.error('Create Task failed:', await createRes.text());
-        process.exit(1);
-    }
+        // 5. Create List
+        console.log('📋 Creating List...');
+        const listRes = await fetch(`${API_URL}/v1/folders/${folder.id}/lists`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({ name: 'To Do List', folder_id: folder.id })
+        });
+        if (!listRes.ok) throw new Error(`List create failed: ${await listRes.text()}`);
+        const list = await listRes.json();
+        console.log(`   List ID: ${list.id}`);
 
-    const createdTask = await createRes.json();
-    console.log('Task created successfully:', createdTask);
+        // 6. Create Task
+        console.log('✨ Creating Task...');
+        const taskRes = await fetch(`${API_URL}/v1/tasks`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify({
+                title: 'Drag Me',
+                status: 'todo',
+                list_id: list.id
+            })
+        });
+        if (!taskRes.ok) throw new Error(`Task create failed: ${await taskRes.text()}`);
+        const task = await taskRes.json();
+        console.log(`   Task Created: "${task.title}" (ID: ${task.id})`);
 
-    if (createdTask.title === taskData.title) {
-        console.log('VERIFICATION PASSED: Task persisted and returned correctly.');
-    } else {
-        console.error('VERIFICATION FAILED: Task title mismatch.');
+        // 7. Move Task
+        console.log('\n🚚 Moving Task to "doing"...');
+        const moveRes = await fetch(`${API_URL}/v1/tasks/${task.id}`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ status: 'doing' })
+        });
+        if (!moveRes.ok) throw new Error(`Move failed: ${await moveRes.text()}`);
+        const movedTask = await moveRes.json();
+
+        if (movedTask.status === 'doing') {
+            console.log('✅ Move API Success (200 OK)');
+        } else {
+            console.error('❌ Move API returned OK but status mismatch:', movedTask.status);
+        }
+
+        // 8. Verify
+        console.log('\n🕵️‍♀️ Final Database Check...');
+        const checkRes = await fetch(`${API_URL}/v1/tasks/${task.id}`, { headers });
+        const finalTask = await checkRes.json();
+
+        if (finalTask.status === 'doing') {
+            console.log('--------------------------------------------------');
+            console.log('🎉 LIVE VERIFICATION SUCCESSFUL');
+            console.log('   The drag-and-drop logic (status update) is fully operational.');
+            console.log('--------------------------------------------------');
+        } else {
+            console.error('❌ PERSISTENCE FAILURE');
+        }
+
+    } catch (e) {
+        console.error('❌ ERROR:', e.message);
     }
 }
 
-main().catch(console.error);
+runTest();

@@ -223,7 +223,7 @@ import { CreateCompanyDialogComponent } from '../dialogs/create-company-dialog/c
 
                    <div class="mt-auto border-t border-gray-100 pt-3 flex items-center justify-between text-xs text-gray-500">
                        <span class="flex items-center"><i class="fas fa-users mr-1.5"></i> {{ company.members?.length || 0 }} membros</span>
-                       <span class="flex items-center"><i class="fas fa-calendar mr-1.5"></i> {{ company.created_at | date:'dd/MM/yy' }}</span>
+                       <span class="flex items-center"><i class="fas fa-clock mr-1.5"></i> {{ company.created_at | date:'dd/MM/yy' }}</span>
                    </div>
               </div>
           </div>

@@ -35,27 +35,31 @@
 
         <!-- Tabs Row -->
         <div class="px-6 flex items-center space-x-6 text-sm font-medium text-gray-500">
-            <button (click)="setView('list')" [class.text-pink-600]="currentView === 'list'"
-                [class.border-b-2]="currentView === 'list'" [class.border-pink-600]="currentView === 'list'"
+            <button (click)="setView('list')" [class.text-pink-600]="activeView === 'list'"
+                [class.border-b-2]="activeView === 'list'" [class.border-pink-600]="activeView === 'list'"
                 class="pb-3 hover:text-gray-900 flex items-center transition-all">
                 <i class="fas fa-list mr-2"></i> Lista
             </button>
-            <button (click)="setView('kanban')" [class.text-pink-600]="currentView === 'kanban'"
-                [class.border-b-2]="currentView === 'kanban'" [class.border-pink-600]="currentView === 'kanban'"
+
+            <button (click)="setView('kanban')" [class.text-pink-600]="activeView === 'kanban'"
+                [class.border-b-2]="activeView === 'kanban'" [class.border-pink-600]="activeView === 'kanban'"
                 class="pb-3 hover:text-gray-900 flex items-center transition-all">
                 <i class="fas fa-columns mr-2"></i> Quadro
             </button>
-            <!-- 'Equipe' tab skipped as not requested but in screenshot -->
-            <button (click)="setView('calendar')" [class.text-pink-600]="currentView === 'calendar'"
-                [class.border-b-2]="currentView === 'calendar'" [class.border-pink-600]="currentView === 'calendar'"
+
+            <button (click)="setView('calendar')" [class.text-pink-600]="activeView === 'calendar'"
+                [class.border-b-2]="activeView === 'calendar'" [class.border-pink-600]="activeView === 'calendar'"
                 class="pb-3 hover:text-gray-900 flex items-center transition-all">
-                <i class="far fa-calendar mr-2"></i> Calendário
+                <i class="fas fa-calendar mr-2"></i> Calendário
             </button>
+
+            <!-- 'Equipe' tab skipped as not requested but in screenshot -->
+
         </div>
     </div>
 
     <!-- Filters/Sub-toolbar (Mocked) -->
-    <div *ngIf="currentView === 'list' || currentView === 'kanban'"
+    <div *ngIf="activeView === 'list'"
         class="px-6 py-3 border-b border-gray-200 flex items-center space-x-2 text-xs bg-gray-50">
         <div class="flex items-center space-x-2">
             <button
@@ -82,16 +86,18 @@
 
     <!-- Content Area -->
     <div class="flex-1 overflow-hidden bg-white relative">
-        <app-kanban-board *ngIf="currentView === 'kanban'" [listId]="listId" [tasks]="filteredTasks"
-            (taskClick)="onTaskSelected($event)" (addTask)="openTaskDialog($event)"
-            class="h-full block"></app-kanban-board>
-        <app-task-table *ngIf="currentView === 'list'" [tasks]="filteredTasks" (taskClick)="onTaskSelected($event)"
-            class="h-full block overflow-hidden"></app-task-table>
-        <app-task-calendar *ngIf="currentView === 'calendar'" [tasks]="filteredTasks"
-            (taskClick)="onTaskSelected($event)" class="h-full block"></app-task-calendar>
+
+        <app-task-table *ngIf="activeView === 'list'" [tasks]="filteredTasks" (taskClick)="onTaskSelected($event)"
+            (addTask)="openTaskDialog()" class="h-full block overflow-hidden"></app-task-table>
+        <app-kanban-board *ngIf="activeView === 'kanban'" [tasks]="filteredTasks" (taskClick)="onTaskSelected($event)"
+            (addTask)="openTaskDialog($event)" class="h-full block overflow-hidden"></app-kanban-board>
+        <app-task-calendar *ngIf="activeView === 'calendar'" [tasks]="filteredTasks"
+            (taskClick)="onTaskSelected($event)" (dateClick)="onCalendarDateClick($event)"
+            (taskDrop)="onTaskDrop($event)" class="h-full block overflow-hidden"></app-task-calendar>
+
 
         <!-- Load More / Pagination -->
-        <div *ngIf="hasMore" class="p-4 flex justify-center border-t border-gray-100">
+        <div *ngIf="hasMore && activeView !== 'calendar'" class="p-4 flex justify-center border-t border-gray-100">
             <button (click)="loadMore()" [disabled]="isLoading"
                 class="px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 rounded-md text-sm font-medium transition-colors border border-gray-200 disabled:opacity-50">
                 <i *ngIf="isLoading" class="fas fa-spinner fa-spin mr-2"></i>
@@ -101,8 +107,8 @@
     </div>
 
     <app-create-task-dialog *ngIf="showTaskDialog" [listId]="listId" [listName]="currentList?.name || 'Lista'"
-        [task]="selectedTask" [initialStatus]="initialDialogStatus" [spaceId]="spaceId" (close)="closeTaskDialog()"
-        (created)="loadTasks()">
+        [task]="selectedTask" [initialStatus]="initialDialogStatus" [initialDate]="initialDialogDate"
+        [spaceId]="spaceId" (close)="closeTaskDialog()" (created)="loadTasks()">
     </app-create-task-dialog>
     <app-invite-member-dialog *ngIf="showInviteDialog" [spaceId]="spaceId"
         (close)="closeInviteDialog()"></app-invite-member-dialog>

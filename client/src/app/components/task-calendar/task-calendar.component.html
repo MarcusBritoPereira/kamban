@@ -1,46 +1,42 @@
-<div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 h-full flex flex-col">
-    <div class="flex justify-between items-center mb-6 px-2">
-        <h2 class="text-xl font-bold text-gray-800 capitalize flex items-center">
-            <i class="far fa-calendar-alt mr-2 text-gray-400"></i>
-            {{ currentMonth | date:'MMMM yyyy':'':'pt-BR' }}
-        </h2>
-        <div class="flex space-x-2">
-            <button (click)="prevMonth()" class="text-gray-500 hover:text-gray-800 p-1 transition-colors"><i
-                    class="fas fa-chevron-left"></i></button>
-            <button (click)="nextMonth()" class="text-gray-500 hover:text-gray-800 p-1 transition-colors"><i
-                    class="fas fa-chevron-right"></i></button>
+<div class="h-full flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <!-- Custom Toolbar / Header Extensions -->
+    <div
+        class="px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white z-10">
+        <!-- Buttons are handled by FullCalendar Toolbar, but we can add extras here -->
+        <div class="flex items-center gap-2">
+            <!-- Sync Buttons (Placeholders as requested) -->
+            <div class="flex items-center -space-x-2 mr-4">
+                <button
+                    class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 hover:scale-110 transition-transform"
+                    title="Sync Google Calendar">
+                    <i class="fab fa-google"></i>
+                </button>
+                <button
+                    class="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-800 hover:scale-110 transition-transform"
+                    title="Sync Outlook">
+                    <i class="fab fa-microsoft"></i>
+                </button>
+                <button
+                    class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-800 hover:scale-110 transition-transform"
+                    title="Sync Apple Calendar">
+                    <i class="fab fa-apple"></i>
+                </button>
+            </div>
+            <span class="text-xs text-gray-400 font-medium">Sincronizar (Em breve)</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <!-- Filter / Toggle -->
+            <button (click)="toggleMeMode()" [class.bg-pink-50]="meMode" [class.text-pink-600]="meMode"
+                [class.border-pink-200]="meMode"
+                class="px-3 py-1.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors flex items-center">
+                <i class="fas fa-user mr-2"></i> Só minhas tarefas
+            </button>
         </div>
     </div>
 
-    <div cdkDropListGroup
-        class="grid grid-cols-7 gap-px bg-gray-200 border border-gray-200 rounded-lg overflow-hidden flex-1">
-        <!-- Week Header -->
-        <div *ngFor="let day of weekDays" class="bg-gray-50 p-2 text-center text-xs font-bold text-gray-500 uppercase">
-            {{ day }}
-        </div>
-
-        <!-- Days -->
-        <div *ngFor="let day of daysInMonth" cdkDropList [cdkDropListData]="day"
-            [cdkDropListDisabled]="day && isPastDate(day)" (cdkDropListDropped)="drop($event)"
-            class="bg-white min-h-[100px] p-2 hover:bg-gray-50 transition-colors relative group"
-            [ngClass]="{'bg-gray-50/50': !day, 'bg-gray-100 opacity-60': day && isPastDate(day)}">
-
-            <span *ngIf="day" class="text-sm font-medium text-gray-700 block mb-2">{{ day | date:'d' }}</span>
-
-            <div *ngIf="day" class="space-y-1">
-                <div *ngFor="let task of getTasksForDay(day)" cdkDrag [cdkDragData]="task"
-                    class="text-[10px] px-2 py-1 rounded bg-blue-100 text-blue-700 truncate border border-blue-200 hover:border-blue-300 cursor-pointer transition-colors shadow-sm cursor-move select-none flex items-center"
-                    title="{{ task.title }}" (click)="taskClick.emit(task); $event.stopPropagation()">
-                    <i class="fas fa-flag mr-1.5" [ngClass]="getPriorityClass(task.priority)"></i>
-                    <span class="truncate">{{ task.title }}</span>
-                </div>
-            </div>
-
-            <!-- Add Button on Hover -->
-            <button *ngIf="day && !isPastDate(day)"
-                class="absolute bottom-2 right-2 text-gray-400 hover:text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
+    <!-- Calendar Container -->
+    <div class="flex-1 overflow-hidden relative calendar-wrapper p-4">
+        <full-calendar [options]="calendarOptions" #calendar></full-calendar>
     </div>
 </div>

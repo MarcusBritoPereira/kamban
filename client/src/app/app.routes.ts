@@ -1,4 +1,6 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { Routes, Router } from '@angular/router';
+import { AuthService } from './services/auth.service';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { ForgotPasswordComponent } from './pages/login/forgot-password.component';
@@ -14,7 +16,20 @@ export const routes: Routes = [
         path: '',
         component: MainLayoutComponent,
         children: [
-            { path: '', redirectTo: 'spaces', pathMatch: 'full' },
+            {
+                path: '',
+                pathMatch: 'full',
+                canActivate: [() => {
+                    const auth = inject(AuthService);
+                    const router = inject(Router);
+                    const user = auth.currentUser();
+                    if (user?.role?.toLowerCase() === 'admin') {
+                        return router.createUrlTree(['/spaces']);
+                    }
+                    return router.createUrlTree(['/my-tasks']);
+                }],
+                children: [] // standard empty component workaround not needed if canActivate redirects
+            },
             {
                 path: 'spaces',
                 loadComponent: () => import('./pages/spaces/spaces.component').then(m => m.SpacesComponent),

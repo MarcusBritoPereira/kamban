@@ -42,7 +42,7 @@ export interface Task {
   list?: {
     id?: string;
     name: string;
-    folder?: { name: string; space_id: string; space?: { name: string } };
+    folder?: { id?: string; name: string; space_id: string; space?: { id?: string; name: string } };
   };
 }
 
@@ -60,6 +60,8 @@ export class DataService {
   // Event bus for task updates
   private taskUpdatesSubject = new Subject<void>();
   taskUpdates$ = this.taskUpdatesSubject.asObservable();
+
+
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
@@ -110,6 +112,12 @@ export class DataService {
     );
   }
 
+  deleteSpace(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/spaces/${id}`).pipe(
+      tap(() => this.getSpaces().subscribe())
+    );
+  }
+
   addMember(spaceId: string, email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/spaces/${spaceId}/members`, { email });
   }
@@ -127,6 +135,10 @@ export class DataService {
     return this.http.put<Folder>(`${this.apiUrl}/folders/${id}`, data);
   }
 
+  deleteFolder(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/folders/${id}`);
+  }
+
   // Lists
   getLists(folderId: string): Observable<TaskList[]> {
     return this.http.get<TaskList[]>(`${this.apiUrl}/folders/${folderId}/lists`);
@@ -138,6 +150,10 @@ export class DataService {
 
   updateList(id: string, data: any): Observable<TaskList> {
     return this.http.put<TaskList>(`${this.apiUrl}/lists/${id}`, data);
+  }
+
+  deleteList(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/lists/${id}`);
   }
 
   getList(id: string): Observable<TaskList> {
@@ -172,6 +188,16 @@ export class DataService {
     return this.http.patch<Task>(`${this.apiUrl}/tasks/${taskId}`, data).pipe(
       tap(() => this.taskUpdatesSubject.next())
     );
+  }
+
+  deleteTask(taskId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/tasks/${taskId}`).pipe(
+      tap(() => this.taskUpdatesSubject.next())
+    );
+  }
+
+  getTask(taskId: string): Observable<Task> {
+    return this.http.get<Task>(`${this.apiUrl}/tasks/${taskId}`);
   }
 
   uploadAttachment(taskId: string, file: File): Observable<any> {

@@ -25,7 +25,61 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
               <div class="flex-1 min-w-0 mr-4">
                  <div class="flex items-center text-xs font-semibold tracking-wide text-gray-500 mb-1 uppercase truncate">
                     <span class="text-pink-600 mr-2">#</span>
-                    <span>{{ taskPath || listName }}</span>
+                    
+                    <!-- Fixed Path if listId exists -->
+                    <span *ngIf="listId">{{ taskPath || listName }}</span>
+                    
+                    <!-- Selection Dropdown if no listId -->
+                    <div *ngIf="!listId" class="relative inline-block ml-1">
+                         <div (click)="showHierarchyDropdown = !showHierarchyDropdown" 
+                              class="cursor-pointer hover:text-gray-800 hover:bg-gray-100 px-2 py-1 rounded transition-colors flex items-center gap-1 border border-transparent hover:border-gray-200">
+                             <span>{{ selectedListId ? taskPath || selectedListName : 'Selecionar Lista de Destino' }}</span>
+                             <i class="fas fa-chevron-down text-[10px]"></i>
+                         </div>
+
+                         <!-- Hierarchy Dropdown -->
+                         <div *ngIf="showHierarchyDropdown" class="absolute top-full left-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-4 animate-fadeIn flex flex-col gap-3">
+                             
+                             <!-- 1. Space -->
+                             <div class="flex flex-col gap-1">
+                                 <label class="text-[10px] uppercase font-bold text-gray-400">Espaço</label>
+                                 <select [ngModel]="selectedSpaceId" (ngModelChange)="onSpaceSelect($event)" [ngModelOptions]="{standalone: true}"
+                                    class="w-full bg-gray-50 border border-gray-200 rounded px-2 py-1.5 text-xs focus:outline-none focus:border-pink-500 cursor-pointer">
+                                     <option [ngValue]="null" disabled>Selecione...</option>
+                                     <option *ngFor="let s of spaces" [value]="s.id">{{ s.name }}</option>
+                                 </select>
+                             </div>
+
+                             <!-- 2. Folder -->
+                             <div class="flex flex-col gap-1" *ngIf="selectedSpaceId">
+                                <label class="text-[10px] uppercase font-bold text-gray-400">Pasta</label>
+                                <select [ngModel]="selectedFolderId" (ngModelChange)="onFolderSelect($event)" [ngModelOptions]="{standalone: true}"
+                                   class="w-full bg-gray-50 border border-gray-200 rounded px-2 py-1.5 text-xs focus:outline-none focus:border-pink-500 cursor-pointer">
+                                    <option [ngValue]="null" disabled>Selecione...</option>
+                                    <option *ngFor="let f of folders" [value]="f.id">{{ f.name }}</option>
+                                </select>
+                            </div>
+
+                            <!-- 3. List -->
+                            <div class="flex flex-col gap-1" *ngIf="selectedFolderId">
+                                <label class="text-[10px] uppercase font-bold text-gray-400">Lista</label>
+                                <select [ngModel]="selectedListId" (ngModelChange)="onListSelect($event)" [ngModelOptions]="{standalone: true}"
+                                   class="w-full bg-gray-50 border border-gray-200 rounded px-2 py-1.5 text-xs focus:outline-none focus:border-pink-500 cursor-pointer">
+                                    <option [ngValue]="null" disabled>Selecione...</option>
+                                    <option *ngFor="let l of lists" [value]="l.id">{{ l.name }}</option>
+                                </select>
+                            </div>
+
+                            <div *ngIf="selectedListId" class="text-xs text-green-600 font-bold text-center pt-2 border-t border-gray-100">
+                                <i class="fas fa-check mr-1"></i> Lista Selecionada
+                            </div>
+
+                         </div>
+                         
+                         <!-- Backdrop -->
+                         <div *ngIf="showHierarchyDropdown" (click)="showHierarchyDropdown = false" class="fixed inset-0 z-40 cursor-default"></div>
+                    </div>
+
                     <span *ngIf="taskForm.get('title')?.value" class="ml-2 text-gray-400 truncate max-w-[200px]">> {{ taskForm.get('title')?.value }}</span>
                  </div>
                  <input type="text" formControlName="title" 
@@ -426,13 +480,14 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
             this.fetchTags();
         }
     }
-    @Input() listId!: string;
-    @Input() spaceId!: string;
+    @Input() listId?: string;
+    @Input() spaceId?: string;
     @Input() listName: string = 'Lista';
     @Output() close = new EventEmitter<void>();
     @Output() created = new EventEmitter<void>();
     @Input() task: any = null;
     @Input() initialStatus: string = 'todo';
+    @Input() initialDate: Date | null = null;
 
     taskForm: FormGroup;
     isSubmitting = false;
@@ -449,6 +504,16 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
     showTagDropdown = false;
     tagColors = ['#ef4444', '#f97316', '#f59e0b', '#84cc16', '#22c55e', '#06b6d4', '#3b82f6', '#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#64748b'];
     selectedColor = '#ec4899';
+
+    // Hierarchy Selection (for Global Add Task)
+    spaces: any[] = [];
+    folders: any[] = [];
+    lists: any[] = [];
+
+    selectedSpaceId: string | null = null;
+    selectedFolderId: string | null = null;
+    selectedListId: string | null = null;
+    showHierarchyDropdown = false;
 
     // Custom Status Dropdown Logic
     showStatusDropdown = false;
@@ -516,7 +581,14 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.fetchDirectory();
-        this.fetchTags();
+
+        // If we have a spaceId (even if no listId yet, or derived), fetch tags
+        if (this.spaceId) {
+            this.fetchTags();
+        } else {
+            // If no spaceId provided, we might need to fetch spaces to allow selection
+            this.fetchSpaces();
+        }
 
         // Fetch List Details for Path
         if (this.listId) {
@@ -568,8 +640,18 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
                 this.existingAttachments = this.task.attachments;
             }
         } else {
+            let deadline = null;
+            if (this.initialDate) {
+                const d = new Date(this.initialDate);
+                const year = d.getFullYear();
+                const month = (d.getMonth() + 1).toString().padStart(2, '0');
+                const day = d.getDate().toString().padStart(2, '0');
+                deadline = `${year}-${month}-${day}`;
+            }
+
             this.taskForm.patchValue({
-                status: this.initialStatus
+                status: this.initialStatus,
+                deadline: deadline
             });
         }
     }
@@ -583,6 +665,66 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
                 error: (err) => alert('Erro ao remover anexo')
             });
         }
+    }
+
+    // Hierarchy Methods
+    fetchSpaces() {
+        this.dataService.getSpaces().subscribe({
+            next: (spaces) => this.spaces = spaces,
+            error: (err) => console.error('Error fetching spaces', err)
+        });
+    }
+
+    onSpaceSelect(spaceId: string) {
+        this.selectedSpaceId = spaceId;
+        this.selectedFolderId = null;
+        this.selectedListId = null;
+        this.folders = [];
+        this.lists = [];
+        this.spaceId = spaceId; // Update local spaceId context
+        this.fetchTags(); // Fetch tags for this space
+
+        // Fetch folders for space
+        this.dataService.getFolders(spaceId).subscribe({
+            next: (folders: any[]) => {
+                this.folders = folders || [];
+            },
+            error: (err) => {
+                console.error('Error fetching folders:', err);
+                this.folders = [];
+            }
+        });
+    }
+
+    onFolderSelect(folderId: string) {
+        this.selectedFolderId = folderId;
+        this.selectedListId = null;
+        this.lists = [];
+
+        const folder = this.folders.find(f => f.id === folderId);
+        if (folder) {
+            this.lists = folder.lists || [];
+        }
+    }
+
+    onListSelect(listId: string) {
+        this.selectedListId = listId;
+        const list = this.lists.find(l => l.id === listId);
+        if (list) {
+            this.listName = list.name;
+        }
+    }
+
+    get selectedSpaceName() {
+        return this.spaces.find(s => s.id === this.selectedSpaceId)?.name || 'Selecione o Espaço';
+    }
+
+    get selectedFolderName() {
+        return this.folders.find(f => f.id === this.selectedFolderId)?.name || 'Selecione a Pasta';
+    }
+
+    get selectedListName() {
+        return this.lists.find(l => l.id === this.selectedListId)?.name || 'Selecione a Lista';
     }
 
     fetchDirectory() {
@@ -666,6 +808,13 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
     createTag(name: string) {
         if (!name.trim()) return;
 
+        const targetSpaceId = this.spaceId || this.selectedSpaceId;
+
+        if (!targetSpaceId) {
+            alert('Selecione um espaço para criar a etiqueta.');
+            return;
+        }
+
         // Optimistic check?
         const existing = this.spaceTags.find(t => t.name.toLowerCase() === name.toLowerCase());
         if (existing) {
@@ -673,7 +822,7 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
             return;
         }
 
-        this.dataService.createTag(this.spaceId, { name, color: this.selectedColor }).subscribe({
+        this.dataService.createTag(targetSpaceId, { name, color: this.selectedColor }).subscribe({
             next: (newTag) => {
                 this.spaceTags.push(newTag);
                 this.selectedTags.push(newTag.id);
@@ -711,6 +860,14 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
     }
 
     onSubmit() {
+        // Validate List Selection if global
+        const targetListId = this.listId || this.selectedListId;
+
+        if (!targetListId) {
+            alert('Por favor, selecione uma lista de destino.');
+            return;
+        }
+
         if (this.taskForm.valid) {
             this.isSubmitting = true;
 
@@ -727,7 +884,7 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
 
             const request$ = this.task
                 ? this.dataService.updateTask(this.task.id, taskData)
-                : this.dataService.createTask(this.listId, { ...taskData, list_id: this.listId });
+                : this.dataService.createTask(targetListId as string, { ...taskData, list_id: targetListId });
 
             request$.subscribe({
                 next: (result: any) => {

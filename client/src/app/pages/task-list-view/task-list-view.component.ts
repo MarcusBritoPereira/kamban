@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, HostListener, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { KanbanBoardComponent } from '../../components/kanban-board/kanban-board.component';
@@ -7,52 +7,48 @@ import { TaskCalendarComponent } from '../../components/task-calendar/task-calen
 import { CreateTaskDialogComponent } from '../../components/dialogs/create-task-dialog/create-task-dialog.component';
 import { InviteMemberDialogComponent } from '../../components/dialogs/invite-member-dialog/invite-member-dialog.component';
 import { DataService } from '../../services/data.service';
+// ... imports
 
 @Component({
   selector: 'app-task-list-view',
   standalone: true,
   imports: [CommonModule, KanbanBoardComponent, TaskTableComponent, TaskCalendarComponent, CreateTaskDialogComponent, InviteMemberDialogComponent],
-  templateUrl: './task-list-view.component.html',
-  styleUrl: './task-list-view.component.css'
+  templateUrl: './task-list-view.component.html'
 })
 export class TaskListViewComponent implements OnInit {
-  currentView: 'list' | 'kanban' | 'calendar' = 'list'; // Default list
-  showTaskDialog = false;
-  showInviteDialog = false;
+  // ... properties
+
   listId: string = '';
   spaceId: string = '';
-
   tasks: any[] = [];
   currentList: any = null;
+  activeView: 'list' | 'kanban' | 'calendar' = 'list';
+  showTaskDialog = false;
   selectedTask: any = null;
-  initialDialogStatus: string = 'todo';
+  initialDialogStatus = 'todo';
+  initialDialogDate: Date | null = null;
+  showInviteDialog = false;
 
-  constructor(private route: ActivatedRoute, private dataService: DataService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private dataService: DataService,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
+  ) { }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      console.log('TaskListView: Route params:', params);
-      const rawId = params.get('listId');
+    // ... params subscription
 
-      if (!rawId || rawId === 'undefined' || rawId === 'null') {
-        console.error('TaskListView: Invalid listId detected:', rawId);
-        this.listId = '';
-        return;
-      }
+    this.dataService.taskUpdates$.subscribe(() => {
+      // ...
+    });
 
-      this.listId = rawId;
+    // ...
 
-      // Try to get spaceId from params first
-      const rawSpaceId = params.get('spaceId');
-      if (rawSpaceId) {
-        this.spaceId = rawSpaceId;
-      } else {
-        // Fallback to snapshot parent lookup
-        this.spaceId = this.route.snapshot.paramMap.get('spaceId') ||
-          this.route.parent?.snapshot.paramMap.get('spaceId') || '';
-      }
-
-      console.log('TaskListView: listId:', this.listId, 'spaceId:', this.spaceId);
+    // Subscribe to route params to get listId and spaceId
+    this.route.params.subscribe(params => {
+      this.listId = params['listId'];
+      this.spaceId = params['spaceId'];
 
       if (this.listId) {
         this.loadListDetails();
@@ -60,9 +56,19 @@ export class TaskListViewComponent implements OnInit {
       }
     });
 
-    this.dataService.taskUpdates$.subscribe(() => {
-      if (this.listId) {
-        this.loadTasks();
+    // Handle deep linking to task
+    this.route.queryParams.subscribe(params => {
+      const openTaskId = params['openTask'];
+      if (openTaskId) {
+        this.dataService.getTask(openTaskId).subscribe({
+          next: (task) => {
+            if (task) {
+              this.onTaskSelected(task);
+              // Clean up query param? Maybe not necessary, but good UX to avoid reopening on refresh
+            }
+          },
+          error: (err) => console.error('Error opening linked task:', err)
+        });
       }
     });
   }
@@ -146,12 +152,34 @@ export class TaskListViewComponent implements OnInit {
     this.sortOrder = this.sortOrder === 'date' ? 'name' : 'date';
   }
 
-  setView(view: 'kanban' | 'list' | 'calendar') {
-    this.currentView = view;
+  setView(view: 'list' | 'kanban' | 'calendar') {
+    this.activeView = view;
+    const currentLimit = this.activeView === 'calendar' ? 1000 : this.limit;
+    if (view === 'calendar') {
+      this.loadTasks(true);
+    }
   }
 
-  openTaskDialog(status?: string) {
+  onCalendarDateClick(date: Date) {
+    this.openTaskDialog(undefined, date);
+  }
+
+  onTaskDrop(event: { task: any, newDate: Date }) {
+    const index = this.tasks.findIndex(t => t.id === event.task.id);
+    if (index !== -1) {
+      const updatedTask = { ...this.tasks[index], deadline: event.newDate };
+      this.tasks[index] = updatedTask;
+      this.tasks = [...this.tasks];
+    }
+
+    this.dataService.updateTask(event.task.id, { deadline: event.newDate }).subscribe({
+      error: (err) => console.error('Error rescheduling task', err)
+    });
+  }
+
+  openTaskDialog(status?: string, date?: Date) {
     this.initialDialogStatus = status || 'todo';
+    this.initialDialogDate = date || null;
     this.showTaskDialog = true;
   }
 
@@ -159,6 +187,7 @@ export class TaskListViewComponent implements OnInit {
     this.showTaskDialog = false;
     this.selectedTask = null;
     this.initialDialogStatus = 'todo';
+    this.initialDialogDate = null;
     this.loadTasks();
   }
 

@@ -54,7 +54,15 @@ export class TasksService {
 
     const task = await this.prisma.task.create({
       data: taskData,
-      include: { list: true }
+      include: {
+        list: {
+          include: {
+            folder: {
+              include: { space: true }
+            }
+          }
+        }
+      }
     });
 
     // Log Activity
@@ -69,7 +77,7 @@ export class TasksService {
           title: 'Nova Tarefa Atribuída',
           message: `Você foi atribuído à tarefa "${task.title}"`,
           type: 'assignment',
-          link: `/tasks/${task.id}`
+          link: `/spaces/${task.list.folder.space_id}/folders/${task.list.folder_id}/lists/${task.list_id}?openTask=${task.id}`
         });
         // Also log assignment activity? 
         // "Added X to task" - maybe redundant if created with them.
@@ -186,6 +194,13 @@ export class TasksService {
         assignees: { include: { user: true } },
         tags: { include: { tag: true } },
         attachments: true,
+        list: {
+          include: {
+            folder: {
+              include: { space: true }
+            }
+          }
+        }
       },
     });
   }
@@ -244,6 +259,15 @@ export class TasksService {
       const updatedTask = await this.prisma.task.update({
         where: { id },
         data: updateData,
+        include: {
+          list: {
+            include: {
+              folder: {
+                include: { space: true }
+              }
+            }
+          }
+        }
       });
 
       // Log Field Changes
@@ -270,9 +294,14 @@ export class TasksService {
           title: 'Tarefa Atribuída',
           message: `Você foi atribuído à tarefa "${updatedTask.title}"`,
           type: 'assignment',
-          link: `/tasks/${updatedTask.id}`
+          link: `/spaces/${updatedTask.list.folder.space_id}/folders/${updatedTask.list.folder_id}/lists/${updatedTask.list_id}?openTask=${updatedTask.id}`
         });
       }
+
+      return updatedTask;
+
+      // Notify Creator of generic update
+      await this.notifyCreator(id, updatedTask.title, 'atualizou a tarefa', actorId, updatedTask.list.folder.space_id, updatedTask.list.folder_id, updatedTask.list_id);
 
       return updatedTask;
     } catch (error) {
@@ -293,9 +322,17 @@ export class TasksService {
       },
     });
     // Log
-    // We could fetch the user name being assigned to make it nicer: "Assigned John Doe"
-    // For now:
     await this.activitiesService.logActivity(taskId, actorId, 'system', 'adicionou um responsável');
+
+    // Notify Creator
+    const task = await this.prisma.task.findUnique({
+      where: { id: taskId },
+      include: { list: { include: { folder: true } } }
+    });
+    if (task) {
+      await this.notifyCreator(taskId, task.title, 'adicionou um responsável', actorId, task.list.folder.space_id, task.list.folder_id, task.list_id);
+    }
+
     return res;
   }
 
@@ -309,6 +346,16 @@ export class TasksService {
       },
     });
     await this.activitiesService.logActivity(taskId, actorId, 'system', 'removeu um responsável');
+
+    // Notify Creator
+    const task = await this.prisma.task.findUnique({
+      where: { id: taskId },
+      include: { list: { include: { folder: true } } }
+    });
+    if (task) {
+      await this.notifyCreator(taskId, task.title, 'removeu um responsável', actorId, task.list.folder.space_id, task.list.folder_id, task.list_id);
+    }
+
     return res;
   }
 
@@ -346,6 +393,10 @@ export class TasksService {
       },
     });
     await this.activitiesService.logActivity(taskId, actorId, 'system', `adicionou etiqueta ${tag.name}`);
+
+    // Notify Creator
+    await this.notifyCreator(taskId, task.title, `adicionou etiqueta ${tag.name}`, actorId, task.list.folder.space_id, task.list.folder_id, task.list_id);
+
     return res;
   }
 
@@ -357,8 +408,49 @@ export class TasksService {
           tag_id: tagId,
         },
       },
+      include: { task: { include: { list: { include: { folder: true } } } } }
     });
     await this.activitiesService.logActivity(taskId, actorId, 'system', 'removeu etiqueta');
+
+    // Notify Creator
+    await this.notifyCreator(taskId, res.task.title, `removeu uma etiqueta da tarefa`, actorId, res.task.list.folder.space_id, res.task.list.folder_id, res.task.list_id);
+
     return res;
+  }
+
+  // --- Helpers for Creator Notification ---
+
+  private async getTaskCreatorId(taskId: string): Promise<string | null> {
+    // Infer creator from the first 'system' activity for this task
+    // "criou esta tarefa" is the standard message, but simply taking the oldest activity is safer/generic
+    const firstActivity = await this.prisma.taskActivity.findFirst({
+      where: { task_id: taskId },
+      orderBy: { created_at: 'asc' },
+    });
+    return firstActivity ? firstActivity.user_id : null;
+  }
+
+  private async notifyCreator(taskId: string, taskTitle: string, actionDescription: string, actorId: string, spaceId: string, folderId: string, listId: string) {
+    try {
+      const creatorId = await this.getTaskCreatorId(taskId);
+      if (!creatorId || creatorId === actorId) return; // Don't notify if creator is the actor or unknown
+
+      // Verify if actor is "system" or actual user? usually actorId is user.
+      // Fetch actor name for better message? For now generic: "Alguém..."
+      // Or we can assume the UI/Notification service handles "Who did it" if we just send the message.
+      // Let's explicitly say "Um usuário..." or fetch the actor name if cheap. 
+      // For performance, we'll keep it simple: "Houve uma atualização na tarefa..."
+
+      await this.notificationsService.create({
+        user_id: creatorId,
+        title: 'Atualização em Tarefa',
+        message: `Membro atualizou a tarefa "${taskTitle}": ${actionDescription}`, // "Membro removeu uma etiqueta..."
+        type: 'info', // or 'update'
+        link: `/spaces/${spaceId}/folders/${folderId}/lists/${listId}?openTask=${taskId}`
+      });
+    } catch (e) {
+      console.error('Error notifying creator:', e);
+      // Suppress error to not block main flow
+    }
   }
 }

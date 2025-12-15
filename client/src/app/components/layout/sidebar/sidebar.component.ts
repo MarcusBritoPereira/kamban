@@ -244,10 +244,49 @@ export class SidebarComponent implements OnInit {
 
   isAdmin(): boolean {
     const user = this.currentUser();
-    return user?.role === 'admin';
+    return user?.role?.toLowerCase() === 'admin';
   }
 
   logout() {
     this.authService.logout();
+  }
+
+  deleteSpace(spaceId: string, event: Event) {
+    event.stopPropagation();
+    if (confirm('Tem certeza de que deseja excluir este espaço? Toda a hierarquia será perdida.')) {
+      this.dataService.deleteSpace(spaceId).subscribe({
+        error: (err) => alert('Erro ao excluir espaço: ' + err.message)
+      });
+    }
+  }
+
+  deleteFolder(folderId: string, spaceId: string, event: Event) {
+    event.stopPropagation();
+    if (confirm('Tem certeza de que deseja excluir esta pasta? As listas dentro dela serão perdidas.')) {
+      this.dataService.deleteFolder(folderId).subscribe({
+        next: () => {
+          // Refresh folders
+          this.dataService.getFolders(spaceId).subscribe(folders => {
+            this.folders.update(current => ({ ...current, [spaceId]: folders }));
+          });
+        },
+        error: (err) => alert('Erro ao excluir pasta: ' + err.message)
+      });
+    }
+  }
+
+  deleteList(listId: string, folderId: string, event: Event) {
+    event.stopPropagation();
+    if (confirm('Tem certeza de que deseja excluir esta lista? As tarefas serão perdidas.')) {
+      this.dataService.deleteList(listId).subscribe({
+        next: () => {
+          // Refresh lists
+          this.dataService.getLists(folderId).subscribe(lists => {
+            this.lists.update(current => ({ ...current, [folderId]: lists }));
+          });
+        },
+        error: (err) => alert('Erro ao excluir lista: ' + err.message)
+      });
+    }
   }
 }

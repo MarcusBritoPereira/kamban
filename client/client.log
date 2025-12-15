@@ -1,0 +1,72 @@
+
+> client@0.0.0 start
+> ng serve
+
+- Building...
+
+Initial chunk files | Names                      |  Raw size
+main.js             | main                       |  99.11 kB | 
+polyfills.js        | polyfills                  |  88.09 kB | 
+chunk-TLBGWUTP.js   | -                          |  83.53 kB | 
+styles.css          | styles                     |  59.22 kB | 
+chunk-4HH5VAD4.js   | -                          |   9.09 kB | 
+chunk-U33U6W3X.js   | -                          |   4.99 kB | 
+chunk-SHAOKUVO.js   | -                          | 938 bytes | 
+
+                    | Initial total              | 344.94 kB
+
+Lazy chunk files    | Names                      |  Raw size
+chunk-B2MIU5UY.js   | companies-list-component   |  57.79 kB | 
+chunk-CNT3O4PK.js   | company-details-component  |  51.47 kB | 
+chunk-AG33YISQ.js   | -                          |  46.67 kB | 
+chunk-CURFJLXV.js   | team-component             |  30.94 kB | 
+chunk-Z2MHLYIW.js   | dashboard-component        |  29.08 kB | 
+chunk-37ELF2JY.js   | task-list-view-component   |  26.50 kB | 
+chunk-ECEWG3EB.js   | member-profile-component   |  20.30 kB | 
+chunk-FQWAL2CN.js   | spaces-dashboard-component |  17.66 kB | 
+chunk-EZXIBMGQ.js   | user-management-component  |  16.65 kB | 
+chunk-36OLM6W3.js   | my-tasks-component         |  16.62 kB | 
+chunk-5R6FI65R.js   | settings-component         |  10.71 kB | 
+chunk-2SZBD7BK.js   | space-details-component    |   6.88 kB | 
+chunk-R7K4UKXJ.js   | folder-details-component   |   6.10 kB | 
+chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
+
+Application bundle generation complete. [4.126 seconds]
+
+Watch mode enabled. Watching for file changes...
+  ➜  Local:   http://localhost:4200/
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                    | Raw size
+main.js             | main                     | 99.11 kB | 
+
+Lazy chunk files    | Names                    | Raw size
+chunk-6PSKAQ7D.js   | task-list-view-component | 26.72 kB | 
+
+Application bundle generation complete. [7.582 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                    | Raw size
+main.js             | main                     | 99.11 kB | 
+
+Lazy chunk files    | Names                    | Raw size
+chunk-5TRY22XO.js   | -                        | 46.47 kB | 
+chunk-JMEHKI5Y.js   | task-list-view-component | 26.72 kB | 
+chunk-ML6ZEJJP.js   | my-tasks-component       | 16.62 kB | 
+
+Application bundle generation complete. [4.074 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names              | Raw size
+main.js             | main               | 99.11 kB | 
+
+Lazy chunk files    | Names              | Raw size
+chunk-Q37DAWP4.js   | my-tasks-component | 17.27 kB | 
+
+Application bundle generation complete. [0.836 seconds]
+
+Page reload sent to client(s).

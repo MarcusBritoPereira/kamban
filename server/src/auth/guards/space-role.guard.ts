@@ -130,7 +130,7 @@ export class SpaceRoleGuard implements CanActivate {
             'ADMIN': 3
         };
 
-        const userRoleValue = roleValue[membership!.role] || 0;
+        const userRoleValue = roleValue[membership!.role.toUpperCase()] || 0;
         const requiredRoleValue = roleValue[minRole.toUpperCase()] || 99;
 
         if (userRoleValue < requiredRoleValue) {

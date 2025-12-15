@@ -8,9 +8,12 @@ import localePt from '@angular/common/locales/pt';
 
 registerLocaleData(localePt);
 
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
+    provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     { provide: LOCALE_ID, useValue: 'pt-BR' }
   ]
