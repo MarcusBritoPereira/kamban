@@ -96,6 +96,9 @@ model Task {
   deadline    DateTime?
   status      String    
   priority    String?   @default("medium")
+  estimated_hours Int?  @default(0)
+  task_value  Decimal?  @db.Decimal(10, 2) @default(0)
+  start_date  DateTime?
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt
 
@@ -202,6 +205,8 @@ model Company {
 
   @@map("companies")
 }
+
+
 
 model CompanyMember {
   id          String   @id @default(uuid())

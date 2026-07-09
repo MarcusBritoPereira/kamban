@@ -5,9 +5,9 @@ services:
     image: postgres:15-alpine
     container_name: project_up_db
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: project_up
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: adminpassword
+      POSTGRES_DB: up_up_task_manager
     ports:
       - "5432:5432"
     volumes:
@@ -19,7 +19,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: postgres://myuser:mypassword@postgres:5432/project_up
+      DATABASE_URL: postgres://admin:adminpassword@postgres:5432/up_up_task_manager
       JWT_SECRET: supersecretkey
       # Add SMTP env vars for production here
     depends_on:

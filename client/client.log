@@ -70,3 +70,72 @@ chunk-Q37DAWP4.js   | my-tasks-component | 17.27 kB |
 Application bundle generation complete. [0.836 seconds]
 
 Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Application bundle generation failed. [5.480 seconds]
+
+✘ [ERROR] TS2304: Cannot find name 'HttpParams'. [plugin angular-compiler]
+
+    src/app/services/data.service.ts:322:21:
+      322 │     let params = new HttpParams();
+          ╵                      ~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'HttpParams'. [plugin angular-compiler]
+
+    src/app/services/data.service.ts:329:21:
+      329 │     let params = new HttpParams();
+          ╵                      ~~~~~~~~~~
+
+
+✘ [ERROR] TS2304: Cannot find name 'HttpParams'. [plugin angular-compiler]
+
+    src/app/services/data.service.ts:335:21:
+      335 │     let params = new HttpParams();
+          ╵                      ~~~~~~~~~~
+
+
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names                      |  Raw size
+main.js             | main                       |  99.11 kB | 
+polyfills.js        | polyfills                  |  88.09 kB | 
+chunk-6ZYZUN57.js   | -                          |  83.53 kB | 
+styles.css          | styles                     |  59.22 kB | 
+chunk-VJC27Z6I.js   | -                          |   9.86 kB | 
+chunk-LPTGGLBF.js   | -                          |   4.99 kB | 
+chunk-SHAOKUVO.js   | -                          | 938 bytes | 
+
+                    | Initial total              | 345.71 kB
+
+Lazy chunk files    | Names                      |  Raw size
+chunk-63Q7FG3C.js   | companies-list-component   |  57.79 kB | 
+chunk-QURX2YWI.js   | company-details-component  |  51.47 kB | 
+chunk-PBR747MK.js   | -                          |  46.47 kB | 
+chunk-3CCIDGRP.js   | team-component             |  30.94 kB | 
+chunk-CZMR43VP.js   | dashboard-component        |  29.08 kB | 
+chunk-JMFPTY7P.js   | task-list-view-component   |  26.72 kB | 
+chunk-S6WJBANM.js   | member-profile-component   |  20.30 kB | 
+chunk-3LACYWWT.js   | spaces-dashboard-component |  17.66 kB | 
+chunk-JIGZH4WJ.js   | my-tasks-component         |  17.27 kB | 
+chunk-ZOM5QW52.js   | user-management-component  |  16.65 kB | 
+chunk-FFEJ2K5B.js   | settings-component         |  10.71 kB | 
+chunk-EDNGZ4MZ.js   | space-details-component    |   6.88 kB | 
+chunk-CXSSPEC7.js   | folder-details-component   |   6.10 kB | 
+chunk-7ZHFMT64.js   | spaces-component           |   1.10 kB | 
+
+Application bundle generation complete. [0.234 seconds]
+
+Page reload sent to client(s).
+- Changes detected. Rebuilding...
+
+Initial chunk files | Names               | Raw size
+main.js             | main                | 99.11 kB | 
+styles.css          | styles              | 59.87 kB | 
+
+Lazy chunk files    | Names               | Raw size
+chunk-2HKIOX7X.js   | dashboard-component | 61.73 kB | 
+
+Application bundle generation complete. [1.801 seconds]
+
+Page reload sent to client(s).
