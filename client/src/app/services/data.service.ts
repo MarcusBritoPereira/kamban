@@ -50,7 +50,7 @@ export interface Task {
   providedIn: 'root'
 })
 export class DataService {
-  private apiUrl = 'http://localhost:3000/v1';
+  private apiUrl = '/v1';
 
   // Signals for state management
   spaces = signal<Space[]>([]);

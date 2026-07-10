@@ -19,6 +19,11 @@ async function main() {
     console.log('User found:', user.email);
     console.log('Stored Hash:', user.password_hash);
 
+    if (!user.password_hash) {
+      console.log('Usuário sem senha local.');
+      return;
+    }
+
     const isMatch = await bcrypt.compare(plainPassword, user.password_hash);
     console.log('Password match result:', isMatch);
 }

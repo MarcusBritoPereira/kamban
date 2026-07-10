@@ -7,14 +7,37 @@ import { ForgotPasswordComponent } from './pages/login/forgot-password.component
 import { ResetPasswordComponent } from './pages/login/reset-password.component';
 import { MainLayoutComponent } from './components/layout/main-layout/main-layout.component';
 
+const authGuard = () => {
+    const auth = inject(AuthService);
+    const router = inject(Router);
+
+    const token = localStorage.getItem('token');
+    const user = auth.currentUser();
+
+    if (!token || !user) {
+        auth.logout();
+        return router.createUrlTree(['/login']);
+    }
+
+    return true;
+};
+
 export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'register', component: RegisterComponent },
     { path: 'forgot-password', component: ForgotPasswordComponent },
     { path: 'reset-password', component: ResetPasswordComponent },
     {
+        path: 'oauth-callback',
+        loadComponent: () =>
+            import('./pages/oauth-callback/oauth-callback.component')
+                .then(m => m.OauthCallbackComponent)
+    },
+    {
         path: '',
         component: MainLayoutComponent,
+        canActivate: [authGuard],
+        canActivateChild: [authGuard],
         children: [
             {
                 path: '',
@@ -23,12 +46,14 @@ export const routes: Routes = [
                     const auth = inject(AuthService);
                     const router = inject(Router);
                     const user = auth.currentUser();
+
                     if (user?.role?.toLowerCase() === 'admin') {
                         return router.createUrlTree(['/spaces']);
                     }
+
                     return router.createUrlTree(['/my-tasks']);
                 }],
-                children: [] // standard empty component workaround not needed if canActivate redirects
+                children: []
             },
             {
                 path: 'spaces',
@@ -85,5 +110,6 @@ export const routes: Routes = [
                 loadComponent: () => import('./pages/dashboard/dashboard.component').then(m => m.DashboardComponent)
             }
         ]
-    }
+    },
+    { path: '**', redirectTo: '' }
 ];

@@ -44,11 +44,11 @@ export class AuthService {
 
   async validateUser(email: string, pass: string): Promise<any> {
     const user = await this.prisma.user.findUnique({ where: { email } });
-    if (!user) return null;
+    if (!user || !user.password_hash) return null;
 
     const isMatch = await bcrypt.compare(pass, user.password_hash);
 
-    if (user && isMatch) {
+    if (isMatch) {
       const { password_hash: _, ...result } = user;
       return result;
     }
@@ -72,6 +72,54 @@ export class AuthService {
       },
     };
   }
+  async validateOAuthUser(profile: {
+    provider: 'google' | 'github';
+    providerId: string;
+    email: string;
+    name: string;
+    avatarUrl?: string | null;
+  }) {
+    const normalizedEmail = profile.email.trim().toLowerCase();
+
+    const providerUser = await this.prisma.user.findFirst({
+      where: {
+        auth_provider: profile.provider,
+        provider_id: profile.providerId,
+      },
+    });
+
+    if (providerUser) {
+      return providerUser;
+    }
+
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
+
+    if (existingUser) {
+      return this.prisma.user.update({
+        where: { id: existingUser.id },
+        data: {
+          auth_provider: profile.provider,
+          provider_id: profile.providerId,
+          avatar_url: existingUser.avatar_url || profile.avatarUrl || null,
+        },
+      });
+    }
+
+    return this.prisma.user.create({
+      data: {
+        name: profile.name,
+        email: normalizedEmail,
+        password_hash: null,
+        auth_provider: profile.provider,
+        provider_id: profile.providerId,
+        avatar_url: profile.avatarUrl || null,
+        role: 'gestor',
+      },
+    });
+  }
+
   async forgotPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) {
