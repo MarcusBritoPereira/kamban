@@ -12,6 +12,18 @@ export class TagsService {
         });
     }
 
+    async findById(id: string) {
+        const tag = await this.prisma.tag.findUnique({
+            where: { id },
+        });
+
+        if (!tag) {
+            throw new NotFoundException('Tag not found');
+        }
+
+        return tag;
+    }
+
     async create(spaceId: string, data: { name: string; color: string }) {
         return this.prisma.tag.create({
             data: {
