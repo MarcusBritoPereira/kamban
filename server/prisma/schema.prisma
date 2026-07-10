@@ -36,6 +36,7 @@ model User {
   task_watchers  TaskWatcher[]
   time_entries   TaskTimeEntry[]
 
+  @@unique([auth_provider, provider_id])
   @@map("users")
 }
 

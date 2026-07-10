@@ -1,15 +1,14 @@
-version: '3.8'
 
 services:
   postgres:
     image: postgres:15-alpine
     container_name: project_up_db
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: adminpassword
-      POSTGRES_DB: up_up_task_manager
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - "5439:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -19,8 +18,16 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_URL: postgres://admin:adminpassword@postgres:5432/up_up_task_manager
-      JWT_SECRET: supersecretkey
+      DATABASE_URL: ${DATABASE_URL}
+      JWT_SECRET: ${JWT_SECRET}
+      FRONTEND_URL: ${FRONTEND_URL}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GITHUB_CALLBACK_URL: ${GITHUB_CALLBACK_URL}
+      GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
+      GITHUB_CLIENT_SECRET: ${GITHUB_CLIENT_SECRET}
+      # Add OAuth client IDs and secrets after creating them
       # Add SMTP env vars for production here
     depends_on:
       - postgres
@@ -30,7 +37,7 @@ services:
     build: ./client
     container_name: project_up_client
     ports:
-      - "80:80" # Maps localhost:80 to container:80
+      - "8081:80" # Maps localhost:8081 to container:80
     depends_on:
       - server
     restart: unless-stopped

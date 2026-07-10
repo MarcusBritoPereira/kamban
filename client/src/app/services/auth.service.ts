@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/v1/auth';
+  private apiUrl = '/v1/auth';
   currentUser = signal<any | null>(null);
 
   constructor(private http: HttpClient, private router: Router) {
@@ -37,6 +37,13 @@ export class AuthService {
   register(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, data);
   }
+
+  setSession(accessToken: string, user: any) {
+    localStorage.setItem('token', accessToken);
+    localStorage.setItem('user', JSON.stringify(user));
+    this.currentUser.set(user);
+  }
+
 
   logout() {
     localStorage.removeItem('token');

@@ -3,9 +3,9 @@
     <div class="p-6 border-b border-white/5 flex items-center">
         <div
             class="w-8 h-8 rounded bg-brand-yellow flex items-center justify-center mr-3 shadow-[0_0_15px_rgba(248,197,53,0.3)]">
-            <span class="text-brand-black font-bold text-lg">U</span>
+            <span class="text-brand-black font-bold text-lg">K</span>
         </div>
-        <h1 class="text-xl font-bold tracking-tight text-white">Up&Up Tarefas</h1>
+        <h1 class="text-xl font-bold tracking-tight text-white">Kamban</h1>
     </div>
 
     <!-- Navigation -->
@@ -176,7 +176,7 @@
             <div class="flex items-center">
                 <div
                     class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-yellow to-brand-orange flex items-center justify-center text-brand-black font-bold mr-3 overflow-hidden">
-                    <img *ngIf="currentUser()?.avatar_url" [src]="'http://localhost:3000' + currentUser()?.avatar_url"
+                    <img *ngIf="currentUser()?.avatar_url" [src]="'' + currentUser()?.avatar_url"
                         class="w-full h-full object-cover">
                     <span *ngIf="!currentUser()?.avatar_url">{{ (currentUser()?.name?.charAt(0) || 'U') | uppercase
                         }}</span>

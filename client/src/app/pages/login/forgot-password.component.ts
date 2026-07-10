@@ -64,7 +64,7 @@ export class ForgotPasswordComponent {
         if (!this.email) return;
 
         this.loading = true;
-        this.http.post<{ message: string }>('http://localhost:3000/v1/auth/forgot-password', { email: this.email })
+        this.http.post<{ message: string }>('/v1/auth/forgot-password', { email: this.email })
             .subscribe({
                 next: (res) => {
                     this.loading = false;

@@ -13,11 +13,11 @@ async function main() {
 
     // 1. Create Team Users
     const usersData = [
-        { email: 'admin@upeupmarketing.com.br', name: 'Admin User', role: Role.admin, avatar: 'https://i.pravatar.cc/150?u=admin' },
-        { email: 'gestor@upandup.com', name: 'Gestor Silva', role: Role.gestor, avatar: 'https://i.pravatar.cc/150?u=gestor' },
-        { email: 'editor@upandup.com', name: 'Editor Junior', role: Role.editor, avatar: 'https://i.pravatar.cc/150?u=editor' },
-        { email: 'designer@upandup.com', name: 'Designer Pro', role: Role.editor, avatar: 'https://i.pravatar.cc/150?u=designer' },
-        { email: 'copy@upandup.com', name: 'Copywriter Lead', role: Role.editor, avatar: 'https://i.pravatar.cc/150?u=copy' }
+        { email: 'admin@kamban.com', name: 'Admin User', role: Role.admin, avatar: 'https://i.pravatar.cc/150?u=admin' },
+        { email: 'gestor@kamban.com', name: 'Gestor Silva', role: Role.gestor, avatar: 'https://i.pravatar.cc/150?u=gestor' },
+        { email: 'editor@kamban.com', name: 'Editor Junior', role: Role.editor, avatar: 'https://i.pravatar.cc/150?u=editor' },
+        { email: 'designer@kamban.com', name: 'Designer Pro', role: Role.editor, avatar: 'https://i.pravatar.cc/150?u=designer' },
+        { email: 'copy@kamban.com', name: 'Copywriter Lead', role: Role.editor, avatar: 'https://i.pravatar.cc/150?u=copy' }
     ];
 
     const users = [];
