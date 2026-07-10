@@ -2,11 +2,12 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService, Folder, TaskList, Space } from '../../../services/data.service';
+import { SimpleInputDialogComponent } from '../../../components/dialogs/simple-input-dialog/simple-input-dialog.component';
 
 @Component({
     selector: 'app-folder-details',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, SimpleInputDialogComponent],
     template: `
     <div class="h-full bg-white p-8 overflow-y-auto">
        <header class="flex justify-between items-center mb-6">
@@ -19,6 +20,10 @@ import { DataService, Folder, TaskList, Space } from '../../../services/data.ser
                 <p class="text-sm text-gray-500">{{ space()?.name }} / Listas</p>
              </div>
           </div>
+          <button (click)="openCreateListDialog()"
+             class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 px-5 rounded-lg transition-all shadow-md hover:shadow-lg flex items-center">
+             <i class="fas fa-list mr-2"></i> Nova Lista
+          </button>
        </header>
 
        <!-- Lists Grid -->
@@ -31,10 +36,27 @@ import { DataService, Folder, TaskList, Space } from '../../../services/data.ser
           </div>
 
           <!-- Empty State -->
-          <div *ngIf="lists().length === 0" class="col-span-full py-12 text-center border-2 border-dashed border-gray-100 rounded-lg">
-              <p class="text-gray-500">Nenhuma lista encontrada nesta pasta.</p>
+          <div *ngIf="lists().length === 0" class="col-span-full py-16 text-center border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+              <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                <i class="fas fa-list text-2xl text-pink-500"></i>
+              </div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Agora crie uma lista</h3>
+              <p class="text-gray-500 mb-6 max-w-md mx-auto">Listas são onde as tarefas e subtarefas serão criadas.</p>
+              <button (click)="openCreateListDialog()"
+                class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 px-5 rounded-lg transition-all shadow-md hover:shadow-lg">
+                Criar lista
+              </button>
           </div>
        </div>
+
+       <app-simple-input-dialog
+          *ngIf="showCreateListDialog"
+          title="Nova Lista"
+          label="Nome da Lista"
+          placeholder="Ex: Backlog, Produção ou Sprint"
+          (submit)="createList($event)"
+          (close)="showCreateListDialog = false">
+       </app-simple-input-dialog>
     </div>
   `
 })
@@ -44,6 +66,7 @@ export class FolderDetailsComponent implements OnInit {
     space = signal<Space | undefined>(undefined);
     folder = signal<Folder | undefined>(undefined);
     lists = signal<TaskList[]>([]);
+    showCreateListDialog = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -80,6 +103,22 @@ export class FolderDetailsComponent implements OnInit {
 
     openList(list: TaskList) {
         this.router.navigate(['/spaces', this.spaceId, 'folders', this.folderId, 'lists', list.id]);
+    }
+
+    openCreateListDialog() {
+        this.showCreateListDialog = true;
+    }
+
+    createList(name: string) {
+        if (!this.folderId) return;
+        this.dataService.createList(this.folderId, { name }).subscribe({
+            next: (list) => {
+                this.showCreateListDialog = false;
+                this.lists.update(lists => [...lists, list]);
+                this.router.navigate(['/spaces', this.spaceId, 'folders', this.folderId, 'lists', list.id]);
+            },
+            error: (err) => alert('Erro ao criar lista: ' + (err.error?.message || err.message))
+        });
     }
 
     goBack() {
