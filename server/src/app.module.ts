@@ -20,6 +20,7 @@ import { LastActivityInterceptor } from './auth/last-activity.interceptor';
 import { NotificationsModule } from './notifications/notifications.module';
 import { CompaniesModule } from './companies/companies.module';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { DashboardModule } from './dashboard/dashboard.module';
     TagsModule,
     ActivitiesModule,
     CompaniesModule,
-    DashboardModule
+    DashboardModule,
+    SearchModule
   ],
   controllers: [AppController],
   providers: [

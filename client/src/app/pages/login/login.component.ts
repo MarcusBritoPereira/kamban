@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
+import { DataService } from '../../services/data.service';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
@@ -18,6 +19,7 @@ export class LoginComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private dataService: DataService,
     private router: Router
   ) {
     this.loginForm = this.fb.group({
@@ -31,10 +33,14 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
           const user = this.authService.currentUser();
-          if (user?.role === 'admin') {
+          const role = user?.role?.toLowerCase();
+          if (role === 'admin' || role === 'gestor') {
             this.router.navigate(['/spaces']);
           } else {
-            this.router.navigate(['/my-tasks']);
+            this.dataService.getSpaces().subscribe({
+              next: (spaces) => this.router.navigate([spaces.length > 0 ? '/my-tasks' : '/spaces']),
+              error: () => this.router.navigate(['/my-tasks'])
+            });
           }
         },
         error: (err) => {
