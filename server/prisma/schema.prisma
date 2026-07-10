@@ -15,38 +15,40 @@ enum Role {
 }
 
 model User {
-  id            String   @id @default(uuid())
-  name          String
-  email         String   @unique
-  password_hash String
-  role          Role
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
-  last_active_at DateTime @default(now())
-  avatar_url     String?
-  reset_token    String?
+  id                  String    @id @default(uuid())
+  name                String
+  email               String    @unique
+  password_hash       String
+  role                Role
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
+  last_active_at      DateTime  @default(now())
+  avatar_url          String?
+  reset_token         String?
   reset_token_expires DateTime?
 
   task_assignees TaskAssignee[]
-  spaces         Space[]      @relation("UserSpaces")
+  spaces         Space[]         @relation("UserSpaces")
   member_of      SpaceMember[]
   notifications  Notification[]
   activities     TaskActivity[]
   companies      CompanyMember[]
+  task_watchers  TaskWatcher[]
 
   @@map("users")
 }
 
 model Space {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String
   description String?
   owner_id    String
-  
-  owner       User     @relation("UserSpaces", fields: [owner_id], references: [id])
-  folders     Folder[]
-  tags        Tag[]
-  members     SpaceMember[]
+
+  owner    User           @relation("UserSpaces", fields: [owner_id], references: [id])
+  folders  Folder[]
+  tags     Tag[]
+  members  SpaceMember[]
+  statuses CustomStatus[]
 
   @@map("spaces")
 }
@@ -58,78 +60,164 @@ model SpaceMember {
   role      String   @default("editor")
   joined_at DateTime @default(now())
 
-  space     Space    @relation(fields: [space_id], references: [id], onDelete: Cascade)
-  user      User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  space Space @relation(fields: [space_id], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([space_id, user_id])
   @@map("space_members")
 }
 
 model Folder {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   space_id    String
   name        String
   description String?
 
-  space       Space    @relation(fields: [space_id], references: [id], onDelete: Cascade)
-  lists       List[]
+  space Space  @relation(fields: [space_id], references: [id], onDelete: Cascade)
+  lists List[]
 
   @@map("folders")
 }
 
 model List {
-  id        String   @id @default(uuid())
+  id        String @id @default(uuid())
   folder_id String
   name      String
 
-  folder    Folder   @relation(fields: [folder_id], references: [id], onDelete: Cascade)
-  tasks     Task[]
+  folder Folder @relation(fields: [folder_id], references: [id], onDelete: Cascade)
+  tasks  Task[]
 
   @@map("lists")
 }
 
 model Task {
-  id          String    @id @default(uuid())
-  list_id     String
-  title       String
-  description String?
-  deadline    DateTime?
-  status      String    
-  priority    String?   @default("medium")
-  estimated_hours Int?  @default(0)
-  task_value  Decimal?  @db.Decimal(10, 2) @default(0)
-  start_date  DateTime?
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @updatedAt
+  id              String    @id @default(uuid())
+  list_id         String
+  parent_task_id  String?
+  title           String
+  description     String?
+  deadline        DateTime?
+  status          String
+  priority        String?   @default("medium")
+  estimated_hours Int?      @default(0)
+  task_value      Decimal?  @default(0) @db.Decimal(10, 2)
+  start_date      DateTime?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
 
-  list        List      @relation(fields: [list_id], references: [id], onDelete: Cascade)
-  assignees   TaskAssignee[]
-  tags        TaskTag[]
-  attachments Attachment[]
-  activities  TaskActivity[]
+  list                  List             @relation(fields: [list_id], references: [id], onDelete: Cascade)
+  parent                Task?            @relation("TaskSubtasks", fields: [parent_task_id], references: [id], onDelete: Cascade)
+  subtasks              Task[]           @relation("TaskSubtasks")
+  assignees             TaskAssignee[]
+  tags                  TaskTag[]
+  attachments           Attachment[]
+  activities            TaskActivity[]
+  watchers              TaskWatcher[]
+  checklists            TaskChecklist[]
+  blockingDependencies  TaskDependency[] @relation("BlockingTask")
+  blockedByDependencies TaskDependency[] @relation("BlockedTask")
 
+  @@index([list_id])
+  @@index([parent_task_id])
+  @@index([status])
+  @@index([deadline])
   @@map("tasks")
+}
+
+model CustomStatus {
+  id         String   @id @default(uuid())
+  space_id   String
+  name       String
+  color      String?  @default("#64748b")
+  position   Int      @default(0)
+  is_default Boolean  @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  space Space @relation(fields: [space_id], references: [id], onDelete: Cascade)
+
+  @@unique([space_id, name])
+  @@index([space_id])
+  @@map("custom_statuses")
 }
 
 model TaskAssignee {
   task_id String
   user_id String
 
-  task    Task   @relation(fields: [task_id], references: [id], onDelete: Cascade)
-  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  task Task @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@id([task_id, user_id])
   @@map("task_assignees")
 }
 
+model TaskWatcher {
+  task_id    String
+  user_id    String
+  created_at DateTime @default(now())
+
+  task Task @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@id([task_id, user_id])
+  @@index([user_id])
+  @@map("task_watchers")
+}
+
+model TaskDependency {
+  id               String   @id @default(uuid())
+  blocking_task_id String
+  blocked_task_id  String
+  type             String   @default("blocks")
+  created_at       DateTime @default(now())
+
+  blocking_task Task @relation("BlockingTask", fields: [blocking_task_id], references: [id], onDelete: Cascade)
+  blocked_task  Task @relation("BlockedTask", fields: [blocked_task_id], references: [id], onDelete: Cascade)
+
+  @@unique([blocking_task_id, blocked_task_id])
+  @@index([blocked_task_id])
+  @@map("task_dependencies")
+}
+
+model TaskChecklist {
+  id         String   @id @default(uuid())
+  task_id    String
+  title      String
+  position   Int      @default(0)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  task  Task                @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  items TaskChecklistItem[]
+
+  @@index([task_id])
+  @@map("task_checklists")
+}
+
+model TaskChecklistItem {
+  id           String   @id @default(uuid())
+  checklist_id String
+  title        String
+  completed    Boolean  @default(false)
+  position     Int      @default(0)
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  checklist TaskChecklist @relation(fields: [checklist_id], references: [id], onDelete: Cascade)
+
+  @@index([checklist_id])
+  @@map("task_checklist_items")
+}
+
 model Tag {
-  id       String    @id @default(uuid())
-  space_id String?   
+  id       String  @id @default(uuid())
+  space_id String?
   name     String
   color    String
 
-  space    Space?     @relation(fields: [space_id], references: [id])
-  tasks    TaskTag[]
+  space Space?    @relation(fields: [space_id], references: [id])
+  tasks TaskTag[]
 
   @@map("tags")
 }
@@ -138,22 +226,22 @@ model TaskTag {
   task_id String
   tag_id  String
 
-  task    Task @relation(fields: [task_id], references: [id], onDelete: Cascade)
-  tag     Tag  @relation(fields: [tag_id], references: [id], onDelete: Cascade)
+  task Task @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tag_id], references: [id], onDelete: Cascade)
 
   @@id([task_id, tag_id])
   @@map("task_tags")
 }
 
 model Attachment {
-  id          String   @id @default(uuid())
+  id          String  @id @default(uuid())
   task_id     String
   file_url    String
   file_name   String
   file_type   String
-  uploaded_by String? 
+  uploaded_by String?
 
-  task        Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  task Task @relation(fields: [task_id], references: [id], onDelete: Cascade)
 
   @@map("attachments")
 }
@@ -165,58 +253,56 @@ model Notification {
   message    String
   read       Boolean  @default(false)
   type       String   @default("info") // 'assignment', 'mention', 'info'
-  link       String?  // URL to redirect (e.g., /metrics)
+  link       String? // URL to redirect (e.g., /metrics)
   created_at DateTime @default(now())
 
-  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("notifications")
 }
 
 model TaskActivity {
-  id          String   @id @default(uuid())
-  task_id     String
-  user_id     String
-  type        String   // 'system' | 'comment'
-  content     String   // The message or log description
-  created_at  DateTime @default(now())
+  id         String   @id @default(uuid())
+  task_id    String
+  user_id    String
+  type       String // 'system' | 'comment'
+  content    String // The message or log description
+  created_at DateTime @default(now())
 
-  task        Task     @relation(fields: [task_id], references: [id], onDelete: Cascade)
-  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  task Task @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("task_activities")
 }
 
 model Company {
-  id              String          @id @default(uuid())
-  name            String
-  status          String          @default("active") // active, inactive
-  niche           String?
-  investment      Decimal?        @db.Decimal(10, 2)
-  partnership_type String?        @map("partnership_type")
-  start_date      DateTime?       @map("start_date")
-  contract_due    DateTime?       @map("contract_due")
-  contract_value  Decimal?        @map("contract_value") @db.Decimal(10, 2)
-  content_quota   Int?            @map("content_quota")
-  created_at      DateTime        @default(now()) @map("created_at")
-  updated_at      DateTime        @updatedAt @map("updated_at")
+  id               String    @id @default(uuid())
+  name             String
+  status           String    @default("active") // active, inactive
+  niche            String?
+  investment       Decimal?  @db.Decimal(10, 2)
+  partnership_type String?   @map("partnership_type")
+  start_date       DateTime? @map("start_date")
+  contract_due     DateTime? @map("contract_due")
+  contract_value   Decimal?  @map("contract_value") @db.Decimal(10, 2)
+  content_quota    Int?      @map("content_quota")
+  created_at       DateTime  @default(now()) @map("created_at")
+  updated_at       DateTime  @updatedAt @map("updated_at")
 
-  members         CompanyMember[]
+  members CompanyMember[]
 
   @@map("companies")
 }
 
-
-
 model CompanyMember {
-  id          String   @id @default(uuid())
-  company_id  String   @map("company_id")
-  user_id     String   @map("user_id")
-  role        String   // Filmmaker, Editor, Designer, Marketing Consultant
-  joined_at   DateTime @default(now()) @map("joined_at")
+  id         String   @id @default(uuid())
+  company_id String   @map("company_id")
+  user_id    String   @map("user_id")
+  role       String // Filmmaker, Editor, Designer, Marketing Consultant
+  joined_at  DateTime @default(now()) @map("joined_at")
 
-  company     Company  @relation(fields: [company_id], references: [id], onDelete: Cascade)
-  user        User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [company_id], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([company_id, user_id])
   @@map("company_members")

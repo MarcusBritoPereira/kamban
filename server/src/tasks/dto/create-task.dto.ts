@@ -11,6 +11,10 @@ export class CreateTaskDto {
   @IsOptional()
   list_id: string;
 
+  @IsOptional()
+  @IsUUID()
+  parent_task_id?: string;
+
   @IsNotEmpty()
   @IsString()
   title: string;

@@ -3,6 +3,10 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { AddAssigneeDto } from './dto/add-assignee.dto';
 import { AddTagDto } from './dto/add-tag.dto';
+import { AddDependencyDto } from './dto/add-dependency.dto';
+import { CreateChecklistDto } from './dto/create-checklist.dto';
+import { CreateChecklistItemDto } from './dto/create-checklist-item.dto';
+import { UpdateChecklistItemDto } from './dto/update-checklist-item.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ActivitiesService } from '../activities/activities.service';
@@ -16,7 +20,7 @@ export class TasksService {
   ) { }
 
   async create(createTaskDto: CreateTaskDto, actorId: string) {
-    const { list_id, assigneeIds, tagIds, ...data } = createTaskDto;
+    const { list_id, assigneeIds, tagIds, parent_task_id, ...data } = createTaskDto;
 
     // Validate list
     const list = await this.prisma.list.findUnique({ where: { id: list_id } });
@@ -28,6 +32,20 @@ export class TasksService {
       ...data,
       list: { connect: { id: list_id } },
     };
+
+    if (parent_task_id) {
+      const parentTask = await this.prisma.task.findUnique({
+        where: { id: parent_task_id },
+        select: { list_id: true },
+      });
+      if (!parentTask) {
+        throw new NotFoundException(`Parent task with ID ${parent_task_id} not found`);
+      }
+      if (parentTask.list_id !== list_id) {
+        throw new BadRequestException('Subtasks must belong to the same list as their parent task');
+      }
+      taskData.parent = { connect: { id: parent_task_id } };
+    }
 
     if (assigneeIds && Array.isArray(assigneeIds) && assigneeIds.length > 0) {
       const validIds = assigneeIds.filter(id => id && id.length > 0);
@@ -105,6 +123,8 @@ export class TasksService {
           assignees: { include: { user: true } },
           tags: { include: { tag: true } },
           attachments: true,
+          subtasks: true,
+          checklists: { include: { items: { orderBy: { position: 'asc' } } } },
         },
         skip,
         take,
@@ -176,6 +196,11 @@ export class TasksService {
         assignees: { include: { user: true } },
         tags: { include: { tag: true } },
         attachments: true,
+        subtasks: true,
+        watchers: { include: { user: { select: { id: true, name: true, email: true, avatar_url: true } } } },
+        checklists: { include: { items: { orderBy: { position: 'asc' } } }, orderBy: { position: 'asc' } },
+        blockingDependencies: { include: { blocked_task: true } },
+        blockedByDependencies: { include: { blocking_task: true } },
         list: {
           include: {
             folder: {
@@ -398,6 +423,199 @@ export class TasksService {
     await this.notifyCreator(taskId, res.task.title, `removeu uma etiqueta da tarefa`, actorId, res.task.list.folder.space_id, res.task.list.folder_id, res.task.list_id);
 
     return res;
+  }
+
+  async addWatcher(taskId: string, userId: string, actorId: string) {
+    const watcher = await this.prisma.taskWatcher.upsert({
+      where: {
+        task_id_user_id: {
+          task_id: taskId,
+          user_id: userId,
+        },
+      },
+      update: {},
+      create: {
+        task: { connect: { id: taskId } },
+        user: { connect: { id: userId } },
+      },
+      include: {
+        user: { select: { id: true, name: true, email: true, avatar_url: true } },
+      },
+    });
+
+    await this.activitiesService.logActivity(taskId, actorId, 'system', 'passou a observar esta tarefa');
+    return watcher;
+  }
+
+  async removeWatcher(taskId: string, userId: string, actorId: string) {
+    const watcher = await this.prisma.taskWatcher.delete({
+      where: {
+        task_id_user_id: {
+          task_id: taskId,
+          user_id: userId,
+        },
+      },
+    });
+
+    await this.activitiesService.logActivity(taskId, actorId, 'system', 'deixou de observar esta tarefa');
+    return watcher;
+  }
+
+  async addDependency(taskId: string, addDependencyDto: AddDependencyDto, actorId: string) {
+    if (taskId === addDependencyDto.blocking_task_id) {
+      throw new BadRequestException('A task cannot depend on itself');
+    }
+
+    const [blockedTask, blockingTask] = await Promise.all([
+      this.prisma.task.findUnique({
+        where: { id: taskId },
+        include: { list: { include: { folder: true } } },
+      }),
+      this.prisma.task.findUnique({
+        where: { id: addDependencyDto.blocking_task_id },
+        include: { list: { include: { folder: true } } },
+      }),
+    ]);
+
+    if (!blockedTask) throw new NotFoundException('Task not found');
+    if (!blockingTask) throw new NotFoundException('Blocking task not found');
+    if (blockedTask.list.folder.space_id !== blockingTask.list.folder.space_id) {
+      throw new BadRequestException('Dependencies must be in the same space');
+    }
+
+    const dependency = await this.prisma.taskDependency.create({
+      data: {
+        blocked_task: { connect: { id: taskId } },
+        blocking_task: { connect: { id: addDependencyDto.blocking_task_id } },
+        type: addDependencyDto.type || 'blocks',
+      },
+      include: {
+        blocking_task: true,
+        blocked_task: true,
+      },
+    });
+
+    await this.activitiesService.logActivity(taskId, actorId, 'system', `adicionou dependência de ${blockingTask.title}`);
+    return dependency;
+  }
+
+  async removeDependency(taskId: string, dependencyId: string, actorId: string) {
+    const dependency = await this.prisma.taskDependency.findUnique({
+      where: { id: dependencyId },
+    });
+
+    if (!dependency || dependency.blocked_task_id !== taskId) {
+      throw new NotFoundException('Dependency not found for this task');
+    }
+
+    const removed = await this.prisma.taskDependency.delete({
+      where: { id: dependencyId },
+    });
+
+    await this.activitiesService.logActivity(taskId, actorId, 'system', 'removeu uma dependência');
+    return removed;
+  }
+
+  async createChecklist(taskId: string, createChecklistDto: CreateChecklistDto, actorId: string) {
+    const checklist = await this.prisma.taskChecklist.create({
+      data: {
+        task: { connect: { id: taskId } },
+        title: createChecklistDto.title,
+        position: createChecklistDto.position ?? 0,
+      },
+      include: { items: true },
+    });
+
+    await this.activitiesService.logActivity(taskId, actorId, 'system', `criou checklist ${checklist.title}`);
+    return checklist;
+  }
+
+  async removeChecklist(taskId: string, checklistId: string, actorId: string) {
+    const checklist = await this.prisma.taskChecklist.findUnique({
+      where: { id: checklistId },
+    });
+
+    if (!checklist || checklist.task_id !== taskId) {
+      throw new NotFoundException('Checklist not found for this task');
+    }
+
+    const removed = await this.prisma.taskChecklist.delete({
+      where: { id: checklistId },
+    });
+
+    await this.activitiesService.logActivity(taskId, actorId, 'system', `removeu checklist ${checklist.title}`);
+    return removed;
+  }
+
+  async createChecklistItem(taskId: string, checklistId: string, createChecklistItemDto: CreateChecklistItemDto, actorId: string) {
+    await this.ensureChecklistBelongsToTask(taskId, checklistId);
+
+    const item = await this.prisma.taskChecklistItem.create({
+      data: {
+        checklist: { connect: { id: checklistId } },
+        title: createChecklistItemDto.title,
+        completed: createChecklistItemDto.completed ?? false,
+        position: createChecklistItemDto.position ?? 0,
+      },
+    });
+
+    await this.activitiesService.logActivity(taskId, actorId, 'system', `adicionou item de checklist ${item.title}`);
+    return item;
+  }
+
+  async updateChecklistItem(taskId: string, itemId: string, updateChecklistItemDto: UpdateChecklistItemDto, actorId: string) {
+    const item = await this.prisma.taskChecklistItem.findUnique({
+      where: { id: itemId },
+      include: { checklist: true },
+    });
+
+    if (!item || item.checklist.task_id !== taskId) {
+      throw new NotFoundException('Checklist item not found for this task');
+    }
+
+    const updated = await this.prisma.taskChecklistItem.update({
+      where: { id: itemId },
+      data: updateChecklistItemDto,
+    });
+
+    if (updateChecklistItemDto.completed !== undefined && updateChecklistItemDto.completed !== item.completed) {
+      await this.activitiesService.logActivity(
+        taskId,
+        actorId,
+        'system',
+        updateChecklistItemDto.completed ? `concluiu item ${updated.title}` : `reabriu item ${updated.title}`,
+      );
+    }
+
+    return updated;
+  }
+
+  async removeChecklistItem(taskId: string, itemId: string, actorId: string) {
+    const item = await this.prisma.taskChecklistItem.findUnique({
+      where: { id: itemId },
+      include: { checklist: true },
+    });
+
+    if (!item || item.checklist.task_id !== taskId) {
+      throw new NotFoundException('Checklist item not found for this task');
+    }
+
+    const removed = await this.prisma.taskChecklistItem.delete({
+      where: { id: itemId },
+    });
+
+    await this.activitiesService.logActivity(taskId, actorId, `system`, `removeu item de checklist ${item.title}`);
+    return removed;
+  }
+
+  private async ensureChecklistBelongsToTask(taskId: string, checklistId: string) {
+    const checklist = await this.prisma.taskChecklist.findUnique({
+      where: { id: checklistId },
+    });
+
+    if (!checklist || checklist.task_id !== taskId) {
+      throw new NotFoundException('Checklist not found for this task');
+    }
   }
 
   // --- Helpers for Creator Notification ---

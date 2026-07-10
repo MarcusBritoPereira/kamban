@@ -134,6 +134,38 @@ export class SpacesService {
     });
   }
 
+  findStatuses(spaceId: string) {
+    return this.prisma.customStatus.findMany({
+      where: { space_id: spaceId },
+      orderBy: [{ position: 'asc' }, { created_at: 'asc' }],
+    });
+  }
+
+  createStatus(spaceId: string, data: { name: string; color?: string; position?: number; is_default?: boolean }) {
+    return this.prisma.customStatus.create({
+      data: {
+        space_id: spaceId,
+        name: data.name,
+        color: data.color,
+        position: data.position ?? 0,
+        is_default: data.is_default ?? false,
+      },
+    });
+  }
+
+  updateStatus(spaceId: string, statusId: string, data: { name?: string; color?: string; position?: number; is_default?: boolean }) {
+    return this.prisma.customStatus.updateMany({
+      where: { id: statusId, space_id: spaceId },
+      data,
+    });
+  }
+
+  removeStatus(spaceId: string, statusId: string) {
+    return this.prisma.customStatus.deleteMany({
+      where: { id: statusId, space_id: spaceId },
+    });
+  }
+
   findOne(id: string) {
     return this.prisma.space.findUnique({ where: { id } });
   }
