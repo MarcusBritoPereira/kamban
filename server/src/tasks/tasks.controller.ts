@@ -8,6 +8,8 @@ import { AddDependencyDto } from './dto/add-dependency.dto';
 import { CreateChecklistDto } from './dto/create-checklist.dto';
 import { CreateChecklistItemDto } from './dto/create-checklist-item.dto';
 import { UpdateChecklistItemDto } from './dto/update-checklist-item.dto';
+import { CreateTimeEntryDto } from './dto/create-time-entry.dto';
+import { UpdateTimeEntryDto } from './dto/update-time-entry.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { SpaceRoleGuard } from '../auth/guards/space-role.guard';
 import { SpaceRole } from '../auth/decorators/space-role.decorator';
@@ -169,5 +171,38 @@ export class TasksController {
   @SpaceRole('EDITOR')
   removeChecklistItem(@Param('id') id: string, @Param('itemId') itemId: string, @Request() req: any) {
     return this.tasksService.removeChecklistItem(id, itemId, req.user.id);
+  }
+
+  @Get(':id/time-entries')
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('VIEWER')
+  findTimeEntries(@Param('id') id: string) {
+    return this.tasksService.findTimeEntries(id);
+  }
+
+  @Post(':id/time-entries')
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('EDITOR')
+  createTimeEntry(@Param('id') id: string, @Body() createTimeEntryDto: CreateTimeEntryDto, @Request() req: any) {
+    return this.tasksService.createTimeEntry(id, req.user.id, createTimeEntryDto);
+  }
+
+  @Patch(':id/time-entries/:timeEntryId')
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('EDITOR')
+  updateTimeEntry(
+    @Param('id') id: string,
+    @Param('timeEntryId') timeEntryId: string,
+    @Body() updateTimeEntryDto: UpdateTimeEntryDto,
+    @Request() req: any,
+  ) {
+    return this.tasksService.updateTimeEntry(id, timeEntryId, updateTimeEntryDto, req.user.id);
+  }
+
+  @Delete(':id/time-entries/:timeEntryId')
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('EDITOR')
+  removeTimeEntry(@Param('id') id: string, @Param('timeEntryId') timeEntryId: string, @Request() req: any) {
+    return this.tasksService.removeTimeEntry(id, timeEntryId, req.user.id);
   }
 }

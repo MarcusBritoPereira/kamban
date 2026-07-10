@@ -34,6 +34,7 @@ model User {
   activities     TaskActivity[]
   companies      CompanyMember[]
   task_watchers  TaskWatcher[]
+  time_entries   TaskTimeEntry[]
 
   @@map("users")
 }
@@ -114,6 +115,7 @@ model Task {
   activities            TaskActivity[]
   watchers              TaskWatcher[]
   checklists            TaskChecklist[]
+  time_entries          TaskTimeEntry[]
   blockingDependencies  TaskDependency[] @relation("BlockingTask")
   blockedByDependencies TaskDependency[] @relation("BlockedTask")
 
@@ -208,6 +210,26 @@ model TaskChecklistItem {
 
   @@index([checklist_id])
   @@map("task_checklist_items")
+}
+
+model TaskTimeEntry {
+  id               String    @id @default(uuid())
+  task_id          String
+  user_id          String
+  started_at       DateTime
+  ended_at         DateTime?
+  duration_minutes Int?
+  note             String?
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
+
+  task Task @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([task_id])
+  @@index([user_id])
+  @@index([started_at])
+  @@map("task_time_entries")
 }
 
 model Tag {

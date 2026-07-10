@@ -7,6 +7,8 @@ import { AddDependencyDto } from './dto/add-dependency.dto';
 import { CreateChecklistDto } from './dto/create-checklist.dto';
 import { CreateChecklistItemDto } from './dto/create-checklist-item.dto';
 import { UpdateChecklistItemDto } from './dto/update-checklist-item.dto';
+import { CreateTimeEntryDto } from './dto/create-time-entry.dto';
+import { UpdateTimeEntryDto } from './dto/update-time-entry.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ActivitiesService } from '../activities/activities.service';
@@ -199,6 +201,7 @@ export class TasksService {
         subtasks: true,
         watchers: { include: { user: { select: { id: true, name: true, email: true, avatar_url: true } } } },
         checklists: { include: { items: { orderBy: { position: 'asc' } } }, orderBy: { position: 'asc' } },
+        time_entries: { include: { user: { select: { id: true, name: true, email: true, avatar_url: true } } }, orderBy: { started_at: 'desc' } },
         blockingDependencies: { include: { blocked_task: true } },
         blockedByDependencies: { include: { blocking_task: true } },
         list: {
@@ -616,6 +619,96 @@ export class TasksService {
     if (!checklist || checklist.task_id !== taskId) {
       throw new NotFoundException('Checklist not found for this task');
     }
+  }
+
+  findTimeEntries(taskId: string) {
+    return this.prisma.taskTimeEntry.findMany({
+      where: { task_id: taskId },
+      include: {
+        user: { select: { id: true, name: true, email: true, avatar_url: true } },
+      },
+      orderBy: { started_at: 'desc' },
+    });
+  }
+
+  async createTimeEntry(taskId: string, userId: string, createTimeEntryDto: CreateTimeEntryDto) {
+    const startedAt = createTimeEntryDto.started_at ? new Date(createTimeEntryDto.started_at) : new Date();
+    const endedAt = createTimeEntryDto.ended_at ? new Date(createTimeEntryDto.ended_at) : undefined;
+    const duration = this.resolveDurationMinutes(startedAt, endedAt, createTimeEntryDto.duration_minutes);
+
+    const entry = await this.prisma.taskTimeEntry.create({
+      data: {
+        task: { connect: { id: taskId } },
+        user: { connect: { id: userId } },
+        started_at: startedAt,
+        ended_at: endedAt,
+        duration_minutes: duration,
+        note: createTimeEntryDto.note,
+      },
+      include: {
+        user: { select: { id: true, name: true, email: true, avatar_url: true } },
+      },
+    });
+
+    await this.activitiesService.logActivity(taskId, userId, 'system', `registrou ${duration || 0} minutos nesta tarefa`);
+    return entry;
+  }
+
+  async updateTimeEntry(taskId: string, timeEntryId: string, updateTimeEntryDto: UpdateTimeEntryDto, actorId: string) {
+    const entry = await this.prisma.taskTimeEntry.findUnique({
+      where: { id: timeEntryId },
+    });
+
+    if (!entry || entry.task_id !== taskId) {
+      throw new NotFoundException('Time entry not found for this task');
+    }
+
+    const startedAt = updateTimeEntryDto.started_at ? new Date(updateTimeEntryDto.started_at) : entry.started_at;
+    const endedAt = updateTimeEntryDto.ended_at ? new Date(updateTimeEntryDto.ended_at) : entry.ended_at || undefined;
+    const duration = this.resolveDurationMinutes(startedAt, endedAt, updateTimeEntryDto.duration_minutes ?? entry.duration_minutes ?? undefined);
+
+    const updated = await this.prisma.taskTimeEntry.update({
+      where: { id: timeEntryId },
+      data: {
+        started_at: startedAt,
+        ended_at: endedAt,
+        duration_minutes: duration,
+        note: updateTimeEntryDto.note,
+      },
+      include: {
+        user: { select: { id: true, name: true, email: true, avatar_url: true } },
+      },
+    });
+
+    await this.activitiesService.logActivity(taskId, actorId, 'system', 'atualizou um registro de tempo');
+    return updated;
+  }
+
+  async removeTimeEntry(taskId: string, timeEntryId: string, actorId: string) {
+    const entry = await this.prisma.taskTimeEntry.findUnique({
+      where: { id: timeEntryId },
+    });
+
+    if (!entry || entry.task_id !== taskId) {
+      throw new NotFoundException('Time entry not found for this task');
+    }
+
+    const removed = await this.prisma.taskTimeEntry.delete({
+      where: { id: timeEntryId },
+    });
+
+    await this.activitiesService.logActivity(taskId, actorId, 'system', 'removeu um registro de tempo');
+    return removed;
+  }
+
+  private resolveDurationMinutes(startedAt: Date, endedAt?: Date, explicitDuration?: number) {
+    if (explicitDuration) return explicitDuration;
+    if (!endedAt) return undefined;
+    if (endedAt <= startedAt) {
+      throw new BadRequestException('ended_at must be after started_at');
+    }
+
+    return Math.ceil((endedAt.getTime() - startedAt.getTime()) / 60000);
   }
 
   // --- Helpers for Creator Notification ---

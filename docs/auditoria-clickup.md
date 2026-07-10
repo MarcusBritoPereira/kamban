@@ -98,7 +98,7 @@ Os bloqueadores principais para evolução são:
    `GET /v1/tasks` sem `list_id` cai em fallback de “all tasks”. Isso é um risco direto de exposição de dados entre empresas/espaços.
 
 3. **Credencial hardcoded/bypass de login**  
-   Existe bypass para `admin@kamban.com` com senha `admin123`. Isso deve ser removido imediatamente.
+   Existe bypass para `admin@upeupmarketing.com.br` com senha `admin123`. Isso deve ser removido imediatamente.
 
 4. **Upload inseguro**  
    Upload aceita arquivo via Multer sem limites explícitos de tamanho, allowlist de MIME/extensão, antivírus, isolamento por tenant ou autorização por espaço no endpoint.
@@ -184,7 +184,7 @@ Para deixar de ser “cadastro de tarefas” e se aproximar de uma plataforma pr
 ### Crítico
 
 - Remover acesso implícito no `SpaceRoleGuard`; negar acesso quando não houver membership/owner/admin válido.
-- Remover bypass `admin@kamban.com`/`admin123`.
+- Remover bypass `admin@upeupmarketing.com.br`/`admin123`.
 - Bloquear `GET /v1/tasks` sem escopo por espaço/lista/usuário autorizado.
 - Aplicar autorização por tenant em anexos, tags, empresas, dashboard, atividades e usuários.
 - Implementar rate limit em autenticação e uploads.
