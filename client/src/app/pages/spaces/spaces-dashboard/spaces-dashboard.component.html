@@ -67,7 +67,7 @@
         </div>
     </div>
 
-    <app-create-space-dialog *ngIf="showCreateDialog" (close)="closeCreateSpaceDialog()" (created)="loadSpaces()">
+    <app-create-space-dialog *ngIf="showCreateDialog" (close)="closeCreateSpaceDialog()" (created)="handleSpaceCreated($event)">
     </app-create-space-dialog>
 
     <app-edit-space-dialog *ngIf="showEditDialog" [space]="selectedSpaceForEdit" (close)="closeEditDialog()"

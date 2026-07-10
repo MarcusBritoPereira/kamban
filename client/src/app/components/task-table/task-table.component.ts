@@ -13,6 +13,7 @@ export class TaskTableComponent implements OnInit {
   @Input() tasks: any[] = [];
   @Output() taskClick = new EventEmitter<any>();
   @Output() addTask = new EventEmitter<void>();
+  @Output() addSubtask = new EventEmitter<any>();
 
   groups: { status: string; label: string; tasks: any[]; isExpanded: boolean; colorClass: string }[] = [];
 
@@ -63,6 +64,11 @@ export class TaskTableComponent implements OnInit {
 
   onTaskClick(task: any) {
     this.taskClick.emit(task);
+  }
+
+  onAddSubtask(task: any, event: Event) {
+    event.stopPropagation();
+    this.addSubtask.emit(task);
   }
 
   isOverdue(deadline: string): boolean {

@@ -84,7 +84,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                  </div>
                  <input type="text" formControlName="title" 
                     class="bg-transparent text-2xl font-bold text-gray-900 w-full focus:outline-none placeholder-gray-300 font-display"
-                    placeholder="Título da Tarefa">
+                    [placeholder]="parentTaskId ? 'Título da Subtarefa' : 'Título da Tarefa'">
               </div>
             </div>
 
@@ -332,7 +332,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     <button (click)="onSubmit()" 
                         [disabled]="taskForm.invalid || isSubmitting"
                         class="bg-pink-600 text-white px-8 py-2.5 rounded-lg text-sm font-bold shadow-md hover:bg-pink-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none disabled:shadow-none">
-                         {{ isSubmitting ? (task ? 'Salvando...' : 'Criando Tarefa') : (task ? 'Salvar Alterações' : 'Criar Tarefa') }}
+                         {{ isSubmitting ? (task ? 'Salvando...' : (parentTaskId ? 'Criando Subtarefa' : 'Criando Tarefa')) : (task ? 'Salvar Alterações' : (parentTaskId ? 'Criar Subtarefa' : 'Criar Tarefa')) }}
                      </button>
                 </div>
             </div>
@@ -486,6 +486,7 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
     @Output() close = new EventEmitter<void>();
     @Output() created = new EventEmitter<void>();
     @Input() task: any = null;
+    @Input() parentTaskId?: string;
     @Input() initialStatus: string = 'todo';
     @Input() initialDate: Date | null = null;
 
@@ -881,6 +882,9 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
                 assigneeIds: this.selectedAssignees,
                 tagIds: this.selectedTags // Added tagIds
             };
+            if (this.parentTaskId && !this.task) {
+                (taskData as any).parent_task_id = this.parentTaskId;
+            }
 
             const request$ = this.task
                 ? this.dataService.updateTask(this.task.id, taskData)

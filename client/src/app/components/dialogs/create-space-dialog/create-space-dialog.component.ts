@@ -12,6 +12,7 @@ import { DataService } from '../../../services/data.service';
 })
 export class CreateSpaceDialogComponent {
   @Output() close = new EventEmitter<void>();
+  @Output() created = new EventEmitter<any>();
   spaceForm: FormGroup;
   isSubmitting = false;
 
@@ -26,8 +27,9 @@ export class CreateSpaceDialogComponent {
     if (this.spaceForm.valid) {
       this.isSubmitting = true;
       this.dataService.createSpace(this.spaceForm.value).subscribe({
-        next: () => {
+        next: (space) => {
           this.isSubmitting = false;
+          this.created.emit(space);
           this.close.emit();
         },
         error: (err) => {

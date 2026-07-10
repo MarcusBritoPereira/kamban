@@ -25,6 +25,7 @@ export class TaskListViewComponent implements OnInit {
   activeView: 'list' | 'kanban' | 'calendar' = 'list';
   showTaskDialog = false;
   selectedTask: any = null;
+  parentTaskForDialog: any = null;
   initialDialogStatus = 'todo';
   initialDialogDate: Date | null = null;
   showInviteDialog = false;
@@ -180,18 +181,29 @@ export class TaskListViewComponent implements OnInit {
   openTaskDialog(status?: string, date?: Date) {
     this.initialDialogStatus = status || 'todo';
     this.initialDialogDate = date || null;
+    this.parentTaskForDialog = null;
+    this.showTaskDialog = true;
+  }
+
+  openSubtaskDialog(parentTask: any) {
+    this.selectedTask = null;
+    this.parentTaskForDialog = parentTask;
+    this.initialDialogStatus = parentTask.status || 'todo';
+    this.initialDialogDate = null;
     this.showTaskDialog = true;
   }
 
   closeTaskDialog() {
     this.showTaskDialog = false;
     this.selectedTask = null;
+    this.parentTaskForDialog = null;
     this.initialDialogStatus = 'todo';
     this.initialDialogDate = null;
     this.loadTasks();
   }
 
   onTaskSelected(task: any) {
+    this.parentTaskForDialog = null;
     this.selectedTask = task;
     this.showTaskDialog = true;
   }

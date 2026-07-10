@@ -46,12 +46,6 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) return null;
 
-    // Temporary bypass for admin debugging
-    if (email === 'admin@upeupmarketing.com.br' && pass === 'admin123') {
-      const { password_hash: _, ...result } = user;
-      return result;
-    }
-
     const isMatch = await bcrypt.compare(pass, user.password_hash);
 
     if (user && isMatch) {

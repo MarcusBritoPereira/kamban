@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService, Task } from '../../services/data.service';
+import { RouterModule } from '@angular/router';
 import { TaskTableComponent } from '../../components/task-table/task-table.component';
 import { KanbanBoardComponent } from '../../components/kanban-board/kanban-board.component';
 import { TaskCalendarComponent } from '../../components/task-calendar/task-calendar.component';
@@ -11,7 +12,7 @@ type ViewMode = 'list' | 'board' | 'calendar';
 @Component({
   selector: 'app-my-tasks',
   standalone: true,
-  imports: [CommonModule, TaskTableComponent, KanbanBoardComponent, TaskCalendarComponent, CreateTaskDialogComponent],
+  imports: [CommonModule, RouterModule, TaskTableComponent, KanbanBoardComponent, TaskCalendarComponent, CreateTaskDialogComponent],
   template: `
     <div class="h-full flex flex-col bg-gray-50">
       <!-- Header -->
@@ -22,10 +23,16 @@ type ViewMode = 'list' | 'board' | 'calendar';
         </div>
 
         <div class="flex items-center gap-4">
-            <button (click)="openCreateTaskDialog()" 
+            <button *ngIf="hasSpaces(); else createSpaceCta" (click)="openCreateTaskDialog()" 
                 class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center">
                 <i class="fas fa-plus mr-2"></i> Nova Tarefa
             </button>
+            <ng-template #createSpaceCta>
+              <a routerLink="/spaces"
+                class="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center">
+                <i class="fas fa-rocket mr-2"></i> Criar Espaço
+              </a>
+            </ng-template>
 
             <!-- View Switcher -->
             <div class="flex bg-gray-100 p-1 rounded-lg">
@@ -93,13 +100,28 @@ type ViewMode = 'list' | 'board' | 'calendar';
 
         <ng-template #emptyState>
           <div class="flex flex-col items-center justify-center h-full text-gray-400">
-            <i class="fas fa-check-circle text-6xl mb-4 text-gray-300"></i>
-            <p class="text-lg font-medium">Você não tem tarefas atribuídas.</p>
-            <div class="mt-4">
+            <ng-container *ngIf="hasSpaces(); else noWorkspaceState">
+              <i class="fas fa-check-circle text-6xl mb-4 text-gray-300"></i>
+              <p class="text-lg font-medium">Você não tem tarefas atribuídas.</p>
+              <p class="text-sm text-gray-400 mt-1 max-w-md text-center">Crie uma tarefa em uma lista existente ou aguarde uma atribuição da sua equipe.</p>
+              <div class="mt-4">
               <button (click)="openCreateTaskDialog()" class="text-pink-600 hover:text-pink-700 font-medium text-sm flex items-center">
                 <i class="fas fa-plus mr-2"></i> Criar uma tarefa
               </button>
-            </div>
+              </div>
+            </ng-container>
+
+            <ng-template #noWorkspaceState>
+              <i class="fas fa-rocket text-6xl mb-4 text-gray-300"></i>
+              <p class="text-lg font-semibold text-gray-600">Comece criando seu primeiro espaço.</p>
+              <p class="text-sm text-gray-400 mt-2 max-w-md text-center">
+                Antes de criar tarefas, você precisa de um espaço com pastas e listas para organizar o trabalho.
+              </p>
+              <a routerLink="/spaces"
+                class="mt-5 bg-pink-600 hover:bg-pink-700 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-md hover:shadow-lg transition-all flex items-center">
+                <i class="fas fa-plus mr-2"></i> Criar primeiro espaço
+              </a>
+            </ng-template>
           </div>
         </ng-template>
       </div>
@@ -125,6 +147,7 @@ type ViewMode = 'list' | 'board' | 'calendar';
 })
 export class MyTasksComponent implements OnInit {
   tasks: any[] = [];
+  spaces = this.dataService.spaces;
   selectedTask: any = null;
   viewMode: ViewMode = 'list';
   initialDialogDate: Date | null = null;
@@ -140,7 +163,12 @@ export class MyTasksComponent implements OnInit {
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    this.dataService.getSpaces().subscribe();
     this.loadTasks();
+  }
+
+  hasSpaces(): boolean {
+    return this.spaces().length > 0;
   }
 
   loadTasks(reset: boolean = true) {

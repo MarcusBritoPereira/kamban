@@ -45,6 +45,75 @@ export class SpacesController {
     return this.spacesService.findAll(user.id, user.role);
   }
 
+  @Get(':id/statuses')
+  async findStatuses(@Param('id') id: string, @Request() req: any) {
+    const user = req.user as { id: string };
+    const hasAccess = await this.permissionsService.hasAccess(
+      user.id,
+      id,
+      SpaceRole.VIEWER,
+    );
+    if (!hasAccess)
+      throw new ForbiddenException('You do not have access to this space');
+
+    return this.spacesService.findStatuses(id);
+  }
+
+  @Post(':id/statuses')
+  async createStatus(
+    @Param('id') id: string,
+    @Body() data: { name: string; color?: string; position?: number; is_default?: boolean },
+    @Request() req: any,
+  ) {
+    const user = req.user as { id: string };
+    const hasAccess = await this.permissionsService.hasAccess(
+      user.id,
+      id,
+      SpaceRole.ADMIN,
+    );
+    if (!hasAccess)
+      throw new ForbiddenException('Only Admins or Owners can manage statuses');
+
+    return this.spacesService.createStatus(id, data);
+  }
+
+  @Patch(':id/statuses/:statusId')
+  async updateStatus(
+    @Param('id') id: string,
+    @Param('statusId') statusId: string,
+    @Body() data: { name?: string; color?: string; position?: number; is_default?: boolean },
+    @Request() req: any,
+  ) {
+    const user = req.user as { id: string };
+    const hasAccess = await this.permissionsService.hasAccess(
+      user.id,
+      id,
+      SpaceRole.ADMIN,
+    );
+    if (!hasAccess)
+      throw new ForbiddenException('Only Admins or Owners can manage statuses');
+
+    return this.spacesService.updateStatus(id, statusId, data);
+  }
+
+  @Delete(':id/statuses/:statusId')
+  async removeStatus(
+    @Param('id') id: string,
+    @Param('statusId') statusId: string,
+    @Request() req: any,
+  ) {
+    const user = req.user as { id: string };
+    const hasAccess = await this.permissionsService.hasAccess(
+      user.id,
+      id,
+      SpaceRole.ADMIN,
+    );
+    if (!hasAccess)
+      throw new ForbiddenException('Only Admins or Owners can manage statuses');
+
+    return this.spacesService.removeStatus(id, statusId);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string, @Request() req: any) {
     const user = req.user as { id: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access

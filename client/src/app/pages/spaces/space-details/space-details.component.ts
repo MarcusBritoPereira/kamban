@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DataService, Folder, Space } from '../../../services/data.service';
 import { AuthService } from '../../../services/auth.service';
+import { SimpleInputDialogComponent } from '../../../components/dialogs/simple-input-dialog/simple-input-dialog.component';
 
 @Component({
     selector: 'app-space-details',
     standalone: true,
-    imports: [CommonModule, RouterModule],
+    imports: [CommonModule, RouterModule, SimpleInputDialogComponent],
     template: `
     <div class="h-full bg-white p-8 overflow-y-auto">
        <header class="flex justify-between items-center mb-6">
@@ -20,8 +21,9 @@ import { AuthService } from '../../../services/auth.service';
                 <p class="text-sm text-gray-500">Folders</p>
              </div>
           </div>
-          <button *ngIf="canManage()" class="text-gray-400 hover:text-gray-600">
-             <i class="fas fa-ellipsis-h"></i>
+          <button *ngIf="canEdit()" (click)="openCreateFolderDialog()"
+             class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 px-5 rounded-lg transition-all shadow-md hover:shadow-lg flex items-center">
+             <i class="fas fa-folder-plus mr-2"></i> Nova Pasta
           </button>
        </header>
 
@@ -35,10 +37,27 @@ import { AuthService } from '../../../services/auth.service';
           </div>
 
           <!-- Empty State -->
-          <div *ngIf="folders().length === 0" class="col-span-full py-12 text-center border-2 border-dashed border-gray-100 rounded-lg">
-              <p class="text-gray-500">Nenhuma pasta encontrada neste espaço.</p>
+          <div *ngIf="folders().length === 0" class="col-span-full py-16 text-center border-2 border-dashed border-gray-200 rounded-xl bg-gray-50">
+              <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                <i class="fas fa-folder-plus text-2xl text-pink-500"></i>
+              </div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Crie a primeira pasta deste espaço</h3>
+              <p class="text-gray-500 mb-6 max-w-md mx-auto">Pastas agrupam listas e mantêm seus projetos organizados antes da criação das tarefas.</p>
+              <button *ngIf="canEdit()" (click)="openCreateFolderDialog()"
+                class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 px-5 rounded-lg transition-all shadow-md hover:shadow-lg">
+                Criar pasta
+              </button>
           </div>
        </div>
+
+       <app-simple-input-dialog
+          *ngIf="showCreateFolderDialog"
+          title="Nova Pasta"
+          label="Nome da Pasta"
+          placeholder="Ex: Projeto, Cliente ou Campanha"
+          (submit)="createFolder($event)"
+          (close)="showCreateFolderDialog = false">
+       </app-simple-input-dialog>
     </div>
   `
 })
@@ -46,6 +65,7 @@ export class SpaceDetailsComponent implements OnInit {
     spaceId: string | null = null;
     space = signal<Space | undefined>(undefined);
     folders = signal<Folder[]>([]);
+    showCreateFolderDialog = false;
 
     currentUser = this.authService.currentUser;
 
@@ -101,6 +121,22 @@ export class SpaceDetailsComponent implements OnInit {
     openFolder(folder: Folder) {
         // Navigate to Folder Details (Lists Grid)
         this.router.navigate(['/spaces', this.spaceId, 'folders', folder.id]);
+    }
+
+    openCreateFolderDialog() {
+        this.showCreateFolderDialog = true;
+    }
+
+    createFolder(name: string) {
+        if (!this.spaceId) return;
+        this.dataService.createFolder(this.spaceId, { name }).subscribe({
+            next: (folder) => {
+                this.showCreateFolderDialog = false;
+                this.folders.update(folders => [...folders, folder]);
+                this.router.navigate(['/spaces', this.spaceId, 'folders', folder.id]);
+            },
+            error: (err) => alert('Erro ao criar pasta: ' + (err.error?.message || err.message))
+        });
     }
 
     goBack() {

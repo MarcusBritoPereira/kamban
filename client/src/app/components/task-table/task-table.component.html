@@ -54,11 +54,15 @@
                             [ngClass]="(task.status === 'done' || task.status === 'approved') ? 'fa-check-circle' : 'fa-check-circle'"></i>
                     </button>
 
-                    <div class="flex items-center min-w-0 flex-1">
+                    <div class="flex flex-col min-w-0 flex-1">
                         <span class="truncate text-sm text-gray-700 font-medium group-hover:text-gray-900 mr-3">
                             {{ task.title }}
                         </span>
+                        <span *ngIf="task.subtasks?.length" class="text-[11px] text-gray-400 mt-0.5">
+                            <i class="fas fa-sitemap mr-1"></i>{{ task.subtasks.length }} subtarefa(s)
+                        </span>
 
+                        <div class="flex items-center mt-1">
                         <i *ngIf="task.attachments?.length" class="fas fa-paperclip text-gray-300 text-xs mr-2"></i>
 
                         <!-- Tags -->
@@ -68,6 +72,7 @@
                                 [style.background-color]="t.tag.color">
                                 {{ t.tag.name }}
                             </span>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -109,7 +114,8 @@
 
                 <!-- Actions -->
                 <div class="col-span-2 text-right opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
+                    <button (click)="onAddSubtask(task, $event)"
+                        title="Adicionar subtarefa"
                         class="text-gray-400 hover:text-gray-600 hover:bg-gray-100 p-1 rounded transition-colors mr-2">
                         <i class="fas fa-plus"></i>
                     </button>

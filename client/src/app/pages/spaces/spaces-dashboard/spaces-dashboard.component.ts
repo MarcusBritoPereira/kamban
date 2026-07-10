@@ -42,6 +42,14 @@ export class SpacesDashboardComponent implements OnInit {
         this.showCreateDialog = false;
     }
 
+    handleSpaceCreated(space: any) {
+        this.showCreateDialog = false;
+        this.loadSpaces();
+        if (space?.id) {
+            this.router.navigate(['/spaces', space.id]);
+        }
+    }
+
     selectSpace(space: any) {
         this.dataService.currentSpaceId.set(space.id);
         this.router.navigate(['/spaces', space.id]);

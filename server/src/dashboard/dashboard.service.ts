@@ -107,6 +107,61 @@ export class DashboardService {
         }).sort((a, b) => b.load_hours - a.load_hours);
     }
 
+    async getWorkload(filters: { period?: string }) {
+        const dateFilter = this.getDateFilter(filters.period);
+
+        const users = await this.prisma.user.findMany({
+            where: { role: { not: 'leitor' } },
+            include: {
+                task_assignees: {
+                    where: { task: { status: { not: 'done' } } },
+                    include: {
+                        task: {
+                            include: {
+                                time_entries: {
+                                    where: { started_at: dateFilter },
+                                },
+                            },
+                        },
+                    },
+                },
+                time_entries: {
+                    where: { started_at: dateFilter },
+                },
+            },
+        });
+
+        return users.map((user) => {
+            const activeTasks = user.task_assignees.map((assignee) => assignee.task);
+            const estimatedMinutes = activeTasks.reduce(
+                (sum, task) => sum + ((task.estimated_hours || 0) * 60),
+                0,
+            );
+            const trackedMinutes = user.time_entries.reduce(
+                (sum, entry) => sum + (entry.duration_minutes || 0),
+                0,
+            );
+            const openTasks = activeTasks.length;
+            const overdueTasks = activeTasks.filter(
+                (task) => task.deadline && task.deadline < new Date(),
+            ).length;
+
+            return {
+                user_id: user.id,
+                name: user.name,
+                avatar_url: user.avatar_url,
+                role: user.role,
+                open_tasks: openTasks,
+                overdue_tasks: overdueTasks,
+                estimated_hours: Math.round(estimatedMinutes / 60),
+                tracked_hours: Math.round((trackedMinutes / 60) * 10) / 10,
+                utilization_percentage: estimatedMinutes > 0
+                    ? Math.round((trackedMinutes / estimatedMinutes) * 100)
+                    : 0,
+            };
+        }).sort((a, b) => b.estimated_hours - a.estimated_hours);
+    }
+
     async getClientPerformance(filters: { period?: string }) {
         // 1. Fetch all active companies
         const companies = await this.prisma.company.findMany({
