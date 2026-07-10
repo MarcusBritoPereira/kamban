@@ -141,7 +141,7 @@ import { FormsModule } from '@angular/forms';
                     <!-- Avatar Area -->
                     <div class="h-40 bg-indigo-600 relative overflow-hidden flex items-center justify-center rounded-t-xl group-hover:bg-indigo-700 transition-colors">
                         <!-- If Avatar Image -->
-                        <img *ngIf="user.avatar_url" [src]="'http://localhost:3000' + user.avatar_url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+                        <img *ngIf="user.avatar_url" [src]="'' + user.avatar_url" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
                         
                         <!-- If No Avatar (Initials) -->
                         <div *ngIf="!user.avatar_url" class="text-white text-6xl font-bold tracking-tighter opacity-70 group-hover:opacity-100 transition-opacity">
@@ -188,7 +188,7 @@ import { FormsModule } from '@angular/forms';
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold text-sm mr-4 overflow-hidden shrink-0 border border-gray-200">
-                                         <img *ngIf="user.avatar_url" [src]="'http://localhost:3000' + user.avatar_url" class="w-full h-full object-cover">
+                                         <img *ngIf="user.avatar_url" [src]="'' + user.avatar_url" class="w-full h-full object-cover">
                                          <span *ngIf="!user.avatar_url">{{ getInitials(user.name) }}</span>
                                     </div>
                                     <span class="font-semibold text-gray-900 group-hover:text-pink-600 transition-colors">{{ user.name }}</span>

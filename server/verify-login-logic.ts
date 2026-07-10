@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
-    const email = 'admin@upeupmarketing.com.br';
+    const email = 'admin@kamban.com';
     const plainPassword = '123456';
 
     const user = await prisma.user.findUnique({
@@ -18,6 +18,11 @@ async function main() {
 
     console.log('User found:', user.email);
     console.log('Stored Hash:', user.password_hash);
+
+    if (!user.password_hash) {
+      console.log('Usuário sem senha local.');
+      return;
+    }
 
     const isMatch = await bcrypt.compare(plainPassword, user.password_hash);
     console.log('Password match result:', isMatch);

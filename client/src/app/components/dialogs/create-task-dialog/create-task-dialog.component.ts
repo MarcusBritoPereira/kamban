@@ -252,7 +252,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                                         </div>
                                         <div class="flex items-center">
                                             <div class="w-6 h-6 rounded-full bg-gray-200 mr-2 overflow-hidden flex items-center justify-center text-[10px]">
-                                                <img *ngIf="member.avatar_url" [src]="'http://localhost:3000' + member.avatar_url" class="w-full h-full object-cover">
+                                                <img *ngIf="member.avatar_url" [src]="'' + member.avatar_url" class="w-full h-full object-cover">
                                                 <span *ngIf="!member.avatar_url">{{ member.name.charAt(0) }}</span>
                                             </div>
                                             {{ member.name }}
@@ -288,7 +288,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                          
                          <div *ngIf="existingAttachments.length > 0" class="grid grid-cols-2 gap-3 mb-3">
                             <div *ngFor="let att of existingAttachments" class="bg-gray-50 border border-gray-200 p-3 rounded-lg flex items-center justify-between group h-fit">
-                                <a [href]="'http://localhost:3000' + att.file_url" target="_blank" class="flex items-center overflow-hidden hover:text-pink-600 transition-colors">
+                                <a [href]="'' + att.file_url" target="_blank" class="flex items-center overflow-hidden hover:text-pink-600 transition-colors">
                                     <div class="w-8 h-8 rounded bg-gray-200 text-gray-500 flex items-center justify-center mr-3 text-xs font-bold uppercase shrink-0">
                                         {{ att.file_type.includes('image') ? 'IMG' : 'DOC' }}
                                     </div>
@@ -355,7 +355,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                  <div *ngFor="let log of activities" class="flex gap-3 group">
                      <!-- Avatar -->
                      <div class="w-6 h-6 rounded-full bg-gray-200 shrink-0 overflow-hidden text-[9px] flex items-center justify-center text-gray-500 font-bold">
-                         <img *ngIf="log.user?.avatar_url" [src]="'http://localhost:3000' + log.user.avatar_url" class="w-full h-full object-cover">
+                         <img *ngIf="log.user?.avatar_url" [src]="'' + log.user.avatar_url" class="w-full h-full object-cover">
                          <span *ngIf="!log.user?.avatar_url">{{ log.user?.name?.charAt(0) || '?' }}</span>
                      </div>
                      
@@ -394,7 +394,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                                 class="px-3 py-2 hover:bg-gray-50 cursor-pointer flex items-center text-xs text-gray-700 transition-colors">
                                 <!-- Avatar -->
                                 <div class="w-5 h-5 rounded-full bg-gray-200 mr-2 overflow-hidden flex items-center justify-center text-[9px] font-bold text-gray-500 shrink-0">
-                                    <img *ngIf="member.avatar_url" [src]="'http://localhost:3000' + member.avatar_url" class="w-full h-full object-cover">
+                                    <img *ngIf="member.avatar_url" [src]="'' + member.avatar_url" class="w-full h-full object-cover">
                                     <span *ngIf="!member.avatar_url">{{ member.name.charAt(0) }}</span>
                                 </div>
                                 <span class="truncate">{{ member.name }}</span>

@@ -1,11 +1,76 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UnauthorizedException,
+  Get,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { ConfigService } from '@nestjs/config';
+import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('v1/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) { }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  googleLogin() {}
+
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  async googleCallback(@Req() req: any, @Res() res: Response) {
+    const authResult = await this.authService.login(req.user);
+
+    const frontendUrl =
+      this.configService.get<string>('FRONTEND_URL') ||
+      'http://localhost:8081';
+
+    const payload = Buffer.from(
+      JSON.stringify({
+        access_token: authResult.access_token,
+        user: authResult.user,
+      }),
+    ).toString('base64url');
+
+    return res.redirect(
+      `${frontendUrl}/oauth-callback?payload=${encodeURIComponent(payload)}`,
+    );
+  }
+
+  @Get('github')
+  @UseGuards(AuthGuard('github'))
+  githubLogin() {}
+
+  @Get('github/callback')
+  @UseGuards(AuthGuard('github'))
+  async githubCallback(@Req() req: any, @Res() res: Response) {
+    const authResult = await this.authService.login(req.user);
+
+    const frontendUrl =
+      this.configService.get<string>('FRONTEND_URL') ||
+      'http://localhost:8081';
+
+    const payload = Buffer.from(
+      JSON.stringify({
+        access_token: authResult.access_token,
+        user: authResult.user,
+      }),
+    ).toString('base64url');
+
+    return res.redirect(
+      `${frontendUrl}/oauth-callback?payload=${encodeURIComponent(payload)}`,
+    );
+  }
 
   @Post('login')
   async login(@Body() loginDto: LoginDto) {

@@ -22,7 +22,7 @@ interface TaskGroup {
            <div class="flex items-center gap-4">
                <!-- Avatar -->
                <div class="w-16 h-16 rounded-full bg-indigo-600 flex items-center justify-center text-white text-xl font-bold overflow-hidden shadow-md">
-                   <img *ngIf="user?.avatar_url" [src]="'http://localhost:3000' + user.avatar_url" class="w-full h-full object-cover">
+                   <img *ngIf="user?.avatar_url" [src]="'' + user.avatar_url" class="w-full h-full object-cover">
                    <span *ngIf="!user?.avatar_url">{{ getInitials(user?.name) }}</span>
                </div>
                
