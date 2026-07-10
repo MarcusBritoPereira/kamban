@@ -46,8 +46,8 @@ export const routes: Routes = [
                     const auth = inject(AuthService);
                     const router = inject(Router);
                     const user = auth.currentUser();
-
-                    if (user?.role?.toLowerCase() === 'admin') {
+                    const role = user?.role?.toLowerCase();
+                    if (role === 'admin' || role === 'gestor') {
                         return router.createUrlTree(['/spaces']);
                     }
 

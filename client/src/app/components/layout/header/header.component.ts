@@ -2,7 +2,8 @@ import { Component, computed, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { DataService } from '../../../services/data.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -21,6 +22,8 @@ export class HeaderComponent implements OnInit {
   notifications = signal<any[]>([]);
   showNotifications = false;
   unreadCount = computed(() => this.notifications().filter(n => !n.read).length);
+  currentUrl = signal<string>('');
+  pageTitle = computed(() => this.getPageTitle(this.currentUrl()));
 
   constructor(
     public authService: AuthService,
@@ -29,6 +32,11 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.currentUrl.set(this.router.url);
+    this.router.events
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event) => this.currentUrl.set(event.urlAfterRedirects));
+
     // Small delay to ensure auth is ready if needed, though usually currentUser is enough
     this.loadNotifications();
 
@@ -90,5 +98,16 @@ export class HeaderComponent implements OnInit {
     this.dataService.markAllNotificationsAsRead().subscribe(() => {
       this.notifications.update(notes => notes.map(n => ({ ...n, read: true })));
     });
+  }
+
+  private getPageTitle(url: string): string {
+    if (url.startsWith('/my-tasks')) return 'Minhas Tarefas';
+    if (url.startsWith('/spaces')) return 'Espaços';
+    if (url.startsWith('/team')) return 'Equipe';
+    if (url.startsWith('/companies')) return 'Empresas';
+    if (url.startsWith('/users')) return 'Usuários';
+    if (url.startsWith('/settings')) return 'Configurações';
+    if (url.startsWith('/dashboard')) return 'Dashboard';
+    return 'Kamban';
   }
 }

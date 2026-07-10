@@ -25,7 +25,7 @@ export class RegisterComponent {
       name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      role: ['admin'] // Default role for MVP simplicity or select
+      role: ['gestor']
     });
   }
 
