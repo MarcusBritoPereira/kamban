@@ -50,9 +50,7 @@ export class PermissionsService {
       return roleStr as SpaceRole;
     }
 
-    // Implicit Membership: All users are members (EDITOR) if not explicitly defined
-    // return null;
-    return SpaceRole.EDITOR;
+    return null;
   }
 
   /**

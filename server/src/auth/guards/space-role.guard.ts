@@ -1,4 +1,4 @@
-import { Injectable, CanActivate, ExecutionContext, ForbiddenException, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, ForbiddenException, Logger } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -12,17 +12,6 @@ export class SpaceRoleGuard implements CanActivate {
     ) { }
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        const requiredRole = this.reflector.get<string>('role', context.getHandler());
-        // If no specific role is required (or it's just authenticated), pass. 
-        // But usually this Guard is used specifically when we want to check space permissions.
-        // Let's assume if @Roles('admin') is present, we check for that. 
-
-        // Actually, we want to enforce logic: 
-        // - Viewer: Can Read. 
-        // - Editor: Can Create/Update/Delete Tasks/Lists. 
-        // - Admin: Can Manage Space Settings/Members.
-
-        // We will use metadata key 'spaceRole' to avoid conflict with global 'roles'.
         const minRole = this.reflector.get<string>('spaceRole', context.getHandler());
         if (!minRole) {
             return true; // No space role restriction on this endpoint
@@ -35,9 +24,6 @@ export class SpaceRoleGuard implements CanActivate {
             throw new ForbiddenException('User not authenticated');
         }
 
-        // Admins (Global) bypass? Maybe. Let's strictly enforce Space Roles for now.
-        // if (user.role === 'ADMIN') return true;
-
         // Determine Space ID
         let spaceId: string | null = null;
 
@@ -49,9 +35,10 @@ export class SpaceRoleGuard implements CanActivate {
 
         // Case 3: Indirect (List ID provided)
         // POST /tasks { list_id: ... }
-        if (!spaceId && request.body && request.body.list_id) {
+        const listId = request.body?.list_id ?? request.query?.list_id;
+        if (!spaceId && listId) {
             const list = await this.prisma.list.findUnique({
-                where: { id: request.body.list_id },
+                where: { id: listId },
                 include: { folder: true }
             });
             if (list) spaceId = list.folder.space_id;
@@ -74,7 +61,8 @@ export class SpaceRoleGuard implements CanActivate {
         // Case 4: Indirect via Task ID (Update/Delete Task) -> /tasks/:id
         // But we need to distinguish /tasks/:id from /spaces/:id.
         // The Controller context helps, but here we are generic.
-        if (!spaceId && request.params.id) {
+        const taskId = request.params.taskId ?? request.params.id;
+        if (!spaceId && taskId) {
             // Check if it looks like a task route? 
             // We can't easily know if :id is a task or list or folder without context.
             // However, we can try to fetch based on the resource type implied by the controller/route?
@@ -86,11 +74,11 @@ export class SpaceRoleGuard implements CanActivate {
             // Smart approach: Attempt to find Task first if route contains 'tasks'.
             if (request.path.includes('/tasks')) {
                 const task = await this.prisma.task.findUnique({
-                    where: { id: request.params.id },
+                    where: { id: taskId },
                     include: { list: { include: { folder: true } } }
                 });
                 if (task) spaceId = task.list.folder.space_id;
-            } else if (request.path.includes('/lists')) {
+            } else if (request.path.includes('/lists') && request.params.id) {
                 const list = await this.prisma.list.findUnique({
                     where: { id: request.params.id },
                     include: { folder: true }
@@ -99,15 +87,40 @@ export class SpaceRoleGuard implements CanActivate {
             }
         }
 
+        if (!spaceId && request.path.includes('/attachments') && request.params.id) {
+            const attachment = await this.prisma.attachment.findUnique({
+                where: { id: request.params.id },
+                include: {
+                    task: {
+                        include: { list: { include: { folder: true } } },
+                    },
+                },
+            });
+            if (attachment) spaceId = attachment.task.list.folder.space_id;
+        }
+
         if (!spaceId) {
             this.logger.warn(`Could not determine Space ID for path ${request.path}`);
-            return true;
+            throw new ForbiddenException('Unable to determine resource scope');
         }
 
         this.logger.log(`Checking membership for User ${user.id} in Space ${spaceId}`);
 
         // Check Membership
-        let membership = await this.prisma.spaceMember.findUnique({
+        const space = await this.prisma.space.findUnique({
+            where: { id: spaceId },
+            select: { owner_id: true },
+        });
+
+        if (!space) {
+            throw new ForbiddenException('Space not found or inaccessible');
+        }
+
+        if (user.role === 'admin' || space.owner_id === user.id) {
+            return true;
+        }
+
+        const membership = await this.prisma.spaceMember.findUnique({
             where: {
                 space_id_user_id: {
                     user_id: user.id,
@@ -117,17 +130,16 @@ export class SpaceRoleGuard implements CanActivate {
         });
 
         if (!membership) {
-            this.logger.warn(`Implicit membership (All Users Rule) granted for User ${user.id} in Space ${spaceId}`);
-            // Implicitly grant EDITOR role to all authenticated users as per business rule
-            // We cast to any to avoid "partial" type issues if SpaceMember has more fields
-            membership = { role: 'EDITOR' } as any;
+            this.logger.warn(`Access denied for User ${user.id} in Space ${spaceId}: no membership`);
+            throw new ForbiddenException('You do not have access to this space');
         }
 
-        // Role Hierarchy: ADMIN > EDITOR > VIEWER
+        // Role Hierarchy: OWNER > ADMIN > EDITOR > VIEWER
         const roleValue: Record<string, number> = {
             'VIEWER': 1,
             'EDITOR': 2,
-            'ADMIN': 3
+            'ADMIN': 3,
+            'OWNER': 4,
         };
 
         const userRoleValue = roleValue[membership!.role.toUpperCase()] || 0;

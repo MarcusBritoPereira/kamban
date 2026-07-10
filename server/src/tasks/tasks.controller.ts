@@ -21,11 +21,9 @@ export class TasksController {
   }
 
   @Get()
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('VIEWER')
   findAll(@Request() req: any) {
-    // This endpoint should probably be filtered or restricted, 
-    // but typically it's technically "My Tasks" or "List Tasks".
-    // If it's "All Tasks", it's dangerous without filters.
-    // Assuming filters are applied in Service based on context.
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const limit = req.query.limit ? parseInt(req.query.limit) : 20;
     return this.tasksService.findAll(req.query.list_id, page, limit);
