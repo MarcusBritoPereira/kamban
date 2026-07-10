@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { AddAssigneeDto } from './dto/add-assignee.dto';
@@ -89,39 +89,18 @@ export class TasksService {
   }
 
   async findAll(listId?: string, page: number = 1, limit: number = 20) {
-    const skip = (page - 1) * limit;
-    const take = limit;
-
-    if (listId) {
-      const [data, total] = await Promise.all([
-        this.prisma.task.findMany({
-          where: { list_id: listId },
-          include: {
-            assignees: { include: { user: true } },
-            tags: { include: { tag: true } },
-            attachments: true,
-          },
-          skip,
-          take,
-          orderBy: { created_at: 'desc' } // Deterministic ordering
-        }),
-        this.prisma.task.count({ where: { list_id: listId } })
-      ]);
-
-      return {
-        data,
-        meta: {
-          total,
-          page,
-          limit,
-          lastPage: Math.ceil(total / limit)
-        }
-      };
+    if (!listId) {
+      throw new BadRequestException('list_id is required');
     }
 
-    // Fallback for "all tasks" (admin use?)
+    const safePage = Math.max(page, 1);
+    const safeLimit = Math.min(Math.max(limit, 1), 100);
+    const skip = (safePage - 1) * safeLimit;
+    const take = safeLimit;
+
     const [data, total] = await Promise.all([
       this.prisma.task.findMany({
+        where: { list_id: listId },
         include: {
           assignees: { include: { user: true } },
           tags: { include: { tag: true } },
@@ -129,24 +108,27 @@ export class TasksService {
         },
         skip,
         take,
-        orderBy: { created_at: 'desc' }
+        orderBy: { created_at: 'desc' } // Deterministic ordering
       }),
-      this.prisma.task.count()
+      this.prisma.task.count({ where: { list_id: listId } })
     ]);
+
     return {
       data,
       meta: {
-        total,
-        page,
-        limit,
-        lastPage: Math.ceil(total / limit)
-      }
-    };
+          total,
+          page: safePage,
+          limit: safeLimit,
+          lastPage: Math.ceil(total / safeLimit)
+        }
+      };
   }
 
   async findAssignedTo(userId: string, page: number = 1, limit: number = 20) {
-    const skip = (page - 1) * limit;
-    const take = limit;
+    const safePage = Math.max(page, 1);
+    const safeLimit = Math.min(Math.max(limit, 1), 100);
+    const skip = (safePage - 1) * safeLimit;
+    const take = safeLimit;
 
     const [data, total] = await Promise.all([
       this.prisma.task.findMany({
@@ -180,9 +162,9 @@ export class TasksService {
       data,
       meta: {
         total,
-        page,
-        limit,
-        lastPage: Math.ceil(total / limit)
+        page: safePage,
+        limit: safeLimit,
+        lastPage: Math.ceil(total / safeLimit)
       }
     };
   }
