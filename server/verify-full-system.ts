@@ -17,7 +17,7 @@ async function verifySystem() {
     let loginRes = await fetch(`${baseUrl}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: 'admin@upeupmarketing.com.br', password: '123456' })
+        body: JSON.stringify({ email: 'admin@kamban.com', password: '123456' })
     });
 
     if (!loginRes.ok) {

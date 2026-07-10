@@ -9,7 +9,7 @@ services:
       POSTGRES_PASSWORD: adminpassword
       POSTGRES_DB: up_up_task_manager
     ports:
-      - "5432:5432"
+      - "5438:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -30,7 +30,7 @@ services:
     build: ./client
     container_name: project_up_client
     ports:
-      - "80:80" # Maps localhost:80 to container:80
+      - "8081:80" # Maps localhost:8081 to container:80
     depends_on:
       - server
     restart: unless-stopped
