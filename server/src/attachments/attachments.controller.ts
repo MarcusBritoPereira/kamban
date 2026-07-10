@@ -7,26 +7,31 @@ import {
   UseInterceptors,
   UploadedFile,
   Request,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
 } from '@nestjs/common';
 import { AttachmentsService } from './attachments.service';
-import { CreateAttachmentDto } from './dto/create-attachment.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RolesGuard } from '../auth/roles.guard';
-import { Roles } from '../auth/roles.decorator';
-import { Role } from '@prisma/client';
+import { SpaceRoleGuard } from '../auth/guards/space-role.guard';
+import { SpaceRole } from '../auth/decorators/space-role.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard)
 @Controller('v1')
 export class AttachmentsController {
   constructor(private readonly attachmentsService: AttachmentsService) { }
 
-  @Roles(Role.admin, Role.gestor, Role.editor)
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('EDITOR')
   @Post('tasks/:taskId/attachments')
   @UseInterceptors(
     FileInterceptor('file', {
+      limits: {
+        fileSize: 10 * 1024 * 1024,
+      },
       storage: diskStorage({
         destination: './uploads/tasks',
         filename: (req: any, file: any, cb: any) => {
@@ -41,10 +46,19 @@ export class AttachmentsController {
   )
   create(
     @Param('taskId') taskId: string,
-    @UploadedFile() file: any,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 10 * 1024 * 1024 }),
+          new FileTypeValidator({
+            fileType: /(pdf|png|jpe?g|gif|webp|txt|csv|docx?|xlsx?)$/i,
+          }),
+        ],
+      }),
+    )
+    file: any,
     @Request() req: any,
   ) {
-    if (!file) throw new Error('File not provided');
     const fileUrl = `/uploads/tasks/${file.filename}`;
     return this.attachmentsService.create(taskId, {
       file_url: fileUrl,
@@ -54,9 +68,10 @@ export class AttachmentsController {
     });
   }
 
-  @Roles(Role.admin, Role.gestor)
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('EDITOR')
   @Delete('attachments/:id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.attachmentsService.remove(id);
   }
 }

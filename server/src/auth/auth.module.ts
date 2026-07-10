@@ -12,10 +12,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET') || 'secretKey',
-        signOptions: { expiresIn: '1d' },
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const secret = configService.get<string>('JWT_SECRET');
+        if (!secret && process.env.NODE_ENV === 'production') {
+          throw new Error('JWT_SECRET must be configured in production');
+        }
+
+        return {
+          secret: secret || 'development-only-secret',
+          signOptions: { expiresIn: '1d' },
+        };
+      },
       inject: [ConfigService],
     }),
   ],
