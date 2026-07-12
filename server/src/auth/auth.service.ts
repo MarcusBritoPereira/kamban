@@ -6,7 +6,6 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -14,7 +13,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   async register(createUserDto: CreateUserDto) {
     const existingUser = await this.prisma.user.findUnique({
@@ -33,7 +32,7 @@ export class AuthService {
     const user = await this.prisma.user.create({
       data: {
         ...userData,
-        role: 'gestor', // Default role for new signups
+        role: 'leitor', // Default least-privileged role for self-service signups
         password_hash: hashedPassword,
       },
     });
@@ -117,7 +116,7 @@ export class AuthService {
         auth_provider: profile.provider,
         provider_id: profile.providerId,
         avatar_url: profile.avatarUrl || null,
-        role: 'gestor',
+        role: 'leitor',
       },
     });
   }
@@ -129,8 +128,8 @@ export class AuthService {
       return { message: 'If email exists, recovery instructions sent.' };
     }
 
-    const { v4: uuidv4 } = require('uuid');
-    const token = uuidv4();
+    const { randomBytes } = await import('crypto');
+    const token = randomBytes(32).toString('hex');
     const expires = new Date();
     expires.setHours(expires.getHours() + 1); // 1 hour
 
@@ -138,8 +137,8 @@ export class AuthService {
       where: { id: user.id },
       data: {
         reset_token: token,
-        reset_token_expires: expires
-      }
+        reset_token_expires: expires,
+      },
     });
 
     // Send Email
@@ -153,9 +152,9 @@ export class AuthService {
       where: {
         reset_token: token,
         reset_token_expires: {
-          gt: new Date()
-        }
-      }
+          gt: new Date(),
+        },
+      },
     });
 
     if (!user) {
@@ -169,41 +168,45 @@ export class AuthService {
       data: {
         password_hash: hashedPassword,
         reset_token: null,
-        reset_token_expires: null
-      }
+        reset_token_expires: null,
+      },
     });
 
     return { message: 'Password reset successful' };
   }
 
   private async sendRecoveryEmail(email: string, token: string) {
-    const nodemailer = require('nodemailer');
+    const nodemailer = await import('nodemailer');
 
-    // Create a test account if no env vars (Ethereal)
-    // For prod, use env vars
-    const testAccount = await nodemailer.createTestAccount();
+    const host = process.env.SMTP_HOST;
+    const port = Number(process.env.SMTP_PORT ?? 587);
+    const user = process.env.SMTP_USER;
+    const pass = process.env.SMTP_PASS;
+    const from =
+      process.env.SMTP_FROM ?? '"Project Up" <no-reply@projectup.com>';
+    const frontendUrl = process.env.FRONTEND_URL;
+
+    if (!host || !user || !pass || !frontendUrl) {
+      throw new Error(
+        'SMTP_HOST, SMTP_USER, SMTP_PASS and FRONTEND_URL must be configured for password recovery',
+      );
+    }
 
     const transporter = nodemailer.createTransport({
-      host: "smtp.ethereal.email",
-      port: 587,
-      secure: false, // true for 465, false for other ports
-      auth: {
-        user: testAccount.user, // generated ethereal user
-        pass: testAccount.pass, // generated ethereal password
-      },
+      host,
+      port,
+      secure: port === 465,
+      auth: { user, pass },
     });
 
-    const resetUrl = `http://localhost:4200/reset-password?token=${token}`;
+    const resetUrl = `${frontendUrl.replace(/\/$/, '')}/reset-password?token=${encodeURIComponent(token)}`;
 
-    const info = await transporter.sendMail({
-      from: '"Project Up" <no-reply@projectup.com>',
+    await transporter.sendMail({
+      from,
       to: email,
-      subject: "Password Recovery",
-      text: `You requested a password reset. Click here: ${resetUrl}`,
-      html: `<b>You requested a password reset.</b> <a href="${resetUrl}">Click here to reset</a>`
+      subject: 'Password Recovery',
+      text: `You requested a password reset. Open this link to reset your password: ${resetUrl}`,
+      html: `<p>You requested a password reset.</p><p><a href="${resetUrl}">Reset your password</a></p>`,
     });
-
-    console.log("Message sent: %s", info.messageId);
-    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   }
 }

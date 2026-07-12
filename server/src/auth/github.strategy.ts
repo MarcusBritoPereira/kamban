@@ -26,16 +26,14 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     });
   }
 
-  async validate(
-    accessToken: string,
-    refreshToken: string,
-    profile: Profile,
-  ) {
+  async validate(accessToken: string, refreshToken: string, profile: Profile) {
     const email = profile.emails?.[0]?.value;
 
-    if (!email) {
+    const emailVerified = (profile.emails?.[0] as any)?.verified !== false;
+
+    if (!email || !emailVerified) {
       throw new UnauthorizedException(
-        'A conta do GitHub não forneceu um endereço de e-mail.',
+        'A conta do GitHub não forneceu um endereço de e-mail verificado.',
       );
     }
 

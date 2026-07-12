@@ -12,9 +12,6 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { UsersModule } from './users/users.module';
 import { TagsModule } from './tags/tags.module';
 import { ActivitiesModule } from './activities/activities.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
-
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LastActivityInterceptor } from './auth/last-activity.interceptor';
 import { NotificationsModule } from './notifications/notifications.module';
@@ -33,16 +30,12 @@ import { SearchModule } from './search/search.module';
     AttachmentsModule,
     PermissionsModule,
     UsersModule,
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'uploads'),
-      serveRoot: '/uploads',
-    }),
     NotificationsModule,
     TagsModule,
     ActivitiesModule,
     CompaniesModule,
     DashboardModule,
-    SearchModule
+    SearchModule,
   ],
   controllers: [AppController],
   providers: [
@@ -53,4 +46,4 @@ import { SearchModule } from './search/search.module';
     },
   ],
 })
-export class AppModule { }
+export class AppModule {}

@@ -43,12 +43,10 @@ export class TasksController {
   }
 
   @Get('user/:userId')
-  @UseGuards(SpaceRoleGuard) // Assuming we want basic auth
-  @SpaceRole('VIEWER') // Or higher?
   findUserTasks(@Param('userId') userId: string, @Request() req: any) {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const limit = req.query.limit ? parseInt(req.query.limit) : 50; // Higher limit for profile view
-    return this.tasksService.findAssignedTo(userId, page, limit);
+    return this.tasksService.findAssignedToInAccessibleSpaces(userId, req.user.id, req.user.role, page, limit);
   }
 
   @Get(':id')

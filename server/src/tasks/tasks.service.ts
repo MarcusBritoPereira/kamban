@@ -191,6 +191,59 @@ export class TasksService {
     };
   }
 
+
+  async findAssignedToInAccessibleSpaces(userId: string, requesterId: string, requesterRole: string, page: number = 1, limit: number = 20) {
+    const safePage = Math.max(page, 1);
+    const safeLimit = Math.min(Math.max(limit, 1), 100);
+    const skip = (safePage - 1) * safeLimit;
+    const take = safeLimit;
+    const spaceAccessFilter = requesterRole === 'admin'
+      ? {}
+      : {
+          list: {
+            folder: {
+              space: {
+                OR: [
+                  { owner_id: requesterId },
+                  { members: { some: { user_id: requesterId } } },
+                ],
+              },
+            },
+          },
+        };
+
+    const where: any = {
+      assignees: { some: { user_id: userId } },
+      ...spaceAccessFilter,
+    };
+
+    const [data, total] = await Promise.all([
+      this.prisma.task.findMany({
+        where,
+        include: {
+          assignees: { include: { user: true } },
+          tags: { include: { tag: true } },
+          attachments: true,
+          list: { include: { folder: { include: { space: true } } } }
+        },
+        orderBy: { deadline: 'asc' },
+        skip,
+        take
+      }),
+      this.prisma.task.count({ where })
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page: safePage,
+        limit: safeLimit,
+        lastPage: Math.ceil(total / safeLimit)
+      }
+    };
+  }
+
   findOne(id: string) {
     return this.prisma.task.findUnique({
       where: { id },
