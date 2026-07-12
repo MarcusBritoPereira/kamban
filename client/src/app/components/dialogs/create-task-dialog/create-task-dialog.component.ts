@@ -10,18 +10,18 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, FormsModule],
     template: `
-    <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm flex items-center justify-center z-[110] p-4">
-      <div [formGroup]="taskForm" class="bg-white w-[98vw] h-[95vh] rounded-xl shadow-2xl flex flex-row overflow-hidden animate-fadeIn font-sans relative">
+    <div class="fixed inset-0 z-[110] flex items-stretch justify-center bg-gray-900/40 p-0 backdrop-blur-sm sm:items-center sm:p-4">
+      <div [formGroup]="taskForm" class="relative flex h-[100dvh] w-full flex-col overflow-hidden rounded-none bg-white font-sans shadow-2xl animate-fadeIn sm:h-[95vh] sm:w-[98vw] sm:rounded-xl lg:flex-row">
         
         <!-- CLOSE BUTTON (Top Right) -->
-        <button (click)="onClose()" class="absolute top-4 right-4 z-50 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-800 flex items-center justify-center transition-colors shadow-sm">
+        <button (click)="onClose()" class="absolute right-3 top-3 z-50 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-500 shadow-sm transition-colors hover:bg-gray-200 hover:text-gray-800 sm:right-4 sm:top-4 sm:h-8 sm:w-8">
             <i class="fas fa-times text-sm"></i>
         </button>
 
         <!-- MAIN CONTENT (Left Side) -->
-        <div class="flex-1 flex flex-col h-full min-w-0">
+        <div class="flex h-full min-w-0 flex-1 flex-col">
             <!-- App Bar / Header -->
-            <div class="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10 shrink-0">
+            <div class="sticky top-0 z-10 flex shrink-0 items-center justify-between border-b border-gray-100 bg-white px-4 py-4 pr-14 sm:px-8 sm:py-6 sm:pr-16">
               <div class="flex-1 min-w-0 mr-4">
                  <div class="flex items-center text-xs font-semibold tracking-wide text-gray-500 mb-1 uppercase truncate">
                     <span class="text-pink-600 mr-2">#</span>
@@ -38,7 +38,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                          </div>
 
                          <!-- Hierarchy Dropdown -->
-                         <div *ngIf="showHierarchyDropdown" class="absolute top-full left-0 mt-2 w-72 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-4 animate-fadeIn flex flex-col gap-3">
+                         <div *ngIf="showHierarchyDropdown" class="absolute left-0 top-full z-50 mt-2 flex w-[calc(100vw-2rem)] max-w-72 flex-col gap-3 rounded-lg border border-gray-200 bg-white p-4 shadow-xl animate-fadeIn">
                              
                              <!-- 1. Space -->
                              <div class="flex flex-col gap-1">
@@ -83,15 +83,15 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                     <span *ngIf="taskForm.get('title')?.value" class="ml-2 text-gray-400 truncate max-w-[200px]">> {{ taskForm.get('title')?.value }}</span>
                  </div>
                  <input type="text" formControlName="title" 
-                    class="bg-transparent text-2xl font-bold text-gray-900 w-full focus:outline-none placeholder-gray-300 font-display"
+                    class="w-full bg-transparent font-display text-xl font-bold text-gray-900 placeholder-gray-300 focus:outline-none sm:text-2xl"
                     [placeholder]="parentTaskId ? 'Título da Subtarefa' : 'Título da Tarefa'">
               </div>
             </div>
 
-            <div class="flex-1 overflow-y-auto custom-scrollbar bg-white p-8 space-y-10">
+            <div class="custom-scrollbar flex-1 space-y-6 overflow-y-auto bg-white p-4 pb-8 sm:space-y-10 sm:p-8">
                     
                     <!-- Meta Data Section -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-8">
                         
                         <!-- Status, Priority, Tags -->
                         <div class="space-y-6">
@@ -181,7 +181,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                                 </div>
 
                                 <!-- Tags Dropdown -->
-                                <div *ngIf="showTagDropdown" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-xl z-50 p-3 w-[260px] animate-fadeIn">
+                                <div *ngIf="showTagDropdown" class="absolute left-0 top-full z-50 mt-1 w-full max-w-[260px] rounded-lg border border-gray-200 bg-white p-3 shadow-xl animate-fadeIn">
                                     <div class="mb-3">
                                         <input type="text" placeholder="Criar nova etiqueta..." #tagInput (keyup.enter)="createTag(tagInput.value); tagInput.value=''"
                                             class="w-full bg-gray-50 border border-gray-200 rounded px-2 py-1.5 text-xs focus:outline-none focus:border-pink-500">
@@ -286,7 +286,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                             <i class="fas fa-paperclip mr-2 text-pink-600 text-sm"></i> Anexos
                          </label>
                          
-                         <div *ngIf="existingAttachments.length > 0" class="grid grid-cols-2 gap-3 mb-3">
+                         <div *ngIf="existingAttachments.length > 0" class="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                             <div *ngFor="let att of existingAttachments" class="bg-gray-50 border border-gray-200 p-3 rounded-lg flex items-center justify-between group h-fit">
                                 <a [href]="'' + att.file_url" target="_blank" class="flex items-center overflow-hidden hover:text-pink-600 transition-colors">
                                     <div class="w-8 h-8 rounded bg-gray-200 text-gray-500 flex items-center justify-center mr-3 text-xs font-bold uppercase shrink-0">
@@ -300,7 +300,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                             </div>
                          </div>
 
-                         <div *ngIf="files.length > 0" class="grid grid-cols-2 gap-3 mb-3">
+                         <div *ngIf="files.length > 0" class="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
                             <div *ngFor="let file of files" class="bg-blue-50 border border-blue-100 p-3 rounded-lg flex items-center justify-between group h-fit">
                                 <div class="flex items-center overflow-hidden">
                                     <div class="w-8 h-8 rounded bg-blue-100 text-blue-500 flex items-center justify-center mr-3 text-xs font-bold uppercase shrink-0">
@@ -314,7 +314,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                             </div>
                          </div>
 
-                         <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 flex flex-col items-center justify-center text-gray-400 hover:bg-gray-50 hover:border-pink-300 hover:text-pink-500 transition-all cursor-pointer relative">
+                         <div class="relative flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 p-5 text-center text-gray-400 transition-all hover:border-pink-300 hover:bg-gray-50 hover:text-pink-500 sm:p-8">
                             <i class="fas fa-cloud-upload-alt text-3xl mb-3"></i>
                             <span class="text-sm font-medium">Clique ou arraste arquivos aqui</span>
                             <input type="file" (change)="onFileSelected($event)" class="absolute inset-0 opacity-0 cursor-pointer" multiple>
@@ -324,14 +324,14 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
             </div>
 
             <!-- Footer / Actions -->
-            <div class="px-8 py-5 border-t border-gray-100 flex justify-end items-center bg-white gap-3 shrink-0">
-                 <div class="flex gap-3">
-                    <button (click)="onClose()" class="px-6 py-2.5 text-gray-600 text-sm font-medium hover:bg-gray-100 rounded-lg transition-colors">
+            <div class="flex shrink-0 items-center justify-end gap-3 border-t border-gray-100 bg-white px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:px-8 sm:py-5">
+                 <div class="flex w-full gap-3 sm:w-auto">
+                    <button (click)="onClose()" class="flex-1 rounded-lg px-4 py-3 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-100 sm:flex-none sm:px-6 sm:py-2.5">
                         Cancelar
                     </button>
                     <button (click)="onSubmit()" 
                         [disabled]="taskForm.invalid || isSubmitting"
-                        class="bg-pink-600 text-white px-8 py-2.5 rounded-lg text-sm font-bold shadow-md hover:bg-pink-700 hover:shadow-lg transition-all transform hover:-translate-y-0.5 disabled:opacity-50 disabled:transform-none disabled:shadow-none">
+                        class="flex-1 rounded-lg bg-pink-600 px-4 py-3 text-sm font-bold text-white shadow-md transition-all hover:bg-pink-700 hover:shadow-lg disabled:transform-none disabled:opacity-50 disabled:shadow-none sm:flex-none sm:px-8 sm:py-2.5 sm:hover:-translate-y-0.5">
                          {{ isSubmitting ? (task ? 'Salvando...' : (parentTaskId ? 'Criando Subtarefa' : 'Criando Tarefa')) : (task ? 'Salvar Alterações' : (parentTaskId ? 'Criar Subtarefa' : 'Criar Tarefa')) }}
                      </button>
                 </div>
@@ -339,7 +339,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
         </div>
 
         <!-- RIGHT SIDE: ACTIVITY -->
-        <div class="w-[30%] bg-gray-50 border-l border-gray-200 flex flex-col h-full shrink-0">
+        <div class="hidden h-full w-[30%] shrink-0 flex-col border-l border-gray-200 bg-gray-50 lg:flex">
              <!-- Activity Header: Added pr-14 to avoid close button overlap -->
              <div class="pl-4 pr-14 py-4 border-b border-gray-200 flex items-center justify-between bg-white/50 backdrop-blur-sm">
                  <h3 class="text-sm font-bold text-gray-700">Atividade</h3>
