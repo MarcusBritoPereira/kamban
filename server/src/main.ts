@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import { join } from 'path';
 import { AppModule } from './app.module';
 import { BadRequestException, ValidationPipe } from '@nestjs/common';
 
@@ -8,6 +7,7 @@ const rateLimitStore = new Map<string, { count: number; resetAt: number }>();
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.set('trust proxy', 1);
   const allowedOrigins = (process.env.CORS_ORIGINS ?? 'http://localhost:4200')
     .split(',')
     .map((origin) => origin.trim())
@@ -22,7 +22,16 @@ async function bootstrap() {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
     res.setHeader('Referrer-Policy', 'no-referrer');
-    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+    res.setHeader(
+      'Permissions-Policy',
+      'camera=(), microphone=(), geolocation=()',
+    );
+    if (process.env.NODE_ENV === 'production') {
+      res.setHeader(
+        'Strict-Transport-Security',
+        'max-age=31536000; includeSubDomains',
+      );
+    }
 
     const windowMs = 60 * 1000;
     const maxRequests = req.path?.startsWith('/v1/auth') ? 20 : 120;
@@ -44,17 +53,16 @@ async function bootstrap() {
     next();
   });
 
-  app.useStaticAssets(join(__dirname, '..', '..', 'uploads'), {
-    prefix: '/uploads/',
-  });
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    transform: true,
-    exceptionFactory: (errors) => {
-      console.error('Validation Errors:', JSON.stringify(errors, null, 2));
-      return new BadRequestException('Validation Error');
-    }
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      exceptionFactory: (errors) => {
+        console.error('Validation Errors:', JSON.stringify(errors, null, 2));
+        return new BadRequestException('Validation Error');
+      },
+    }),
+  );
   await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();

@@ -26,16 +26,14 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     });
   }
 
-  async validate(
-    accessToken: string,
-    refreshToken: string,
-    profile: Profile,
-  ) {
+  async validate(accessToken: string, refreshToken: string, profile: Profile) {
     const email = profile.emails?.[0]?.value;
 
-    if (!email) {
+    const emailVerified = (profile as any)._json?.email_verified === true;
+
+    if (!email || !emailVerified) {
       throw new UnauthorizedException(
-        'A conta do Google não forneceu um endereço de e-mail.',
+        'A conta do Google não forneceu um endereço de e-mail verificado.',
       );
     }
 
