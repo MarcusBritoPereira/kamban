@@ -45,8 +45,8 @@
             </a>
         </div>
 
-        <!-- Spaces Section (Admin Only) -->
-        <div *ngIf="isAdmin()">
+        <!-- Spaces Section -->
+        <div *ngIf="canViewSpaces()">
             <div class="mb-3 px-2 flex justify-between items-center group">
                 <h3
                     class="text-xs font-semibold text-gray-500 uppercase tracking-wider group-hover:text-brand-yellow transition-colors duration-300">
@@ -61,7 +61,11 @@
                 <div *ngFor="let space of spaces()">
                     <!-- Space Item -->
                     <div class="flex items-center justify-between px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer group transition-all duration-200"
-                        [ngClass]="{'bg-white/5': isSpaceExpanded(space.id!)}">
+                        [ngClass]="{
+                          'bg-white/5': isSpaceExpanded(space.id!),
+                          'ring-1 ring-brand-yellow/20':
+                            activeSpaceId === space.id
+                        }">
                         <div class="flex items-center overflow-hidden w-full" [routerLink]="['/spaces', space.id]">
                             <span
                                 class="mr-2 text-gray-400 text-[10px] transition-transform duration-200 p-1 hover:text-white"
@@ -95,7 +99,12 @@
                     <div *ngIf="isSpaceExpanded(space.id!)" class="ml-2 pl-2 border-l border-white/5 space-y-1 mt-1">
                         <div *ngFor="let folder of getFoldersForSpace(space.id!)">
                             <!-- Folder Item -->
-                            <div class="flex items-center justify-between px-3 py-1.5 hover:bg-white/5 rounded-md cursor-pointer group/folder transition-all duration-200"
+                            <div
+                                class="flex items-center justify-between px-3 py-1.5 hover:bg-white/5 rounded-md cursor-pointer group/folder transition-all duration-200"
+                                [ngClass]="{
+                                  'bg-white/5':
+                                    activeFolderId === folder.id
+                                }"
                                 (click)="toggleFolder(folder.id!)">
                                 <div class="flex items-center overflow-hidden">
                                     <span class="mr-2 text-gray-500 text-[8px] transition-transform duration-200"
@@ -130,8 +139,10 @@
                                     class="flex items-center justify-between px-3 py-1.5 hover:bg-white/5 rounded-md cursor-pointer group/list transition-all duration-200"
                                     [routerLink]="['/spaces', space.id!, 'folders', folder.id!, 'lists', list.id!]"
                                     routerLinkActive="bg-brand-yellow/10 text-brand-yellow">
-                                    <span class="text-sm text-gray-500 group-hover/list:text-gray-300 truncate"
-                                        [class.text-brand-yellow]="false">
+                                    <span
+                                        class="text-sm text-gray-500 group-hover/list:text-gray-300 truncate"
+                                        [class.text-brand-yellow]="activeListId === list.id"
+                                        [class.font-semibold]="activeListId === list.id">
                                         # {{ list.name }}
                                     </span>
                                     <div class="hidden group-hover/list:flex items-center space-x-1">

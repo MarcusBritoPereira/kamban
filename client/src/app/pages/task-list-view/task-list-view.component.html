@@ -108,7 +108,7 @@
 
     <app-create-task-dialog *ngIf="showTaskDialog" [listId]="listId" [listName]="currentList?.name || 'Lista'"
         [task]="selectedTask" [parentTaskId]="parentTaskForDialog?.id" [initialStatus]="initialDialogStatus" [initialDate]="initialDialogDate"
-        [spaceId]="spaceId" (close)="closeTaskDialog()" (created)="loadTasks()">
+        [spaceId]="spaceId" (close)="closeTaskDialog()" (created)="handleTaskCreated($event)">
     </app-create-task-dialog>
     <app-invite-member-dialog *ngIf="showInviteDialog" [spaceId]="spaceId"
         (close)="closeInviteDialog()"></app-invite-member-dialog>

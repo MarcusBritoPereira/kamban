@@ -1,6 +1,11 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router } from '@angular/router';
+import {
+  NavigationEnd,
+  Router,
+  RouterModule
+} from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { DataService, Space, Folder, TaskList } from '../../../services/data.service';
 import { AuthService } from '../../../services/auth.service';
 import { SimpleInputDialogComponent } from '../../dialogs/simple-input-dialog/simple-input-dialog.component';
@@ -27,6 +32,10 @@ export class SidebarComponent implements OnInit {
   expandedSpaces: ExpandedState = {};
   expandedFolders: ExpandedState = {};
 
+  activeSpaceId: string | null = null;
+  activeFolderId: string | null = null;
+  activeListId: string | null = null;
+
   showUserMenu = signal<boolean>(false);
   currentUser = this.authService.currentUser;
 
@@ -49,7 +58,79 @@ export class SidebarComponent implements OnInit {
   constructor(public dataService: DataService, public authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.dataService.getSpaces().subscribe();
+    this.dataService.getSpaces().subscribe({
+      next: () => this.syncHierarchyWithRoute(this.router.url)
+    });
+
+    this.router.events
+      .pipe(
+        filter(
+          (event): event is NavigationEnd =>
+            event instanceof NavigationEnd
+        )
+      )
+      .subscribe((event) => {
+        this.syncHierarchyWithRoute(event.urlAfterRedirects);
+      });
+  }
+
+  private syncHierarchyWithRoute(url: string) {
+    const cleanUrl = url.split('?')[0];
+
+    const match = cleanUrl.match(
+      /^\/spaces\/([^/]+)(?:\/folders\/([^/]+))?(?:\/lists\/([^/]+))?/
+    );
+
+    if (!match) {
+      this.activeSpaceId = null;
+      this.activeFolderId = null;
+      this.activeListId = null;
+      return;
+    }
+
+    const [, spaceId, folderId, listId] = match;
+
+    this.activeSpaceId = spaceId || null;
+    this.activeFolderId = folderId || null;
+    this.activeListId = listId || null;
+
+    if (!spaceId) return;
+
+    this.expandedSpaces[spaceId] = true;
+    this.dataService.currentSpaceId.set(spaceId);
+
+    const loadFolderLists = () => {
+      if (!folderId) return;
+
+      this.expandedFolders[folderId] = true;
+
+      if (!this.lists()[folderId]) {
+        this.dataService.getLists(folderId).subscribe((lists) => {
+          this.lists.update((current) => ({
+            ...current,
+            [folderId]: lists
+          }));
+        });
+      }
+    };
+
+    if (this.folders()[spaceId]) {
+      loadFolderLists();
+      return;
+    }
+
+    this.dataService.getFolders(spaceId).subscribe((folders) => {
+      this.folders.update((current) => ({
+        ...current,
+        [spaceId]: folders
+      }));
+
+      loadFolderLists();
+    });
+  }
+
+  canViewSpaces(): boolean {
+    return !!this.currentUser();
   }
 
   // Dialog Logic for Simple Inputs

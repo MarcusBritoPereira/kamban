@@ -202,6 +202,39 @@ export class TaskListViewComponent implements OnInit {
     this.loadTasks();
   }
 
+  handleTaskCreated(event: {
+    task: any;
+    listId: string;
+    spaceId?: string;
+    folderId?: string;
+  }) {
+    this.showTaskDialog = false;
+    this.selectedTask = null;
+    this.parentTaskForDialog = null;
+    this.initialDialogStatus = 'todo';
+    this.initialDialogDate = null;
+
+    this.loadTasks();
+
+    if (event?.task?.id) {
+      setTimeout(() => {
+        this.dataService.getTask(event.task.id).subscribe({
+          next: (task) => {
+            if (task) {
+              this.onTaskSelected(task);
+            }
+          },
+          error: (err) => {
+            console.error(
+              'Erro ao abrir a tarefa recém-criada:',
+              err
+            );
+          }
+        });
+      }, 300);
+    }
+  }
+
   onTaskSelected(task: any) {
     this.parentTaskForDialog = null;
     this.selectedTask = task;

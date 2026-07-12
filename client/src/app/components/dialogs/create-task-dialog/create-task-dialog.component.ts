@@ -484,7 +484,12 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
     @Input() spaceId?: string;
     @Input() listName: string = 'Lista';
     @Output() close = new EventEmitter<void>();
-    @Output() created = new EventEmitter<void>();
+    @Output() created = new EventEmitter<{
+        task: any;
+        listId: string;
+        spaceId?: string;
+        folderId?: string;
+    }>();
     @Input() task: any = null;
     @Input() parentTaskId?: string;
     @Input() initialStatus: string = 'todo';
@@ -896,14 +901,34 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
 
                     this.uploadFiles(taskId).subscribe({
                         next: () => {
-                            this.created.emit();
+                            this.created.emit({
+                                task: result,
+                                listId: targetListId as string,
+                                spaceId:
+                                    this.spaceId ||
+                                    this.selectedSpaceId ||
+                                    undefined,
+                                folderId:
+                                    this.selectedFolderId ||
+                                    undefined,
+                            });
                             this.close.emit();
                         },
                         error: (err: any) => {
                             console.error('Error uploading files:', err);
                             alert('Tarefa salva, mas erro ao enviar anexos.');
                             this.isSubmitting = false;
-                            this.created.emit();
+                            this.created.emit({
+                                task: result,
+                                listId: targetListId as string,
+                                spaceId:
+                                    this.spaceId ||
+                                    this.selectedSpaceId ||
+                                    undefined,
+                                folderId:
+                                    this.selectedFolderId ||
+                                    undefined,
+                            });
                             this.close.emit();
                         },
                         complete: () => {

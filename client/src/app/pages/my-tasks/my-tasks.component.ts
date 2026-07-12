@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DataService, Task } from '../../services/data.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TaskTableComponent } from '../../components/task-table/task-table.component';
 import { KanbanBoardComponent } from '../../components/kanban-board/kanban-board.component';
 import { TaskCalendarComponent } from '../../components/task-calendar/task-calendar.component';
@@ -139,8 +139,8 @@ type ViewMode = 'list' | 'board' | 'calendar';
       <!-- Create New Task Dialog -->
       <app-create-task-dialog *ngIf="showCreateTaskDialog"
         [initialDate]="initialDialogDate"
-        (created)="loadTasks(); showCreateTaskDialog = false; initialDialogDate = null"
-        (close)="showCreateTaskDialog = false; initialDialogDate = null">
+        (created)="handleTaskCreated($event)"
+        (close)="closeCreateTaskDialog()">
       </app-create-task-dialog>
     </div>
   `
@@ -160,7 +160,10 @@ export class MyTasksComponent implements OnInit {
   hasMore = false;
   showCreateTaskDialog = false;
 
-  constructor(private dataService: DataService) { }
+  constructor(
+    private dataService: DataService,
+    private router: Router
+  ) { }
 
   ngOnInit() {
     this.dataService.getSpaces().subscribe();
@@ -216,6 +219,84 @@ export class MyTasksComponent implements OnInit {
 
   openCreateTaskDialog() {
     this.showCreateTaskDialog = true;
+  }
+
+  closeCreateTaskDialog() {
+    this.showCreateTaskDialog = false;
+    this.initialDialogDate = null;
+  }
+
+  handleTaskCreated(event: {
+    task: any;
+    listId: string;
+    spaceId?: string;
+    folderId?: string;
+  }) {
+    this.closeCreateTaskDialog();
+
+    if (!event?.listId) {
+      this.loadTasks();
+      return;
+    }
+
+    if (event.spaceId && event.folderId) {
+      this.router.navigate(
+        [
+          '/spaces',
+          event.spaceId,
+          'folders',
+          event.folderId,
+          'lists',
+          event.listId
+        ],
+        {
+          queryParams: {
+            openTask: event.task?.id || undefined,
+            created: '1'
+          }
+        }
+      );
+      return;
+    }
+
+    this.dataService.getList(event.listId).subscribe({
+      next: (list: any) => {
+        const folderId =
+          event.folderId ||
+          list.folder_id ||
+          list.folder?.id;
+
+        const spaceId =
+          event.spaceId ||
+          list.folder?.space_id ||
+          list.space_id;
+
+        if (spaceId && folderId) {
+          this.router.navigate(
+            [
+              '/spaces',
+              spaceId,
+              'folders',
+              folderId,
+              'lists',
+              event.listId
+            ],
+            {
+              queryParams: {
+                openTask: event.task?.id || undefined,
+                created: '1'
+              }
+            }
+          );
+          return;
+        }
+
+        this.router.navigate(['/spaces']);
+      },
+      error: () => {
+        this.router.navigate(['/spaces']);
+      }
+    });
   }
 
   onCalendarDateClick(date: Date) {
