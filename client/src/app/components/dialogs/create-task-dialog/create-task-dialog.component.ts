@@ -586,7 +586,11 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
     taskPath: string = '';
 
     ngOnInit() {
-        this.fetchDirectory();
+        // Carrega somente os usuários pertencentes ao espaço atual.
+        // Evita expor usuários de outras empresas/espaços.
+        if (this.spaceId) {
+            this.fetchMembers();
+        }
 
         // If we have a spaceId (even if no listId yet, or derived), fetch tags
         if (this.spaceId) {
@@ -689,6 +693,7 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
         this.lists = [];
         this.spaceId = spaceId; // Update local spaceId context
         this.fetchTags(); // Fetch tags for this space
+        this.fetchMembers(); // Fetch only members from the selected space
 
         // Fetch folders for space
         this.dataService.getFolders(spaceId).subscribe({
@@ -734,6 +739,8 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
     }
 
     fetchDirectory() {
+        // Mantido somente para telas administrativas que precisem
+        // consultar o diretório global de usuários.
         this.dataService.getDirectory().subscribe({
             next: (users) => {
                 this.members = users;
@@ -751,7 +758,26 @@ export class CreateTaskDialogComponent implements OnInit, OnChanges {
     }
 
     fetchMembers() {
-        this.fetchDirectory();
+        const targetSpaceId = this.spaceId || this.selectedSpaceId;
+
+        if (!targetSpaceId) {
+            this.members = [];
+            return;
+        }
+
+        this.dataService.getSpaceMembers(targetSpaceId).subscribe({
+            next: (members: any[]) => {
+                // A API pode retornar diretamente usuários ou registros
+                // de associação no formato { user: {...} }.
+                this.members = (members || [])
+                    .map((member: any) => member.user ?? member)
+                    .filter((user: any) => user && user.id);
+            },
+            error: (err) => {
+                console.error('Error fetching space members:', err);
+                this.members = [];
+            }
+        });
     }
 
     toggleAssignee(userId: string) {
