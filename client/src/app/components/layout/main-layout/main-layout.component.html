@@ -1,13 +1,27 @@
-<div class="flex h-screen overflow-hidden bg-gray-50">
+<div class="flex h-dvh overflow-hidden bg-gray-50 text-gray-900">
+    <!-- Mobile sidebar backdrop -->
+    <button *ngIf="isSidebarOpen"
+        type="button"
+        class="fixed inset-0 z-40 bg-gray-950/50 backdrop-blur-sm lg:hidden"
+        aria-label="Fechar menu lateral"
+        (click)="closeSidebar()">
+    </button>
+
     <!-- Sidebar -->
-    <app-sidebar class="flex-shrink-0"></app-sidebar>
+    <app-sidebar class="fixed inset-y-0 left-0 z-50 flex-shrink-0 transform transition-transform duration-300 ease-out lg:static lg:translate-x-0"
+        [class.translate-x-0]="isSidebarOpen"
+        [class.-translate-x-full]="!isSidebarOpen"
+        [mobileOpen]="isSidebarOpen"
+        (navigateMobile)="closeSidebar()"></app-sidebar>
 
     <!-- Main Content -->
-    <div class="flex-1 flex flex-col overflow-hidden">
-        <app-header></app-header>
+    <div class="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <app-header (menuClick)="openSidebar()"></app-header>
 
-        <main class="flex-1 overflow-x-hidden overflow-y-auto p-6">
-            <router-outlet></router-outlet>
+        <main class="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6 lg:p-8 safe-area-bottom">
+            <div class="mx-auto w-full max-w-[1600px]">
+                <router-outlet></router-outlet>
+            </div>
         </main>
     </div>
 </div>

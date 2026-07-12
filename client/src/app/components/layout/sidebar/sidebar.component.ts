@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { DataService, Space, Folder, TaskList } from '../../../services/data.service';
@@ -18,6 +18,8 @@ interface ExpandedState {
   styleUrl: './sidebar.component.css'
 })
 export class SidebarComponent implements OnInit {
+  @Input() mobileOpen = false;
+  @Output() navigateMobile = new EventEmitter<void>();
   spaces = this.dataService.spaces;
 
   // Local state for hierarchy
@@ -245,6 +247,10 @@ export class SidebarComponent implements OnInit {
   isAdmin(): boolean {
     const user = this.currentUser();
     return user?.role?.toLowerCase() === 'admin';
+  }
+
+  closeOnMobile() {
+    this.navigateMobile.emit();
   }
 
   logout() {

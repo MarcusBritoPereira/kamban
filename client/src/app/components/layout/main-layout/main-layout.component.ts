@@ -11,4 +11,14 @@ import { HeaderComponent } from '../header/header.component';
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css'
 })
-export class MainLayoutComponent { }
+export class MainLayoutComponent {
+  isSidebarOpen = false;
+
+  openSidebar() {
+    this.isSidebarOpen = true;
+  }
+
+  closeSidebar() {
+    this.isSidebarOpen = false;
+  }
+}
