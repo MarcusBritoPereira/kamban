@@ -53,6 +53,7 @@ model Space {
   tags     Tag[]
   members  SpaceMember[]
   statuses CustomStatus[]
+  custom_fields CustomFieldDefinition[]
 
   @@map("spaces")
 }
@@ -106,6 +107,8 @@ model Task {
   estimated_hours Int?      @default(0)
   task_value      Decimal?  @default(0) @db.Decimal(10, 2)
   start_date      DateTime?
+  recurrence_rule String?
+  recurrence_until DateTime?
   created_at      DateTime  @default(now())
   updated_at      DateTime  @updatedAt
 
@@ -119,6 +122,7 @@ model Task {
   watchers              TaskWatcher[]
   checklists            TaskChecklist[]
   time_entries          TaskTimeEntry[]
+  custom_field_values   TaskCustomFieldValue[]
   blockingDependencies  TaskDependency[] @relation("BlockingTask")
   blockedByDependencies TaskDependency[] @relation("BlockedTask")
 
@@ -144,6 +148,41 @@ model CustomStatus {
   @@unique([space_id, name])
   @@index([space_id])
   @@map("custom_statuses")
+}
+
+model CustomFieldDefinition {
+  id          String   @id @default(uuid())
+  space_id    String
+  name        String
+  type        String
+  options     Json?
+  required    Boolean  @default(false)
+  position    Int      @default(0)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  space  Space                  @relation(fields: [space_id], references: [id], onDelete: Cascade)
+  values TaskCustomFieldValue[]
+
+  @@unique([space_id, name])
+  @@index([space_id])
+  @@map("custom_field_definitions")
+}
+
+model TaskCustomFieldValue {
+  id         String   @id @default(uuid())
+  task_id    String
+  field_id   String
+  value      Json?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  task  Task                  @relation(fields: [task_id], references: [id], onDelete: Cascade)
+  field CustomFieldDefinition @relation(fields: [field_id], references: [id], onDelete: Cascade)
+
+  @@unique([task_id, field_id])
+  @@index([field_id])
+  @@map("task_custom_field_values")
 }
 
 model TaskAssignee {
