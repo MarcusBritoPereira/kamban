@@ -41,6 +41,18 @@ export class CreateTaskDto {
   assigneeIds?: string[];
 
   @IsOptional()
+  @IsDateString()
+  start_date?: string;
+
+  @IsOptional()
+  @IsString()
+  recurrence_rule?: string;
+
+  @IsOptional()
+  @IsDateString()
+  recurrence_until?: string;
+
+  @IsOptional()
   @IsArray()
   @IsString({ each: true })
   tagIds?: string[];

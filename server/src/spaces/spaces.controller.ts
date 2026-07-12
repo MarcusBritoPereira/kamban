@@ -26,11 +26,10 @@ import {
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('v1/spaces')
 export class SpacesController {
-
   constructor(
     private readonly spacesService: SpacesService,
     private readonly permissionsService: PermissionsService,
-  ) { }
+  ) {}
 
   @Roles(Role.admin, Role.gestor)
   @Post()
@@ -62,7 +61,13 @@ export class SpacesController {
   @Post(':id/statuses')
   async createStatus(
     @Param('id') id: string,
-    @Body() data: { name: string; color?: string; position?: number; is_default?: boolean },
+    @Body()
+    data: {
+      name: string;
+      color?: string;
+      position?: number;
+      is_default?: boolean;
+    },
     @Request() req: any,
   ) {
     const user = req.user as { id: string };
@@ -81,7 +86,13 @@ export class SpacesController {
   async updateStatus(
     @Param('id') id: string,
     @Param('statusId') statusId: string,
-    @Body() data: { name?: string; color?: string; position?: number; is_default?: boolean },
+    @Body()
+    data: {
+      name?: string;
+      color?: string;
+      position?: number;
+      is_default?: boolean;
+    },
     @Request() req: any,
   ) {
     const user = req.user as { id: string };
@@ -112,6 +123,95 @@ export class SpacesController {
       throw new ForbiddenException('Only Admins or Owners can manage statuses');
 
     return this.spacesService.removeStatus(id, statusId);
+  }
+
+  @Get(':id/custom-fields')
+  async findCustomFields(@Param('id') id: string, @Request() req: any) {
+    const user = req.user as { id: string };
+    const hasAccess = await this.permissionsService.hasAccess(
+      user.id,
+      id,
+      SpaceRole.VIEWER,
+    );
+    if (!hasAccess)
+      throw new ForbiddenException('You do not have access to this space');
+
+    return this.spacesService.findCustomFields(id);
+  }
+
+  @Post(':id/custom-fields')
+  async createCustomField(
+    @Param('id') id: string,
+    @Body()
+    data: {
+      name: string;
+      type: string;
+      options?: unknown;
+      required?: boolean;
+      position?: number;
+    },
+    @Request() req: any,
+  ) {
+    const user = req.user as { id: string };
+    const hasAccess = await this.permissionsService.hasAccess(
+      user.id,
+      id,
+      SpaceRole.ADMIN,
+    );
+    if (!hasAccess)
+      throw new ForbiddenException(
+        'Only Admins or Owners can manage custom fields',
+      );
+
+    return this.spacesService.createCustomField(id, data);
+  }
+
+  @Patch(':id/custom-fields/:fieldId')
+  async updateCustomField(
+    @Param('id') id: string,
+    @Param('fieldId') fieldId: string,
+    @Body()
+    data: {
+      name?: string;
+      type?: string;
+      options?: unknown;
+      required?: boolean;
+      position?: number;
+    },
+    @Request() req: any,
+  ) {
+    const user = req.user as { id: string };
+    const hasAccess = await this.permissionsService.hasAccess(
+      user.id,
+      id,
+      SpaceRole.ADMIN,
+    );
+    if (!hasAccess)
+      throw new ForbiddenException(
+        'Only Admins or Owners can manage custom fields',
+      );
+
+    return this.spacesService.updateCustomField(id, fieldId, data);
+  }
+
+  @Delete(':id/custom-fields/:fieldId')
+  async removeCustomField(
+    @Param('id') id: string,
+    @Param('fieldId') fieldId: string,
+    @Request() req: any,
+  ) {
+    const user = req.user as { id: string };
+    const hasAccess = await this.permissionsService.hasAccess(
+      user.id,
+      id,
+      SpaceRole.ADMIN,
+    );
+    if (!hasAccess)
+      throw new ForbiddenException(
+        'Only Admins or Owners can manage custom fields',
+      );
+
+    return this.spacesService.removeCustomField(id, fieldId);
   }
 
   @Get(':id')

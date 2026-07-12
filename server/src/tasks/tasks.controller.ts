@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -17,7 +27,7 @@ import { SpaceRole } from '../auth/decorators/space-role.decorator';
 @UseGuards(JwtAuthGuard)
 @Controller('v1/tasks')
 export class TasksController {
-  constructor(private readonly tasksService: TasksService) { }
+  constructor(private readonly tasksService: TasksService) {}
 
   @Post()
   @UseGuards(SpaceRoleGuard)
@@ -46,7 +56,13 @@ export class TasksController {
   findUserTasks(@Param('userId') userId: string, @Request() req: any) {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const limit = req.query.limit ? parseInt(req.query.limit) : 50; // Higher limit for profile view
-    return this.tasksService.findAssignedToInAccessibleSpaces(userId, req.user.id, req.user.role, page, limit);
+    return this.tasksService.findAssignedToInAccessibleSpaces(
+      userId,
+      req.user.id,
+      req.user.role,
+      page,
+      limit,
+    );
   }
 
   @Get(':id')
@@ -59,7 +75,11 @@ export class TasksController {
   @Patch(':id')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  update(@Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto, @Request() req: any) {
+  update(
+    @Param('id') id: string,
+    @Body() updateTaskDto: UpdateTaskDto,
+    @Request() req: any,
+  ) {
     return this.tasksService.update(id, updateTaskDto, req.user.id);
   }
 
@@ -73,28 +93,44 @@ export class TasksController {
   @Post(':id/assignees')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  addAssignee(@Param('id') id: string, @Body() addAssigneeDto: AddAssigneeDto, @Request() req: any) {
+  addAssignee(
+    @Param('id') id: string,
+    @Body() addAssigneeDto: AddAssigneeDto,
+    @Request() req: any,
+  ) {
     return this.tasksService.addAssignee(id, addAssigneeDto, req.user.id);
   }
 
   @Delete(':id/assignees/:userId')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  removeAssignee(@Param('id') id: string, @Param('userId') userId: string, @Request() req: any) {
+  removeAssignee(
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+    @Request() req: any,
+  ) {
     return this.tasksService.removeAssignee(id, userId, req.user.id);
   }
 
   @Post(':id/tags')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  addTag(@Param('id') id: string, @Body() addTagDto: AddTagDto, @Request() req: any) {
+  addTag(
+    @Param('id') id: string,
+    @Body() addTagDto: AddTagDto,
+    @Request() req: any,
+  ) {
     return this.tasksService.addTag(id, addTagDto, req.user.id);
   }
 
   @Delete(':id/tags/:tagId')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  removeTag(@Param('id') id: string, @Param('tagId') tagId: string, @Request() req: any) {
+  removeTag(
+    @Param('id') id: string,
+    @Param('tagId') tagId: string,
+    @Request() req: any,
+  ) {
     return this.tasksService.removeTag(id, tagId, req.user.id);
   }
 
@@ -115,28 +151,48 @@ export class TasksController {
   @Post(':id/dependencies')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  addDependency(@Param('id') id: string, @Body() addDependencyDto: AddDependencyDto, @Request() req: any) {
+  addDependency(
+    @Param('id') id: string,
+    @Body() addDependencyDto: AddDependencyDto,
+    @Request() req: any,
+  ) {
     return this.tasksService.addDependency(id, addDependencyDto, req.user.id);
   }
 
   @Delete(':id/dependencies/:dependencyId')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  removeDependency(@Param('id') id: string, @Param('dependencyId') dependencyId: string, @Request() req: any) {
+  removeDependency(
+    @Param('id') id: string,
+    @Param('dependencyId') dependencyId: string,
+    @Request() req: any,
+  ) {
     return this.tasksService.removeDependency(id, dependencyId, req.user.id);
   }
 
   @Post(':id/checklists')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  createChecklist(@Param('id') id: string, @Body() createChecklistDto: CreateChecklistDto, @Request() req: any) {
-    return this.tasksService.createChecklist(id, createChecklistDto, req.user.id);
+  createChecklist(
+    @Param('id') id: string,
+    @Body() createChecklistDto: CreateChecklistDto,
+    @Request() req: any,
+  ) {
+    return this.tasksService.createChecklist(
+      id,
+      createChecklistDto,
+      req.user.id,
+    );
   }
 
   @Delete(':id/checklists/:checklistId')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  removeChecklist(@Param('id') id: string, @Param('checklistId') checklistId: string, @Request() req: any) {
+  removeChecklist(
+    @Param('id') id: string,
+    @Param('checklistId') checklistId: string,
+    @Request() req: any,
+  ) {
     return this.tasksService.removeChecklist(id, checklistId, req.user.id);
   }
 
@@ -149,7 +205,12 @@ export class TasksController {
     @Body() createChecklistItemDto: CreateChecklistItemDto,
     @Request() req: any,
   ) {
-    return this.tasksService.createChecklistItem(id, checklistId, createChecklistItemDto, req.user.id);
+    return this.tasksService.createChecklistItem(
+      id,
+      checklistId,
+      createChecklistItemDto,
+      req.user.id,
+    );
   }
 
   @Patch(':id/checklist-items/:itemId')
@@ -161,14 +222,58 @@ export class TasksController {
     @Body() updateChecklistItemDto: UpdateChecklistItemDto,
     @Request() req: any,
   ) {
-    return this.tasksService.updateChecklistItem(id, itemId, updateChecklistItemDto, req.user.id);
+    return this.tasksService.updateChecklistItem(
+      id,
+      itemId,
+      updateChecklistItemDto,
+      req.user.id,
+    );
   }
 
   @Delete(':id/checklist-items/:itemId')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  removeChecklistItem(@Param('id') id: string, @Param('itemId') itemId: string, @Request() req: any) {
+  removeChecklistItem(
+    @Param('id') id: string,
+    @Param('itemId') itemId: string,
+    @Request() req: any,
+  ) {
     return this.tasksService.removeChecklistItem(id, itemId, req.user.id);
+  }
+
+  @Get(':id/custom-fields')
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('VIEWER')
+  findCustomFieldValues(@Param('id') id: string) {
+    return this.tasksService.findCustomFieldValues(id);
+  }
+
+  @Patch(':id/custom-fields/:fieldId')
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('EDITOR')
+  setCustomFieldValue(
+    @Param('id') id: string,
+    @Param('fieldId') fieldId: string,
+    @Body('value') value: unknown,
+    @Request() req: any,
+  ) {
+    return this.tasksService.setCustomFieldValue(
+      id,
+      fieldId,
+      value,
+      req.user.id,
+    );
+  }
+
+  @Delete(':id/custom-fields/:fieldId')
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('EDITOR')
+  removeCustomFieldValue(
+    @Param('id') id: string,
+    @Param('fieldId') fieldId: string,
+    @Request() req: any,
+  ) {
+    return this.tasksService.removeCustomFieldValue(id, fieldId, req.user.id);
   }
 
   @Get(':id/time-entries')
@@ -181,8 +286,16 @@ export class TasksController {
   @Post(':id/time-entries')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  createTimeEntry(@Param('id') id: string, @Body() createTimeEntryDto: CreateTimeEntryDto, @Request() req: any) {
-    return this.tasksService.createTimeEntry(id, req.user.id, createTimeEntryDto);
+  createTimeEntry(
+    @Param('id') id: string,
+    @Body() createTimeEntryDto: CreateTimeEntryDto,
+    @Request() req: any,
+  ) {
+    return this.tasksService.createTimeEntry(
+      id,
+      req.user.id,
+      createTimeEntryDto,
+    );
   }
 
   @Patch(':id/time-entries/:timeEntryId')
@@ -194,13 +307,22 @@ export class TasksController {
     @Body() updateTimeEntryDto: UpdateTimeEntryDto,
     @Request() req: any,
   ) {
-    return this.tasksService.updateTimeEntry(id, timeEntryId, updateTimeEntryDto, req.user.id);
+    return this.tasksService.updateTimeEntry(
+      id,
+      timeEntryId,
+      updateTimeEntryDto,
+      req.user.id,
+    );
   }
 
   @Delete(':id/time-entries/:timeEntryId')
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
-  removeTimeEntry(@Param('id') id: string, @Param('timeEntryId') timeEntryId: string, @Request() req: any) {
+  removeTimeEntry(
+    @Param('id') id: string,
+    @Param('timeEntryId') timeEntryId: string,
+    @Request() req: any,
+  ) {
     return this.tasksService.removeTimeEntry(id, timeEntryId, req.user.id);
   }
 }

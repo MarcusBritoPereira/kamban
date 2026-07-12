@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { AddAssigneeDto } from './dto/add-assignee.dto';
@@ -18,11 +22,12 @@ export class TasksService {
   constructor(
     private prisma: PrismaService,
     private notificationsService: NotificationsService,
-    private activitiesService: ActivitiesService
-  ) { }
+    private activitiesService: ActivitiesService,
+  ) {}
 
   async create(createTaskDto: CreateTaskDto, actorId: string) {
-    const { list_id, assigneeIds, tagIds, parent_task_id, ...data } = createTaskDto;
+    const { list_id, assigneeIds, tagIds, parent_task_id, ...data } =
+      createTaskDto;
 
     // Validate list
     const list = await this.prisma.list.findUnique({ where: { id: list_id } });
@@ -41,16 +46,20 @@ export class TasksService {
         select: { list_id: true },
       });
       if (!parentTask) {
-        throw new NotFoundException(`Parent task with ID ${parent_task_id} not found`);
+        throw new NotFoundException(
+          `Parent task with ID ${parent_task_id} not found`,
+        );
       }
       if (parentTask.list_id !== list_id) {
-        throw new BadRequestException('Subtasks must belong to the same list as their parent task');
+        throw new BadRequestException(
+          'Subtasks must belong to the same list as their parent task',
+        );
       }
       taskData.parent = { connect: { id: parent_task_id } };
     }
 
     if (assigneeIds && Array.isArray(assigneeIds) && assigneeIds.length > 0) {
-      const validIds = assigneeIds.filter(id => id && id.length > 0);
+      const validIds = assigneeIds.filter((id) => id && id.length > 0);
       if (validIds.length > 0) {
         taskData.assignees = {
           create: validIds.map((userId) => ({
@@ -61,13 +70,19 @@ export class TasksService {
     }
 
     // Handle Tags
-    if (createTaskDto.tagIds && Array.isArray(createTaskDto.tagIds) && createTaskDto.tagIds.length > 0) {
-      const validTagIds = createTaskDto.tagIds.filter(id => id && id.length > 0);
+    if (
+      createTaskDto.tagIds &&
+      Array.isArray(createTaskDto.tagIds) &&
+      createTaskDto.tagIds.length > 0
+    ) {
+      const validTagIds = createTaskDto.tagIds.filter(
+        (id) => id && id.length > 0,
+      );
       if (validTagIds.length > 0) {
         taskData.tags = {
-          create: validTagIds.map(tagId => ({
-            tag: { connect: { id: tagId } }
-          }))
+          create: validTagIds.map((tagId) => ({
+            tag: { connect: { id: tagId } },
+          })),
         };
       }
     }
@@ -78,15 +93,20 @@ export class TasksService {
         list: {
           include: {
             folder: {
-              include: { space: true }
-            }
-          }
-        }
-      }
+              include: { space: true },
+            },
+          },
+        },
+      },
     });
 
     // Log Activity
-    await this.activitiesService.logActivity(task.id, actorId, 'system', 'criou esta tarefa');
+    await this.activitiesService.logActivity(
+      task.id,
+      actorId,
+      'system',
+      'criou esta tarefa',
+    );
 
     // Notify assignees
     if (assigneeIds && assigneeIds.length > 0) {
@@ -97,9 +117,9 @@ export class TasksService {
           title: 'Nova Tarefa Atribuída',
           message: `Você foi atribuído à tarefa "${task.title}"`,
           type: 'assignment',
-          link: `/spaces/${task.list.folder.space_id}/folders/${task.list.folder_id}/lists/${task.list_id}?openTask=${task.id}`
+          link: `/spaces/${task.list.folder.space_id}/folders/${task.list.folder_id}/lists/${task.list_id}?openTask=${task.id}`,
         });
-        // Also log assignment activity? 
+        // Also log assignment activity?
         // "Added X to task" - maybe redundant if created with them.
         // Let's stick to "created task".
       }
@@ -130,20 +150,20 @@ export class TasksService {
         },
         skip,
         take,
-        orderBy: { created_at: 'desc' } // Deterministic ordering
+        orderBy: { created_at: 'desc' }, // Deterministic ordering
       }),
-      this.prisma.task.count({ where: { list_id: listId } })
+      this.prisma.task.count({ where: { list_id: listId } }),
     ]);
 
     return {
       data,
       meta: {
-          total,
-          page: safePage,
-          limit: safeLimit,
-          lastPage: Math.ceil(total / safeLimit)
-        }
-      };
+        total,
+        page: safePage,
+        limit: safeLimit,
+        lastPage: Math.ceil(total / safeLimit),
+      },
+    };
   }
 
   async findAssignedTo(userId: string, page: number = 1, limit: number = 20) {
@@ -165,19 +185,19 @@ export class TasksService {
           assignees: { include: { user: true } },
           tags: { include: { tag: true } },
           attachments: true,
-          list: { include: { folder: { include: { space: true } } } } // Include context for "My Tasks" view
+          list: { include: { folder: { include: { space: true } } } }, // Include context for "My Tasks" view
         },
         orderBy: { deadline: 'asc' },
         skip,
-        take
+        take,
       }),
       this.prisma.task.count({
         where: {
           assignees: {
-            some: { user_id: userId }
-          }
-        }
-      })
+            some: { user_id: userId },
+          },
+        },
+      }),
     ]);
 
     return {
@@ -186,31 +206,37 @@ export class TasksService {
         total,
         page: safePage,
         limit: safeLimit,
-        lastPage: Math.ceil(total / safeLimit)
-      }
+        lastPage: Math.ceil(total / safeLimit),
+      },
     };
   }
 
-
-  async findAssignedToInAccessibleSpaces(userId: string, requesterId: string, requesterRole: string, page: number = 1, limit: number = 20) {
+  async findAssignedToInAccessibleSpaces(
+    userId: string,
+    requesterId: string,
+    requesterRole: string,
+    page: number = 1,
+    limit: number = 20,
+  ) {
     const safePage = Math.max(page, 1);
     const safeLimit = Math.min(Math.max(limit, 1), 100);
     const skip = (safePage - 1) * safeLimit;
     const take = safeLimit;
-    const spaceAccessFilter = requesterRole === 'admin'
-      ? {}
-      : {
-          list: {
-            folder: {
-              space: {
-                OR: [
-                  { owner_id: requesterId },
-                  { members: { some: { user_id: requesterId } } },
-                ],
+    const spaceAccessFilter =
+      requesterRole === 'admin'
+        ? {}
+        : {
+            list: {
+              folder: {
+                space: {
+                  OR: [
+                    { owner_id: requesterId },
+                    { members: { some: { user_id: requesterId } } },
+                  ],
+                },
               },
             },
-          },
-        };
+          };
 
     const where: any = {
       assignees: { some: { user_id: userId } },
@@ -224,13 +250,13 @@ export class TasksService {
           assignees: { include: { user: true } },
           tags: { include: { tag: true } },
           attachments: true,
-          list: { include: { folder: { include: { space: true } } } }
+          list: { include: { folder: { include: { space: true } } } },
         },
         orderBy: { deadline: 'asc' },
         skip,
-        take
+        take,
       }),
-      this.prisma.task.count({ where })
+      this.prisma.task.count({ where }),
     ]);
 
     return {
@@ -239,8 +265,8 @@ export class TasksService {
         total,
         page: safePage,
         limit: safeLimit,
-        lastPage: Math.ceil(total / safeLimit)
-      }
+        lastPage: Math.ceil(total / safeLimit),
+      },
     };
   }
 
@@ -252,18 +278,34 @@ export class TasksService {
         tags: { include: { tag: true } },
         attachments: true,
         subtasks: true,
-        watchers: { include: { user: { select: { id: true, name: true, email: true, avatar_url: true } } } },
-        checklists: { include: { items: { orderBy: { position: 'asc' } } }, orderBy: { position: 'asc' } },
-        time_entries: { include: { user: { select: { id: true, name: true, email: true, avatar_url: true } } }, orderBy: { started_at: 'desc' } },
+        watchers: {
+          include: {
+            user: {
+              select: { id: true, name: true, email: true, avatar_url: true },
+            },
+          },
+        },
+        checklists: {
+          include: { items: { orderBy: { position: 'asc' } } },
+          orderBy: { position: 'asc' },
+        },
+        time_entries: {
+          include: {
+            user: {
+              select: { id: true, name: true, email: true, avatar_url: true },
+            },
+          },
+          orderBy: { started_at: 'desc' },
+        },
         blockingDependencies: { include: { blocked_task: true } },
         blockedByDependencies: { include: { blocking_task: true } },
         list: {
           include: {
             folder: {
-              include: { space: true }
-            }
-          }
-        }
+              include: { space: true },
+            },
+          },
+        },
       },
     });
   }
@@ -274,7 +316,7 @@ export class TasksService {
     // 1. Fetch current task to compare
     const currentTask = await this.prisma.task.findUnique({
       where: { id },
-      include: { assignees: true, tags: true }
+      include: { assignees: true, tags: true },
     });
     if (!currentTask) throw new NotFoundException('Task not found');
 
@@ -283,26 +325,43 @@ export class TasksService {
 
     // Handle Assignees
     if (assigneeIds && Array.isArray(assigneeIds)) {
-      const currentAssigneeIds = currentTask.assignees.map(a => a.user_id) || [];
-      newAssignees = assigneeIds.filter(uid => !currentAssigneeIds.includes(uid));
-      const removedAssignees = currentAssigneeIds.filter(uid => !assigneeIds.includes(uid));
+      const currentAssigneeIds =
+        currentTask.assignees.map((a) => a.user_id) || [];
+      newAssignees = assigneeIds.filter(
+        (uid) => !currentAssigneeIds.includes(uid),
+      );
+      const removedAssignees = currentAssigneeIds.filter(
+        (uid) => !assigneeIds.includes(uid),
+      );
 
       updateData.assignees = {
         deleteMany: {}, // Clear existing
-        create: assigneeIds.filter(uid => uid).map((userId) => ({
-          user: { connect: { id: userId } },
-        })),
+        create: assigneeIds
+          .filter((uid) => uid)
+          .map((userId) => ({
+            user: { connect: { id: userId } },
+          })),
       };
 
       // Log removal? Difficult to get names here efficiently without extra queries.
       // We'll trust the user sees the final state or we could look up names.
       if (removedAssignees.length > 0) {
         // Simplified logging
-        await this.activitiesService.logActivity(id, actorId, 'system', `removeu responsáveis`);
+        await this.activitiesService.logActivity(
+          id,
+          actorId,
+          'system',
+          `removeu responsáveis`,
+        );
       }
       if (newAssignees.length > 0) {
         // We can improve this by resolving names if needed, or just "atribuiu novos responsáveis"
-        await this.activitiesService.logActivity(id, actorId, 'system', `atribuiu responsáveis`);
+        await this.activitiesService.logActivity(
+          id,
+          actorId,
+          'system',
+          `atribuiu responsáveis`,
+        );
       }
     }
 
@@ -310,9 +369,11 @@ export class TasksService {
     if (updateTaskDto.tagIds && Array.isArray(updateTaskDto.tagIds)) {
       updateData.tags = {
         deleteMany: {},
-        create: updateTaskDto.tagIds.filter(tid => tid).map(tagId => ({
-          tag: { connect: { id: tagId } }
-        }))
+        create: updateTaskDto.tagIds
+          .filter((tid) => tid)
+          .map((tagId) => ({
+            tag: { connect: { id: tagId } },
+          })),
       };
       // Simple log
       // await this.activitiesService.logActivity(id, actorId, 'system', 'atualizou as etiquetas');
@@ -326,28 +387,49 @@ export class TasksService {
           list: {
             include: {
               folder: {
-                include: { space: true }
-              }
-            }
-          }
-        }
+                include: { space: true },
+              },
+            },
+          },
+        },
       });
 
       // Log Field Changes
       if (data.status && data.status !== currentTask.status) {
-        await this.activitiesService.logActivity(id, actorId, 'system', `alterou o status para ${data.status}`);
+        await this.activitiesService.logActivity(
+          id,
+          actorId,
+          'system',
+          `alterou o status para ${data.status}`,
+        );
       }
       if (data.priority && data.priority !== currentTask.priority) {
-        await this.activitiesService.logActivity(id, actorId, 'system', `alterou a prioridade para ${data.priority}`);
+        await this.activitiesService.logActivity(
+          id,
+          actorId,
+          'system',
+          `alterou a prioridade para ${data.priority}`,
+        );
       }
-      if (data.deadline && new Date(data.deadline).getTime() !== new Date(currentTask.deadline || 0).getTime()) {
-        await this.activitiesService.logActivity(id, actorId, 'system', `definiu a data final como ${new Date(data.deadline).toLocaleDateString()}`);
+      if (
+        data.deadline &&
+        new Date(data.deadline).getTime() !==
+          new Date(currentTask.deadline || 0).getTime()
+      ) {
+        await this.activitiesService.logActivity(
+          id,
+          actorId,
+          'system',
+          `definiu a data final como ${new Date(data.deadline).toLocaleDateString()}`,
+        );
       }
       // Description is verbose, maybe just "updated description"
-      if (data.description !== undefined && data.description !== currentTask.description) {
+      if (
+        data.description !== undefined &&
+        data.description !== currentTask.description
+      ) {
         // await this.activitiesService.logActivity(id, actorId, 'system', `editou a descrição`);
       }
-
 
       // Notify NEW assignees
       for (const userId of newAssignees) {
@@ -357,14 +439,22 @@ export class TasksService {
           title: 'Tarefa Atribuída',
           message: `Você foi atribuído à tarefa "${updatedTask.title}"`,
           type: 'assignment',
-          link: `/spaces/${updatedTask.list.folder.space_id}/folders/${updatedTask.list.folder_id}/lists/${updatedTask.list_id}?openTask=${updatedTask.id}`
+          link: `/spaces/${updatedTask.list.folder.space_id}/folders/${updatedTask.list.folder_id}/lists/${updatedTask.list_id}?openTask=${updatedTask.id}`,
         });
       }
 
       return updatedTask;
 
       // Notify Creator of generic update
-      await this.notifyCreator(id, updatedTask.title, 'atualizou a tarefa', actorId, updatedTask.list.folder.space_id, updatedTask.list.folder_id, updatedTask.list_id);
+      await this.notifyCreator(
+        id,
+        updatedTask.title,
+        'atualizou a tarefa',
+        actorId,
+        updatedTask.list.folder.space_id,
+        updatedTask.list.folder_id,
+        updatedTask.list_id,
+      );
 
       return updatedTask;
     } catch (error) {
@@ -377,7 +467,11 @@ export class TasksService {
     return this.prisma.task.delete({ where: { id } });
   }
 
-  async addAssignee(taskId: string, addAssigneeDto: AddAssigneeDto, actorId: string) {
+  async addAssignee(
+    taskId: string,
+    addAssigneeDto: AddAssigneeDto,
+    actorId: string,
+  ) {
     const res = await this.prisma.taskAssignee.create({
       data: {
         task: { connect: { id: taskId } },
@@ -385,15 +479,28 @@ export class TasksService {
       },
     });
     // Log
-    await this.activitiesService.logActivity(taskId, actorId, 'system', 'adicionou um responsável');
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      'adicionou um responsável',
+    );
 
     // Notify Creator
     const task = await this.prisma.task.findUnique({
       where: { id: taskId },
-      include: { list: { include: { folder: true } } }
+      include: { list: { include: { folder: true } } },
     });
     if (task) {
-      await this.notifyCreator(taskId, task.title, 'adicionou um responsável', actorId, task.list.folder.space_id, task.list.folder_id, task.list_id);
+      await this.notifyCreator(
+        taskId,
+        task.title,
+        'adicionou um responsável',
+        actorId,
+        task.list.folder.space_id,
+        task.list.folder_id,
+        task.list_id,
+      );
     }
 
     return res;
@@ -408,15 +515,28 @@ export class TasksService {
         },
       },
     });
-    await this.activitiesService.logActivity(taskId, actorId, 'system', 'removeu um responsável');
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      'removeu um responsável',
+    );
 
     // Notify Creator
     const task = await this.prisma.task.findUnique({
       where: { id: taskId },
-      include: { list: { include: { folder: true } } }
+      include: { list: { include: { folder: true } } },
     });
     if (task) {
-      await this.notifyCreator(taskId, task.title, 'removeu um responsável', actorId, task.list.folder.space_id, task.list.folder_id, task.list_id);
+      await this.notifyCreator(
+        taskId,
+        task.title,
+        'removeu um responsável',
+        actorId,
+        task.list.folder.space_id,
+        task.list.folder_id,
+        task.list_id,
+      );
     }
 
     return res;
@@ -455,10 +575,23 @@ export class TasksService {
         tag: { connect: { id: tag.id } },
       },
     });
-    await this.activitiesService.logActivity(taskId, actorId, 'system', `adicionou etiqueta ${tag.name}`);
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      `adicionou etiqueta ${tag.name}`,
+    );
 
     // Notify Creator
-    await this.notifyCreator(taskId, task.title, `adicionou etiqueta ${tag.name}`, actorId, task.list.folder.space_id, task.list.folder_id, task.list_id);
+    await this.notifyCreator(
+      taskId,
+      task.title,
+      `adicionou etiqueta ${tag.name}`,
+      actorId,
+      task.list.folder.space_id,
+      task.list.folder_id,
+      task.list_id,
+    );
 
     return res;
   }
@@ -471,12 +604,25 @@ export class TasksService {
           tag_id: tagId,
         },
       },
-      include: { task: { include: { list: { include: { folder: true } } } } }
+      include: { task: { include: { list: { include: { folder: true } } } } },
     });
-    await this.activitiesService.logActivity(taskId, actorId, 'system', 'removeu etiqueta');
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      'removeu etiqueta',
+    );
 
     // Notify Creator
-    await this.notifyCreator(taskId, res.task.title, `removeu uma etiqueta da tarefa`, actorId, res.task.list.folder.space_id, res.task.list.folder_id, res.task.list_id);
+    await this.notifyCreator(
+      taskId,
+      res.task.title,
+      `removeu uma etiqueta da tarefa`,
+      actorId,
+      res.task.list.folder.space_id,
+      res.task.list.folder_id,
+      res.task.list_id,
+    );
 
     return res;
   }
@@ -495,11 +641,18 @@ export class TasksService {
         user: { connect: { id: userId } },
       },
       include: {
-        user: { select: { id: true, name: true, email: true, avatar_url: true } },
+        user: {
+          select: { id: true, name: true, email: true, avatar_url: true },
+        },
       },
     });
 
-    await this.activitiesService.logActivity(taskId, actorId, 'system', 'passou a observar esta tarefa');
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      'passou a observar esta tarefa',
+    );
     return watcher;
   }
 
@@ -513,11 +666,20 @@ export class TasksService {
       },
     });
 
-    await this.activitiesService.logActivity(taskId, actorId, 'system', 'deixou de observar esta tarefa');
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      'deixou de observar esta tarefa',
+    );
     return watcher;
   }
 
-  async addDependency(taskId: string, addDependencyDto: AddDependencyDto, actorId: string) {
+  async addDependency(
+    taskId: string,
+    addDependencyDto: AddDependencyDto,
+    actorId: string,
+  ) {
     if (taskId === addDependencyDto.blocking_task_id) {
       throw new BadRequestException('A task cannot depend on itself');
     }
@@ -535,7 +697,9 @@ export class TasksService {
 
     if (!blockedTask) throw new NotFoundException('Task not found');
     if (!blockingTask) throw new NotFoundException('Blocking task not found');
-    if (blockedTask.list.folder.space_id !== blockingTask.list.folder.space_id) {
+    if (
+      blockedTask.list.folder.space_id !== blockingTask.list.folder.space_id
+    ) {
       throw new BadRequestException('Dependencies must be in the same space');
     }
 
@@ -551,11 +715,20 @@ export class TasksService {
       },
     });
 
-    await this.activitiesService.logActivity(taskId, actorId, 'system', `adicionou dependência de ${blockingTask.title}`);
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      `adicionou dependência de ${blockingTask.title}`,
+    );
     return dependency;
   }
 
-  async removeDependency(taskId: string, dependencyId: string, actorId: string) {
+  async removeDependency(
+    taskId: string,
+    dependencyId: string,
+    actorId: string,
+  ) {
     const dependency = await this.prisma.taskDependency.findUnique({
       where: { id: dependencyId },
     });
@@ -568,11 +741,20 @@ export class TasksService {
       where: { id: dependencyId },
     });
 
-    await this.activitiesService.logActivity(taskId, actorId, 'system', 'removeu uma dependência');
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      'removeu uma dependência',
+    );
     return removed;
   }
 
-  async createChecklist(taskId: string, createChecklistDto: CreateChecklistDto, actorId: string) {
+  async createChecklist(
+    taskId: string,
+    createChecklistDto: CreateChecklistDto,
+    actorId: string,
+  ) {
     const checklist = await this.prisma.taskChecklist.create({
       data: {
         task: { connect: { id: taskId } },
@@ -582,7 +764,12 @@ export class TasksService {
       include: { items: true },
     });
 
-    await this.activitiesService.logActivity(taskId, actorId, 'system', `criou checklist ${checklist.title}`);
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      `criou checklist ${checklist.title}`,
+    );
     return checklist;
   }
 
@@ -599,11 +786,21 @@ export class TasksService {
       where: { id: checklistId },
     });
 
-    await this.activitiesService.logActivity(taskId, actorId, 'system', `removeu checklist ${checklist.title}`);
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      `removeu checklist ${checklist.title}`,
+    );
     return removed;
   }
 
-  async createChecklistItem(taskId: string, checklistId: string, createChecklistItemDto: CreateChecklistItemDto, actorId: string) {
+  async createChecklistItem(
+    taskId: string,
+    checklistId: string,
+    createChecklistItemDto: CreateChecklistItemDto,
+    actorId: string,
+  ) {
     await this.ensureChecklistBelongsToTask(taskId, checklistId);
 
     const item = await this.prisma.taskChecklistItem.create({
@@ -615,11 +812,21 @@ export class TasksService {
       },
     });
 
-    await this.activitiesService.logActivity(taskId, actorId, 'system', `adicionou item de checklist ${item.title}`);
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      `adicionou item de checklist ${item.title}`,
+    );
     return item;
   }
 
-  async updateChecklistItem(taskId: string, itemId: string, updateChecklistItemDto: UpdateChecklistItemDto, actorId: string) {
+  async updateChecklistItem(
+    taskId: string,
+    itemId: string,
+    updateChecklistItemDto: UpdateChecklistItemDto,
+    actorId: string,
+  ) {
     const item = await this.prisma.taskChecklistItem.findUnique({
       where: { id: itemId },
       include: { checklist: true },
@@ -634,12 +841,17 @@ export class TasksService {
       data: updateChecklistItemDto,
     });
 
-    if (updateChecklistItemDto.completed !== undefined && updateChecklistItemDto.completed !== item.completed) {
+    if (
+      updateChecklistItemDto.completed !== undefined &&
+      updateChecklistItemDto.completed !== item.completed
+    ) {
       await this.activitiesService.logActivity(
         taskId,
         actorId,
         'system',
-        updateChecklistItemDto.completed ? `concluiu item ${updated.title}` : `reabriu item ${updated.title}`,
+        updateChecklistItemDto.completed
+          ? `concluiu item ${updated.title}`
+          : `reabriu item ${updated.title}`,
       );
     }
 
@@ -660,11 +872,19 @@ export class TasksService {
       where: { id: itemId },
     });
 
-    await this.activitiesService.logActivity(taskId, actorId, `system`, `removeu item de checklist ${item.title}`);
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      `system`,
+      `removeu item de checklist ${item.title}`,
+    );
     return removed;
   }
 
-  private async ensureChecklistBelongsToTask(taskId: string, checklistId: string) {
+  private async ensureChecklistBelongsToTask(
+    taskId: string,
+    checklistId: string,
+  ) {
     const checklist = await this.prisma.taskChecklist.findUnique({
       where: { id: checklistId },
     });
@@ -678,16 +898,30 @@ export class TasksService {
     return this.prisma.taskTimeEntry.findMany({
       where: { task_id: taskId },
       include: {
-        user: { select: { id: true, name: true, email: true, avatar_url: true } },
+        user: {
+          select: { id: true, name: true, email: true, avatar_url: true },
+        },
       },
       orderBy: { started_at: 'desc' },
     });
   }
 
-  async createTimeEntry(taskId: string, userId: string, createTimeEntryDto: CreateTimeEntryDto) {
-    const startedAt = createTimeEntryDto.started_at ? new Date(createTimeEntryDto.started_at) : new Date();
-    const endedAt = createTimeEntryDto.ended_at ? new Date(createTimeEntryDto.ended_at) : undefined;
-    const duration = this.resolveDurationMinutes(startedAt, endedAt, createTimeEntryDto.duration_minutes);
+  async createTimeEntry(
+    taskId: string,
+    userId: string,
+    createTimeEntryDto: CreateTimeEntryDto,
+  ) {
+    const startedAt = createTimeEntryDto.started_at
+      ? new Date(createTimeEntryDto.started_at)
+      : new Date();
+    const endedAt = createTimeEntryDto.ended_at
+      ? new Date(createTimeEntryDto.ended_at)
+      : undefined;
+    const duration = this.resolveDurationMinutes(
+      startedAt,
+      endedAt,
+      createTimeEntryDto.duration_minutes,
+    );
 
     const entry = await this.prisma.taskTimeEntry.create({
       data: {
@@ -699,15 +933,27 @@ export class TasksService {
         note: createTimeEntryDto.note,
       },
       include: {
-        user: { select: { id: true, name: true, email: true, avatar_url: true } },
+        user: {
+          select: { id: true, name: true, email: true, avatar_url: true },
+        },
       },
     });
 
-    await this.activitiesService.logActivity(taskId, userId, 'system', `registrou ${duration || 0} minutos nesta tarefa`);
+    await this.activitiesService.logActivity(
+      taskId,
+      userId,
+      'system',
+      `registrou ${duration || 0} minutos nesta tarefa`,
+    );
     return entry;
   }
 
-  async updateTimeEntry(taskId: string, timeEntryId: string, updateTimeEntryDto: UpdateTimeEntryDto, actorId: string) {
+  async updateTimeEntry(
+    taskId: string,
+    timeEntryId: string,
+    updateTimeEntryDto: UpdateTimeEntryDto,
+    actorId: string,
+  ) {
     const entry = await this.prisma.taskTimeEntry.findUnique({
       where: { id: timeEntryId },
     });
@@ -716,9 +962,19 @@ export class TasksService {
       throw new NotFoundException('Time entry not found for this task');
     }
 
-    const startedAt = updateTimeEntryDto.started_at ? new Date(updateTimeEntryDto.started_at) : entry.started_at;
-    const endedAt = updateTimeEntryDto.ended_at ? new Date(updateTimeEntryDto.ended_at) : entry.ended_at || undefined;
-    const duration = this.resolveDurationMinutes(startedAt, endedAt, updateTimeEntryDto.duration_minutes ?? entry.duration_minutes ?? undefined);
+    const startedAt = updateTimeEntryDto.started_at
+      ? new Date(updateTimeEntryDto.started_at)
+      : entry.started_at;
+    const endedAt = updateTimeEntryDto.ended_at
+      ? new Date(updateTimeEntryDto.ended_at)
+      : entry.ended_at || undefined;
+    const duration = this.resolveDurationMinutes(
+      startedAt,
+      endedAt,
+      updateTimeEntryDto.duration_minutes ??
+        entry.duration_minutes ??
+        undefined,
+    );
 
     const updated = await this.prisma.taskTimeEntry.update({
       where: { id: timeEntryId },
@@ -729,11 +985,18 @@ export class TasksService {
         note: updateTimeEntryDto.note,
       },
       include: {
-        user: { select: { id: true, name: true, email: true, avatar_url: true } },
+        user: {
+          select: { id: true, name: true, email: true, avatar_url: true },
+        },
       },
     });
 
-    await this.activitiesService.logActivity(taskId, actorId, 'system', 'atualizou um registro de tempo');
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      'atualizou um registro de tempo',
+    );
     return updated;
   }
 
@@ -750,11 +1013,20 @@ export class TasksService {
       where: { id: timeEntryId },
     });
 
-    await this.activitiesService.logActivity(taskId, actorId, 'system', 'removeu um registro de tempo');
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      'removeu um registro de tempo',
+    );
     return removed;
   }
 
-  private resolveDurationMinutes(startedAt: Date, endedAt?: Date, explicitDuration?: number) {
+  private resolveDurationMinutes(
+    startedAt: Date,
+    endedAt?: Date,
+    explicitDuration?: number,
+  ) {
     if (explicitDuration) return explicitDuration;
     if (!endedAt) return undefined;
     if (endedAt <= startedAt) {
@@ -762,6 +1034,71 @@ export class TasksService {
     }
 
     return Math.ceil((endedAt.getTime() - startedAt.getTime()) / 60000);
+  }
+
+  findCustomFieldValues(taskId: string) {
+    return this.prisma.taskCustomFieldValue.findMany({
+      where: { task_id: taskId },
+      include: { field: true },
+      orderBy: { field: { position: 'asc' } },
+    });
+  }
+
+  async setCustomFieldValue(
+    taskId: string,
+    fieldId: string,
+    value: unknown,
+    actorId: string,
+  ) {
+    const [task, field] = await Promise.all([
+      this.prisma.task.findUnique({
+        where: { id: taskId },
+        include: { list: { include: { folder: true } } },
+      }),
+      this.prisma.customFieldDefinition.findUnique({ where: { id: fieldId } }),
+    ]);
+
+    if (!task) throw new NotFoundException('Task not found');
+    if (!field) throw new NotFoundException('Custom field not found');
+    if (field.space_id !== task.list.folder.space_id) {
+      throw new BadRequestException(
+        'Custom field must belong to the same space as the task',
+      );
+    }
+
+    const customValue = await this.prisma.taskCustomFieldValue.upsert({
+      where: { task_id_field_id: { task_id: taskId, field_id: fieldId } },
+      update: { value: value as any },
+      create: { task_id: taskId, field_id: fieldId, value: value as any },
+      include: { field: true },
+    });
+
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      `atualizou o campo personalizado ${field.name}`,
+    );
+    return customValue;
+  }
+
+  async removeCustomFieldValue(
+    taskId: string,
+    fieldId: string,
+    actorId: string,
+  ) {
+    const removed = await this.prisma.taskCustomFieldValue.delete({
+      where: { task_id_field_id: { task_id: taskId, field_id: fieldId } },
+      include: { field: true },
+    });
+
+    await this.activitiesService.logActivity(
+      taskId,
+      actorId,
+      'system',
+      `removeu o campo personalizado ${removed.field.name}`,
+    );
+    return removed;
   }
 
   // --- Helpers for Creator Notification ---
@@ -776,7 +1113,15 @@ export class TasksService {
     return firstActivity ? firstActivity.user_id : null;
   }
 
-  private async notifyCreator(taskId: string, taskTitle: string, actionDescription: string, actorId: string, spaceId: string, folderId: string, listId: string) {
+  private async notifyCreator(
+    taskId: string,
+    taskTitle: string,
+    actionDescription: string,
+    actorId: string,
+    spaceId: string,
+    folderId: string,
+    listId: string,
+  ) {
     try {
       const creatorId = await this.getTaskCreatorId(taskId);
       if (!creatorId || creatorId === actorId) return; // Don't notify if creator is the actor or unknown
@@ -784,7 +1129,7 @@ export class TasksService {
       // Verify if actor is "system" or actual user? usually actorId is user.
       // Fetch actor name for better message? For now generic: "Alguém..."
       // Or we can assume the UI/Notification service handles "Who did it" if we just send the message.
-      // Let's explicitly say "Um usuário..." or fetch the actor name if cheap. 
+      // Let's explicitly say "Um usuário..." or fetch the actor name if cheap.
       // For performance, we'll keep it simple: "Houve uma atualização na tarefa..."
 
       await this.notificationsService.create({
@@ -792,7 +1137,7 @@ export class TasksService {
         title: 'Atualização em Tarefa',
         message: `Membro atualizou a tarefa "${taskTitle}": ${actionDescription}`, // "Membro removeu uma etiqueta..."
         type: 'info', // or 'update'
-        link: `/spaces/${spaceId}/folders/${folderId}/lists/${listId}?openTask=${taskId}`
+        link: `/spaces/${spaceId}/folders/${folderId}/lists/${listId}?openTask=${taskId}`,
       });
     } catch (e) {
       console.error('Error notifying creator:', e);
