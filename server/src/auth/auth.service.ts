@@ -32,7 +32,7 @@ export class AuthService {
     const user = await this.prisma.user.create({
       data: {
         ...userData,
-        role: 'leitor', // Default least-privileged role for self-service signups
+        role: 'gestor', // New self-service accounts can create and manage spaces
         password_hash: hashedPassword,
       },
     });
@@ -116,7 +116,7 @@ export class AuthService {
         auth_provider: profile.provider,
         provider_id: profile.providerId,
         avatar_url: profile.avatarUrl || null,
-        role: 'leitor',
+        role: 'gestor',
       },
     });
   }
