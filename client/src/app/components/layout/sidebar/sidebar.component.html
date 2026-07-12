@@ -1,11 +1,15 @@
-<div class="h-screen w-64 bg-brand-dark text-brand-white flex flex-col overflow-hidden border-r border-white/5">
+<div class="h-dvh w-[min(18rem,86vw)] bg-brand-dark text-brand-white flex flex-col overflow-hidden border-r border-white/5 shadow-2xl lg:w-64 lg:shadow-none">
     <!-- Header -->
-    <div class="p-6 border-b border-white/5 flex items-center">
-        <div
-            class="w-8 h-8 rounded bg-brand-yellow flex items-center justify-center mr-3 shadow-[0_0_15px_rgba(248,197,53,0.3)]">
-            <span class="text-brand-black font-bold text-lg">K</span>
+    <div class="p-5 sm:p-6 border-b border-white/5 flex items-center justify-between">
+        <div class="flex items-center min-w-0">
+            <div class="w-8 h-8 rounded bg-brand-yellow flex items-center justify-center mr-3 shadow-[0_0_15px_rgba(248,197,53,0.3)]">
+                <span class="text-brand-black font-bold text-lg">K</span>
+            </div>
+            <h1 class="text-xl font-bold tracking-tight text-white truncate">Kamban</h1>
         </div>
-        <h1 class="text-xl font-bold tracking-tight text-white">Kamban</h1>
+        <button type="button" class="flex h-10 w-10 items-center justify-center rounded-xl text-gray-400 hover:bg-white/10 hover:text-white lg:hidden" aria-label="Fechar menu" (click)="closeOnMobile()">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
 
     <!-- Navigation -->
@@ -13,33 +17,33 @@
         <!-- My Tasks Link -->
         <div class="mb-6 space-y-1">
             <!-- Dashboard Link (Admin Only) -->
-            <a *ngIf="isAdmin()" routerLink="/dashboard" routerLinkActive="text-brand-yellow bg-white/5"
+            <a *ngIf="isAdmin()" routerLink="/dashboard" (click)="closeOnMobile()" routerLinkActive="text-brand-yellow bg-white/5"
                 class="flex items-center px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
                 <span class="mr-3 text-lg group-hover:scale-110 transition-transform">📊</span>
                 Dashboard
             </a>
-            <a *ngIf="isAdmin()" routerLink="/dashboard" [queryParams]="{tab: 'production'}"
+            <a *ngIf="isAdmin()" routerLink="/dashboard" (click)="closeOnMobile()" [queryParams]="{tab: 'production'}"
                 routerLinkActive="text-brand-yellow bg-white/5"
                 class="flex items-center px-4 py-2 text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors group ml-4 border-l border-white/10">
                 <span class="mr-3 text-lg group-hover:scale-110 transition-transform">📈</span>
                 Produção
             </a>
-            <a routerLink="/my-tasks" routerLinkActive="text-brand-yellow bg-white/5"
+            <a routerLink="/my-tasks" (click)="closeOnMobile()" routerLinkActive="text-brand-yellow bg-white/5"
                 class="flex items-center px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
                 <span class="mr-3 text-lg group-hover:scale-110 transition-transform">📋</span>
                 {{ isAdmin() ? 'Minhas Tarefas' : 'Atribuídas a mim' }}
             </a>
             <!-- Equipes Link (Admin Only) -->
-            <a *ngIf="isAdmin()" routerLink="/team" routerLinkActive="bg-pink-50 text-pink-600 font-semibold"
-                class="group flex items-center px-2 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-50 hover:text-gray-900 transition-colors">
-                <i class="fas fa-users mr-3 text-gray-400 group-hover:text-gray-500 transition-colors"
+            <a *ngIf="isAdmin()" routerLink="/team" (click)="closeOnMobile()" routerLinkActive="bg-pink-50 text-pink-600 font-semibold"
+                class="flex items-center px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
+                <i class="fas fa-users mr-3 text-gray-400 group-hover:text-brand-yellow transition-colors"
                     routerLinkActive="text-pink-500"></i>
                 Equipes
             </a>
             <!-- Empresas Link (Admin Only) -->
-            <a *ngIf="isAdmin()" routerLink="/companies" routerLinkActive="bg-pink-50 text-pink-600 font-semibold"
-                class="group flex items-center px-2 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-50 hover:text-gray-900 transition-colors">
-                <i class="fas fa-building mr-3 text-gray-400 group-hover:text-gray-500 transition-colors"
+            <a *ngIf="isAdmin()" routerLink="/companies" (click)="closeOnMobile()" routerLinkActive="bg-pink-50 text-pink-600 font-semibold"
+                class="flex items-center px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors group">
+                <i class="fas fa-building mr-3 text-gray-400 group-hover:text-brand-yellow transition-colors"
                     routerLinkActive="text-pink-500"></i>
                 Empresas
             </a>
@@ -62,7 +66,7 @@
                     <!-- Space Item -->
                     <div class="flex items-center justify-between px-3 py-2 hover:bg-white/5 rounded-lg cursor-pointer group transition-all duration-200"
                         [ngClass]="{'bg-white/5': isSpaceExpanded(space.id!)}">
-                        <div class="flex items-center overflow-hidden w-full" [routerLink]="['/spaces', space.id]">
+                        <div class="flex items-center overflow-hidden w-full" [routerLink]="['/spaces', space.id]" (click)="closeOnMobile()">
                             <span
                                 class="mr-2 text-gray-400 text-[10px] transition-transform duration-200 p-1 hover:text-white"
                                 [class.rotate-90]="isSpaceExpanded(space.id!)"
@@ -72,7 +76,7 @@
                                 {{ space.name }}
                             </span>
                         </div>
-                        <div class="hidden group-hover:flex items-center space-x-1">
+                        <div class="flex items-center space-x-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                             <button (click)="initiateCreateFolder(space.id!, $event)"
                                 class="p-1 hover:bg-white/10 rounded text-gray-400 hover:text-brand-yellow"
                                 title="Nova Pasta">
@@ -104,7 +108,7 @@
                                         {{ folder.name }}
                                     </span>
                                 </div>
-                                <div class="hidden group-hover/folder:flex items-center space-x-1">
+                                <div class="flex items-center space-x-1 opacity-100 sm:opacity-0 sm:group-hover/folder:opacity-100 transition-opacity">
                                     <button (click)="initiateCreateList(folder, $event)"
                                         class="p-0.5 hover:bg-white/10 rounded text-gray-500 hover:text-brand-yellow"
                                         title="Nova Lista">
@@ -129,12 +133,12 @@
                                 <div *ngFor="let list of getListsForFolder(folder.id!)"
                                     class="flex items-center justify-between px-3 py-1.5 hover:bg-white/5 rounded-md cursor-pointer group/list transition-all duration-200"
                                     [routerLink]="['/spaces', space.id!, 'folders', folder.id!, 'lists', list.id!]"
-                                    routerLinkActive="bg-brand-yellow/10 text-brand-yellow">
+                                    routerLinkActive="bg-brand-yellow/10 text-brand-yellow" (click)="closeOnMobile()">
                                     <span class="text-sm text-gray-500 group-hover/list:text-gray-300 truncate"
                                         [class.text-brand-yellow]="false">
                                         # {{ list.name }}
                                     </span>
-                                    <div class="hidden group-hover/list:flex items-center space-x-1">
+                                    <div class="flex items-center space-x-1 opacity-100 sm:opacity-0 sm:group-hover/list:opacity-100 transition-opacity">
                                         <button (click)="initiateRenameList(list, space.id!, $event)"
                                             class="p-0.5 hover:bg-white/10 rounded text-gray-600 hover:text-brand-yellow"
                                             title="Renomear">
@@ -198,11 +202,11 @@
                 <p class="text-xs text-gray-500 uppercase tracking-wider mt-0.5">{{ currentUser()?.role }}</p>
             </div>
 
-            <a *ngIf="isAdmin()" routerLink="/users"
+            <a *ngIf="isAdmin()" routerLink="/users" (click)="closeOnMobile()"
                 class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-brand-yellow transition-colors">
                 Gerenciar Usuários
             </a>
-            <a routerLink="/settings"
+            <a routerLink="/settings" (click)="closeOnMobile()"
                 class="block px-4 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white transition-colors">
                 Configurações
             </a>

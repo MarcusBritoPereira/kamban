@@ -1,76 +1,83 @@
-<header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 shadow-sm">
-    <h2 class="text-xl font-semibold text-gray-800">
-        {{ pageTitle() }}
-    </h2>
-    <div class="flex items-center">
+<header class="sticky top-0 z-30 flex min-h-16 items-center justify-between gap-3 border-b border-gray-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur sm:px-6 lg:px-8">
+    <div class="flex min-w-0 items-center gap-3">
+        <button type="button" (click)="menuClick.emit()"
+            class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 shadow-sm transition-colors hover:bg-gray-50 hover:text-gray-900 lg:hidden"
+            aria-label="Abrir menu lateral">
+            <i class="fas fa-bars text-lg"></i>
+        </button>
+        <div class="min-w-0">
+            <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-gray-400 sm:hidden">Kamban</p>
+            <h2 class="truncate text-lg font-bold text-gray-900 sm:text-xl">
+                {{ pageTitle() }}
+            </h2>
+        </div>
+    </div>
+
+    <div class="flex min-w-0 items-center gap-2 sm:gap-4">
         <!-- Notifications Bell -->
-        <div class="relative mr-6">
+        <div class="relative">
             <button (click)="toggleNotifications()"
-                class="relative p-2 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-100 focus:outline-none">
-                <i class="fas fa-bell text-xl"></i>
+                class="relative flex h-11 w-11 items-center justify-center rounded-xl text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-yellow/60"
+                aria-label="Abrir notificações">
+                <i class="fas fa-bell text-lg"></i>
                 <span *ngIf="unreadCount() > 0"
-                    class="absolute top-1 right-1 inline-flex items-center justify-center w-4 h-4 text-[10px] font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-red-500 rounded-full border-2 border-white">
+                    class="absolute right-2 top-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full border-2 border-white bg-red-500 px-1 text-[10px] font-bold leading-none text-white">
                     {{ unreadCount() }}
                 </span>
             </button>
 
             <!-- Dropdown -->
             <div *ngIf="showNotifications"
-                class="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl overflow-hidden z-50 border border-gray-100 animate-fadeIn origin-top-right">
-                <div class="p-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                    <h3 class="font-bold text-gray-700 text-sm">Notificações</h3>
+                class="fixed inset-x-3 top-16 z-50 max-h-[calc(100dvh-5rem)] overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl sm:absolute sm:inset-auto sm:right-0 sm:mt-2 sm:w-96 sm:origin-top-right">
+                <div class="flex items-center justify-between border-b border-gray-100 bg-gray-50/80 p-4">
+                    <h3 class="text-sm font-bold text-gray-800">Notificações</h3>
                     <button *ngIf="unreadCount() > 0" (click)="markAllRead()"
-                        class="text-[10px] text-pink-600 hover:text-pink-800 font-bold uppercase tracking-wider">
+                        class="rounded-full bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-pink-600 shadow-sm hover:text-pink-800">
                         Ler todas
                     </button>
                 </div>
-                <div class="max-h-80 overflow-y-auto custom-scrollbar">
+                <div class="max-h-[60dvh] overflow-y-auto custom-scrollbar">
                     <div *ngIf="notifications().length === 0" class="p-8 text-center text-gray-400">
-                        <i class="far fa-bell-slash text-2xl mb-2 opacity-50"></i>
+                        <i class="far fa-bell-slash mb-2 text-2xl opacity-50"></i>
                         <p class="text-xs">Nenhuma notificação</p>
                     </div>
 
                     <div *ngFor="let note of notifications()" (click)="markAsRead(note)"
-                        class="p-3 border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors flex items-start gap-3 relative"
+                        class="relative flex cursor-pointer items-start gap-3 border-b border-gray-50 p-4 transition-colors hover:bg-gray-50"
                         [class.bg-white]="note.read" [class.bg-blue-50]="!note.read">
-
                         <div class="mt-0.5" [ngClass]="{'text-pink-500': !note.read, 'text-gray-400': note.read}">
-                            <i class="fas"
-                                [ngClass]="note.type === 'assignment' ? 'fa-user-plus' : 'fa-info-circle'"></i>
+                            <i class="fas" [ngClass]="note.type === 'assignment' ? 'fa-user-plus' : 'fa-info-circle'"></i>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-gray-800 truncate">{{ note.title }}</p>
-                            <p class="text-xs text-gray-600 mt-0.5 line-clamp-2 leading-relaxed">{{ note.message }}</p>
-                            <p class="text-[10px] text-gray-400 mt-1.5 font-medium">{{ note.created_at | date:'dd/MM
-                                HH:mm' }}</p>
+                        <div class="min-w-0 flex-1">
+                            <p class="truncate text-sm font-semibold text-gray-800">{{ note.title }}</p>
+                            <p class="mt-0.5 line-clamp-2 text-xs leading-relaxed text-gray-600">{{ note.message }}</p>
+                            <p class="mt-1.5 text-[10px] font-medium text-gray-400">{{ note.created_at | date:'dd/MM HH:mm' }}</p>
                         </div>
-                        <div *ngIf="!note.read" class="w-1.5 h-1.5 rounded-full bg-pink-500 mt-2 shrink-0"></div>
+                        <div *ngIf="!note.read" class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-pink-500"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Backdrop for closing -->
-            <div *ngIf="showNotifications" (click)="showNotifications = false"
-                class="fixed inset-0 z-40 cursor-default"></div>
+            <div *ngIf="showNotifications" (click)="showNotifications = false" class="fixed inset-0 z-40 cursor-default"></div>
         </div>
 
         <!-- User Profile -->
-        <div class="flex items-center space-x-4" *ngIf="userParams() as u">
-            <div class="text-right mr-2">
-                <p class="text-sm font-medium text-gray-900">{{ u.name }}</p>
-                <p class="text-xs text-gray-500">{{ u.email }}</p>
+        <div class="flex min-w-0 items-center gap-3" *ngIf="userParams() as u">
+            <div class="hidden min-w-0 text-right md:block">
+                <p class="truncate text-sm font-semibold text-gray-900">{{ u.name }}</p>
+                <p class="truncate text-xs text-gray-500">{{ u.email }}</p>
             </div>
 
-            <div
-                class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-yellow to-brand-orange flex items-center justify-center text-brand-black font-bold overflow-hidden shadow-md">
-                <img *ngIf="u.avatar_url" [src]="'' + u.avatar_url"
-                    class="w-full h-full object-cover">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-brand-yellow to-orange-500 font-bold text-brand-black shadow-md">
+                <img *ngIf="u.avatar_url" [src]="'' + u.avatar_url" class="h-full w-full object-cover">
                 <span *ngIf="!u.avatar_url">{{ (u.name?.charAt(0) || 'U') | uppercase }}</span>
             </div>
 
-            <button (click)="authService.logout()" class="text-gray-500 hover:text-red-600 transition-colors"
+            <button (click)="authService.logout()"
+                class="hidden rounded-xl px-3 py-2 text-sm font-semibold text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600 sm:inline-flex"
                 title="Sair">
-                <i class="fas fa-sign-out-alt"></i> Sair
+                <i class="fas fa-sign-out-alt sm:mr-2"></i><span>Sair</span>
             </button>
         </div>
     </div>
