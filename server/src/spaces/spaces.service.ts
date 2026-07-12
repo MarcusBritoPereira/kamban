@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class SpacesService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
 
   create(createSpaceDto: CreateSpaceDto, ownerId: string) {
     return this.prisma.space.create({
@@ -89,15 +89,15 @@ export class SpacesService {
             id: true,
             name: true,
             email: true,
-            avatar_url: true
-          }
-        }
-      }
+            avatar_url: true,
+          },
+        },
+      },
     });
 
     if (space && space.owner) {
       // Check if owner is already in members (unlikely but safe to check)
-      const ownerInMembers = members.find(m => m.user.id === space.owner.id);
+      const ownerInMembers = members.find((m) => m.user.id === space.owner.id);
       if (!ownerInMembers) {
         // Mock a member object for the owner
         const ownerAsMember = {
@@ -106,7 +106,7 @@ export class SpacesService {
           user_id: space.owner.id,
           role: 'owner',
           joined_at: new Date(),
-          user: space.owner
+          user: space.owner,
         };
         return [ownerAsMember, ...members];
       }
@@ -141,7 +141,15 @@ export class SpacesService {
     });
   }
 
-  createStatus(spaceId: string, data: { name: string; color?: string; position?: number; is_default?: boolean }) {
+  createStatus(
+    spaceId: string,
+    data: {
+      name: string;
+      color?: string;
+      position?: number;
+      is_default?: boolean;
+    },
+  ) {
     return this.prisma.customStatus.create({
       data: {
         space_id: spaceId,
@@ -153,7 +161,16 @@ export class SpacesService {
     });
   }
 
-  updateStatus(spaceId: string, statusId: string, data: { name?: string; color?: string; position?: number; is_default?: boolean }) {
+  updateStatus(
+    spaceId: string,
+    statusId: string,
+    data: {
+      name?: string;
+      color?: string;
+      position?: number;
+      is_default?: boolean;
+    },
+  ) {
     return this.prisma.customStatus.updateMany({
       where: { id: statusId, space_id: spaceId },
       data,
@@ -163,6 +180,58 @@ export class SpacesService {
   removeStatus(spaceId: string, statusId: string) {
     return this.prisma.customStatus.deleteMany({
       where: { id: statusId, space_id: spaceId },
+    });
+  }
+
+  findCustomFields(spaceId: string) {
+    return this.prisma.customFieldDefinition.findMany({
+      where: { space_id: spaceId },
+      orderBy: [{ position: 'asc' }, { created_at: 'asc' }],
+    });
+  }
+
+  createCustomField(
+    spaceId: string,
+    data: {
+      name: string;
+      type: string;
+      options?: unknown;
+      required?: boolean;
+      position?: number;
+    },
+  ) {
+    return this.prisma.customFieldDefinition.create({
+      data: {
+        space_id: spaceId,
+        name: data.name,
+        type: data.type,
+        options: data.options as any,
+        required: data.required ?? false,
+        position: data.position ?? 0,
+      },
+    });
+  }
+
+  updateCustomField(
+    spaceId: string,
+    fieldId: string,
+    data: {
+      name?: string;
+      type?: string;
+      options?: unknown;
+      required?: boolean;
+      position?: number;
+    },
+  ) {
+    return this.prisma.customFieldDefinition.updateMany({
+      where: { id: fieldId, space_id: spaceId },
+      data: { ...data, options: data.options as any },
+    });
+  }
+
+  removeCustomField(spaceId: string, fieldId: string) {
+    return this.prisma.customFieldDefinition.deleteMany({
+      where: { id: fieldId, space_id: spaceId },
     });
   }
 
