@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, signal } from '@angular/core';
+import { Component, computed, EventEmitter, OnInit, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
 import { DataService } from '../../../services/data.service';
@@ -13,6 +13,7 @@ import { filter } from 'rxjs';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit {
+  @Output() menuClick = new EventEmitter<void>();
   user = this.authService.currentUser;
   userParams = computed(() => {
     const u = this.user();
