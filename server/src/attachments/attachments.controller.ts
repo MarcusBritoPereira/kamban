@@ -10,19 +10,23 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
+  Get,
+  Res,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { AttachmentsService } from './attachments.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { SpaceRoleGuard } from '../auth/guards/space-role.guard';
 import { SpaceRole } from '../auth/decorators/space-role.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { extname } from 'path';
+import { extname, join } from 'path';
+import { randomBytes } from 'crypto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('v1')
 export class AttachmentsController {
-  constructor(private readonly attachmentsService: AttachmentsService) { }
+  constructor(private readonly attachmentsService: AttachmentsService) {}
 
   @UseGuards(SpaceRoleGuard)
   @SpaceRole('EDITOR')
@@ -35,11 +39,10 @@ export class AttachmentsController {
       storage: diskStorage({
         destination: './uploads/tasks',
         filename: (req: any, file: any, cb: any) => {
-          const randomName = Array(32)
-            .fill(null)
-            .map(() => Math.round(Math.random() * 16).toString(16))
-            .join('');
-          return cb(null, `${randomName}${extname(file.originalname)}`);
+          return cb(
+            null,
+            `${randomBytes(16).toString('hex')}${extname(file.originalname).toLowerCase()}`,
+          );
         },
       }),
     }),
@@ -64,8 +67,20 @@ export class AttachmentsController {
       file_url: fileUrl,
       file_name: file.originalname,
       file_type: file.mimetype,
-      uploaded_by: req.user.name
+      uploaded_by: req.user.name,
     });
+  }
+
+  @UseGuards(SpaceRoleGuard)
+  @SpaceRole('VIEWER')
+  @Get('attachments/:id/download')
+  async download(@Param('id') id: string, @Res() res: Response) {
+    const attachment = await this.attachmentsService.findOne(id);
+    const fileName = attachment.file_url.split('/').pop();
+    return res.download(
+      join(process.cwd(), 'uploads', 'tasks', fileName ?? ''),
+      attachment.file_name,
+    );
   }
 
   @UseGuards(SpaceRoleGuard)

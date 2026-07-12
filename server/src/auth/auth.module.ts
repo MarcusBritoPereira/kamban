@@ -16,12 +16,12 @@ import { GoogleStrategy } from './google.strategy';
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => {
         const secret = configService.get<string>('JWT_SECRET');
-        if (!secret && process.env.NODE_ENV === 'production') {
-          throw new Error('JWT_SECRET must be configured in production');
+        if (!secret && process.env.NODE_ENV !== 'test') {
+          throw new Error('JWT_SECRET must be configured');
         }
 
         return {
-          secret: secret || 'development-only-secret',
+          secret: secret || 'test-only-secret',
           signOptions: { expiresIn: '1d' },
         };
       },

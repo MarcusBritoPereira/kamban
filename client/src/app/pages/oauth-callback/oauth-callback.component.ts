@@ -43,11 +43,11 @@ export class OauthCallbackComponent implements OnInit {
 
       const data = JSON.parse(atob(padded));
 
-      if (!data.access_token || !data.user) {
+      if (!data.user) {
         throw new Error('Payload inválido');
       }
 
-      this.authService.setSession(data.access_token, data.user);
+      this.authService.setSession(data.user);
 
       if (data.user.role?.toLowerCase() === 'admin') {
         this.router.navigate(['/spaces']);

@@ -11,10 +11,9 @@ const authGuard = () => {
     const auth = inject(AuthService);
     const router = inject(Router);
 
-    const token = localStorage.getItem('token');
     const user = auth.currentUser();
 
-    if (!token || !user) {
+    if (!user) {
         auth.logout();
         return router.createUrlTree(['/login']);
     }

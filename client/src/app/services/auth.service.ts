@@ -23,10 +23,9 @@ export class AuthService {
   }
 
   login(credentials: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
+    return this.http.post(`${this.apiUrl}/login`, credentials, { withCredentials: true }).pipe(
       tap((response: any) => {
-        if (response.access_token) {
-          localStorage.setItem('token', response.access_token);
+        if (response.user) {
           localStorage.setItem('user', JSON.stringify(response.user));
           this.currentUser.set(response.user);
         }
@@ -38,15 +37,14 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/register`, data);
   }
 
-  setSession(accessToken: string, user: any) {
-    localStorage.setItem('token', accessToken);
+  setSession(user: any) {
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUser.set(user);
   }
 
 
   logout() {
-    localStorage.removeItem('token');
+    this.http.post(`${this.apiUrl}/logout`, {}, { withCredentials: true }).subscribe({ error: () => undefined });
     localStorage.removeItem('user');
     this.currentUser.set(null);
     this.router.navigate(['/login']);

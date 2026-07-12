@@ -9,10 +9,16 @@ import {
   Post,
   UseInterceptors,
   UploadedFile,
+  Request,
+  ForbiddenException,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import { randomBytes } from 'crypto';
 import { UsersService } from './users.service';
 import { Role } from '@prisma/client';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -23,7 +29,7 @@ import { Roles } from '../auth/roles.decorator';
 @Roles(Role.admin) // All endpoints here are Admin only
 @Controller('v1/users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   findAll() {
@@ -56,16 +62,30 @@ export class UsersController {
       storage: diskStorage({
         destination: './uploads/avatars',
         filename: (req: any, file: any, cb: any) => {
-          const randomName = Array(32)
-            .fill(null)
-            .map(() => Math.round(Math.random() * 16).toString(16))
-            .join('');
-          return cb(null, `${randomName}${extname(file.originalname)}`);
+          return cb(
+            null,
+            `${randomBytes(16).toString('hex')}${extname(file.originalname).toLowerCase()}`,
+          );
         },
       }),
     }),
   )
-  uploadAvatar(@Param('id') id: string, @UploadedFile() file: any) {
+  uploadAvatar(
+    @Param('id') id: string,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 2 * 1024 * 1024 }),
+          new FileTypeValidator({ fileType: /(png|jpe?g|gif|webp)$/i }),
+        ],
+      }),
+    )
+    file: any,
+    @Request() req: any,
+  ) {
+    if (req.user.role !== Role.admin && req.user.id !== id) {
+      throw new ForbiddenException('You can only update your own avatar');
+    }
     const avatarUrl = `/uploads/avatars/${file.filename}`;
     return this.usersService.updateAvatar(id, avatarUrl);
   }

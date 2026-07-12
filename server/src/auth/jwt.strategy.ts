@@ -7,14 +7,27 @@ import { ConfigService } from '@nestjs/config';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(configService: ConfigService) {
     const secret = configService.get<string>('JWT_SECRET');
-    if (!secret && process.env.NODE_ENV === 'production') {
-      throw new Error('JWT_SECRET must be configured in production');
+    if (!secret && process.env.NODE_ENV !== 'test') {
+      throw new Error('JWT_SECRET must be configured');
     }
 
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+        (request: { headers?: { cookie?: string } } | undefined) => {
+          const cookieHeader = request?.headers?.cookie;
+          if (!cookieHeader) return null;
+          const tokenCookie = cookieHeader
+            .split(';')
+            .map((part) => part.trim())
+            .find((part) => part.startsWith('access_token='));
+          return tokenCookie
+            ? decodeURIComponent(tokenCookie.split('=').slice(1).join('='))
+            : null;
+        },
+      ]),
       ignoreExpiration: false,
-      secretOrKey: secret || 'development-only-secret',
+      secretOrKey: secret || 'test-only-secret',
     });
   }
 
