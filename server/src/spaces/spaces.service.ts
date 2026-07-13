@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { randomBytes } from 'crypto';
 import { CreateSpaceDto } from './dto/create-space.dto';
 import { UpdateSpaceDto } from './dto/update-space.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -115,23 +120,133 @@ export class SpacesService {
     return members;
   }
 
-  async addMember(spaceId: string, email: string) {
-    // Find user by email
-    const userToAdd = await this.prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (!userToAdd) {
-      throw new Error('User not found');
+  async inviteMember(
+    spaceId: string,
+    email: string,
+    invitedById: string,
+    role = 'editor',
+  ) {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
+      throw new BadRequestException('Email is required');
     }
 
-    return this.prisma.spaceMember.create({
+    const space = await this.prisma.space.findUnique({
+      where: { id: spaceId },
+    });
+    if (!space) {
+      throw new NotFoundException('Space not found');
+    }
+
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: normalizedEmail },
+      select: { id: true },
+    });
+
+    if (existingUser) {
+      const existingMember = await this.prisma.spaceMember.findUnique({
+        where: {
+          space_id_user_id: { space_id: spaceId, user_id: existingUser.id },
+        },
+      });
+      if (existingMember || space.owner_id === existingUser.id) {
+        return {
+          status: 'accepted',
+          member: existingMember,
+          message: 'Usuário já faz parte deste espaço.',
+        };
+      }
+    }
+
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7);
+
+    const invitation = await this.prisma.spaceInvitation.create({
       data: {
         space_id: spaceId,
-        user_id: userToAdd.id,
-        role: 'editor', // default role
+        email: normalizedEmail,
+        role,
+        token: randomBytes(32).toString('hex'),
+        invited_by_id: invitedById,
+        expires_at: expiresAt,
+      },
+      include: {
+        space: { select: { id: true, name: true } },
+        invited_by: { select: { id: true, name: true, email: true } },
       },
     });
+
+    const frontendUrl = process.env.FRONTEND_URL?.replace(/\/$/, '') ?? '';
+    return {
+      ...invitation,
+      invite_url: frontendUrl
+        ? `${frontendUrl}/spaces/invitations/${invitation.token}`
+        : `/spaces/invitations/${invitation.token}`,
+    };
+  }
+
+  findInvitationsForUser(email: string) {
+    return this.prisma.spaceInvitation.findMany({
+      where: {
+        email: email.trim().toLowerCase(),
+        status: 'pending',
+        expires_at: { gt: new Date() },
+      },
+      include: {
+        space: { select: { id: true, name: true, description: true } },
+        invited_by: { select: { id: true, name: true, email: true } },
+      },
+      orderBy: { created_at: 'desc' },
+    });
+  }
+
+  async acceptInvitation(token: string, userId: string, userEmail: string) {
+    const invitation = await this.prisma.spaceInvitation.findUnique({
+      where: { token },
+    });
+    if (!invitation) {
+      throw new NotFoundException('Invitation not found');
+    }
+    if (invitation.status !== 'pending') {
+      throw new BadRequestException('Invitation is no longer pending');
+    }
+    if (invitation.expires_at < new Date()) {
+      await this.prisma.spaceInvitation.update({
+        where: { id: invitation.id },
+        data: { status: 'expired' },
+      });
+      throw new BadRequestException('Invitation has expired');
+    }
+    if (invitation.email !== userEmail.trim().toLowerCase()) {
+      throw new BadRequestException(
+        'This invitation was sent to another email',
+      );
+    }
+
+    const member = await this.prisma.$transaction(async (tx) => {
+      const createdMember = await tx.spaceMember.upsert({
+        where: {
+          space_id_user_id: { space_id: invitation.space_id, user_id: userId },
+        },
+        update: { role: invitation.role },
+        create: {
+          space_id: invitation.space_id,
+          user_id: userId,
+          role: invitation.role,
+        },
+      });
+      await tx.spaceInvitation.update({
+        where: { id: invitation.id },
+        data: {
+          status: 'accepted',
+          accepted_by_id: userId,
+          accepted_at: new Date(),
+        },
+      });
+      return createdMember;
+    });
+
+    return { status: 'accepted', member };
   }
 
   findStatuses(spaceId: string) {
