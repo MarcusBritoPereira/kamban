@@ -23,6 +23,20 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { randomBytes } from 'crypto';
 
+const ALLOWED_MIME_TYPES = [
+  'application/pdf',
+  'image/png',
+  'image/jpeg',
+  'image/gif',
+  'image/webp',
+  'text/plain',
+  'text/csv',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+];
+
 @UseGuards(JwtAuthGuard)
 @Controller('v1')
 export class AttachmentsController {
@@ -35,6 +49,13 @@ export class AttachmentsController {
     FileInterceptor('file', {
       limits: {
         fileSize: 10 * 1024 * 1024,
+      },
+      fileFilter: (req: any, file: any, cb: any) => {
+        if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+          return cb(new Error('Unsupported file type'), false);
+        }
+
+        return cb(null, true);
       },
       storage: diskStorage({
         destination: './uploads/tasks',

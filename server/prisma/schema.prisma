@@ -19,8 +19,8 @@ model User {
   name                String
   email               String    @unique
   password_hash       String?
-  auth_provider      String  @default("local")
-  provider_id        String?
+  auth_provider       String    @default("local")
+  provider_id         String?
   role                Role
   created_at          DateTime  @default(now())
   updated_at          DateTime  @updatedAt
@@ -48,13 +48,14 @@ model Space {
   description String?
   owner_id    String
 
-  owner    User           @relation("UserSpaces", fields: [owner_id], references: [id])
-  folders  Folder[]
-  tags     Tag[]
-  members  SpaceMember[]
-  statuses CustomStatus[]
+  owner         User                    @relation("UserSpaces", fields: [owner_id], references: [id])
+  folders       Folder[]
+  tags          Tag[]
+  members       SpaceMember[]
+  statuses      CustomStatus[]
   custom_fields CustomFieldDefinition[]
 
+  @@index([owner_id])
   @@map("spaces")
 }
 
@@ -69,6 +70,7 @@ model SpaceMember {
   user  User  @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([space_id, user_id])
+  @@index([user_id])
   @@map("space_members")
 }
 
@@ -81,6 +83,7 @@ model Folder {
   space Space  @relation(fields: [space_id], references: [id], onDelete: Cascade)
   lists List[]
 
+  @@index([space_id])
   @@map("folders")
 }
 
@@ -92,29 +95,30 @@ model List {
   folder Folder @relation(fields: [folder_id], references: [id], onDelete: Cascade)
   tasks  Task[]
 
+  @@index([folder_id])
   @@map("lists")
 }
 
 model Task {
-  id              String    @id @default(uuid())
-  list_id         String
-  parent_task_id  String?
-  title           String
-  description     String?
-  deadline        DateTime?
-  status          String
-  priority        String?   @default("medium")
-  estimated_hours Int?      @default(0)
-  task_value      Decimal?  @default(0) @db.Decimal(10, 2)
-  start_date      DateTime?
-  recurrence_rule String?
+  id               String    @id @default(uuid())
+  list_id          String
+  parent_task_id   String?
+  title            String
+  description      String?
+  deadline         DateTime?
+  status           String
+  priority         String?   @default("medium")
+  estimated_hours  Int?      @default(0)
+  task_value       Decimal?  @default(0) @db.Decimal(10, 2)
+  start_date       DateTime?
+  recurrence_rule  String?
   recurrence_until DateTime?
-  created_at      DateTime  @default(now())
-  updated_at      DateTime  @updatedAt
+  created_at       DateTime  @default(now())
+  updated_at       DateTime  @updatedAt
 
-  list                  List             @relation(fields: [list_id], references: [id], onDelete: Cascade)
-  parent                Task?            @relation("TaskSubtasks", fields: [parent_task_id], references: [id], onDelete: Cascade)
-  subtasks              Task[]           @relation("TaskSubtasks")
+  list                  List                   @relation(fields: [list_id], references: [id], onDelete: Cascade)
+  parent                Task?                  @relation("TaskSubtasks", fields: [parent_task_id], references: [id], onDelete: Cascade)
+  subtasks              Task[]                 @relation("TaskSubtasks")
   assignees             TaskAssignee[]
   tags                  TaskTag[]
   attachments           Attachment[]
@@ -123,8 +127,8 @@ model Task {
   checklists            TaskChecklist[]
   time_entries          TaskTimeEntry[]
   custom_field_values   TaskCustomFieldValue[]
-  blockingDependencies  TaskDependency[] @relation("BlockingTask")
-  blockedByDependencies TaskDependency[] @relation("BlockedTask")
+  blockingDependencies  TaskDependency[]       @relation("BlockingTask")
+  blockedByDependencies TaskDependency[]       @relation("BlockedTask")
 
   @@index([list_id])
   @@index([parent_task_id])
@@ -151,15 +155,15 @@ model CustomStatus {
 }
 
 model CustomFieldDefinition {
-  id          String   @id @default(uuid())
-  space_id    String
-  name        String
-  type        String
-  options     Json?
-  required    Boolean  @default(false)
-  position    Int      @default(0)
-  created_at  DateTime @default(now())
-  updated_at  DateTime @updatedAt
+  id         String   @id @default(uuid())
+  space_id   String
+  name       String
+  type       String
+  options    Json?
+  required   Boolean  @default(false)
+  position   Int      @default(0)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
   space  Space                  @relation(fields: [space_id], references: [id], onDelete: Cascade)
   values TaskCustomFieldValue[]
@@ -193,6 +197,7 @@ model TaskAssignee {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@id([task_id, user_id])
+  @@index([user_id])
   @@map("task_assignees")
 }
 
@@ -283,6 +288,7 @@ model Tag {
   space Space?    @relation(fields: [space_id], references: [id])
   tasks TaskTag[]
 
+  @@index([space_id])
   @@map("tags")
 }
 
@@ -294,6 +300,7 @@ model TaskTag {
   tag  Tag  @relation(fields: [tag_id], references: [id], onDelete: Cascade)
 
   @@id([task_id, tag_id])
+  @@index([tag_id])
   @@map("task_tags")
 }
 
@@ -307,6 +314,7 @@ model Attachment {
 
   task Task @relation(fields: [task_id], references: [id], onDelete: Cascade)
 
+  @@index([task_id])
   @@map("attachments")
 }
 
@@ -322,6 +330,7 @@ model Notification {
 
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  @@index([user_id, read, created_at])
   @@map("notifications")
 }
 
@@ -336,6 +345,7 @@ model TaskActivity {
   task Task @relation(fields: [task_id], references: [id], onDelete: Cascade)
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+  @@index([task_id, created_at])
   @@map("task_activities")
 }
 
@@ -355,6 +365,7 @@ model Company {
 
   members CompanyMember[]
 
+  @@index([status])
   @@map("companies")
 }
 
@@ -369,5 +380,6 @@ model CompanyMember {
   user    User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([company_id, user_id])
+  @@index([user_id])
   @@map("company_members")
 }
