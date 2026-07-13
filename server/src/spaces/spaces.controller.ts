@@ -9,7 +9,6 @@ import {
   UseGuards,
   Request,
   ForbiddenException,
-  NotFoundException,
 } from '@nestjs/common';
 import { SpacesService } from './spaces.service';
 import { CreateSpaceDto } from './dto/create-space.dto';
@@ -214,6 +213,18 @@ export class SpacesController {
     return this.spacesService.removeCustomField(id, fieldId);
   }
 
+  @Get('invitations/me')
+  findMyInvitations(@Request() req: any) {
+    const user = req.user as { email: string };
+    return this.spacesService.findInvitationsForUser(user.email);
+  }
+
+  @Post('invitations/:token/accept')
+  acceptInvitation(@Param('token') token: string, @Request() req: any) {
+    const user = req.user as { id: string; email: string };
+    return this.spacesService.acceptInvitation(token, user.id, user.email);
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string, @Request() req: any) {
     const user = req.user as { id: string }; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
@@ -260,15 +271,7 @@ export class SpacesController {
     if (!hasAccess)
       throw new ForbiddenException('Only Admins or Owners can invite members');
 
-    try {
-      return await this.spacesService.addMember(id, email);
-    } catch (error) {
-      const err = error as { message?: string };
-      if (err.message && err.message.includes('User not found')) {
-        throw new NotFoundException(err.message);
-      }
-      throw error;
-    }
+    return this.spacesService.inviteMember(id, email, user.id);
   }
 
   @Roles(Role.admin)

@@ -37,6 +37,8 @@ model User {
   companies      CompanyMember[]
   task_watchers  TaskWatcher[]
   time_entries   TaskTimeEntry[]
+  space_invitations_sent SpaceInvitation[] @relation("SpaceInvitationInviter")
+  space_invitations      SpaceInvitation[] @relation("SpaceInvitationAcceptedBy")
 
   @@unique([auth_provider, provider_id])
   @@map("users")
@@ -54,6 +56,7 @@ model Space {
   members       SpaceMember[]
   statuses      CustomStatus[]
   custom_fields CustomFieldDefinition[]
+  invitations   SpaceInvitation[]
 
   @@index([owner_id])
   @@map("spaces")
@@ -72,6 +75,30 @@ model SpaceMember {
   @@unique([space_id, user_id])
   @@index([user_id])
   @@map("space_members")
+}
+
+model SpaceInvitation {
+  id             String    @id @default(uuid())
+  space_id       String
+  email          String
+  role           String    @default("editor")
+  token          String    @unique
+  status         String    @default("pending")
+  invited_by_id  String
+  accepted_by_id String?
+  accepted_at    DateTime?
+  expires_at     DateTime
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  space       Space @relation(fields: [space_id], references: [id], onDelete: Cascade)
+  invited_by  User  @relation("SpaceInvitationInviter", fields: [invited_by_id], references: [id], onDelete: Cascade)
+  accepted_by User? @relation("SpaceInvitationAcceptedBy", fields: [accepted_by_id], references: [id], onDelete: SetNull)
+
+  @@index([space_id])
+  @@index([email])
+  @@index([status])
+  @@map("space_invitations")
 }
 
 model Folder {
