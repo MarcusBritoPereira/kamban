@@ -42,7 +42,15 @@ export class TasksController {
   findAll(@Request() req: any) {
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const limit = req.query.limit ? parseInt(req.query.limit) : 20;
-    return this.tasksService.findAll(req.query.list_id, page, limit);
+    return this.tasksService.findAll(req.query.list_id, page, limit, {
+      status: req.query.status,
+      priority: req.query.priority,
+      assigneeId: req.query.assignee_id,
+      tagId: req.query.tag_id,
+      search: req.query.search,
+      dueAfter: req.query.due_after,
+      dueBefore: req.query.due_before,
+    });
   }
 
   @Get('me')
