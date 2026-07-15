@@ -13,6 +13,7 @@ import { CreateChecklistItemDto } from './dto/create-checklist-item.dto';
 import { UpdateChecklistItemDto } from './dto/update-checklist-item.dto';
 import { CreateTimeEntryDto } from './dto/create-time-entry.dto';
 import { UpdateTimeEntryDto } from './dto/update-time-entry.dto';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { ActivitiesService } from '../activities/activities.service';
@@ -128,7 +129,20 @@ export class TasksService {
     return task;
   }
 
-  async findAll(listId?: string, page: number = 1, limit: number = 20) {
+  async findAll(
+    listId?: string,
+    page: number = 1,
+    limit: number = 20,
+    filters: {
+      status?: string;
+      priority?: string;
+      assigneeId?: string;
+      tagId?: string;
+      search?: string;
+      dueAfter?: string;
+      dueBefore?: string;
+    } = {},
+  ) {
     if (!listId) {
       throw new BadRequestException('list_id is required');
     }
@@ -137,10 +151,11 @@ export class TasksService {
     const safeLimit = Math.min(Math.max(limit, 1), 100);
     const skip = (safePage - 1) * safeLimit;
     const take = safeLimit;
+    const where = this.buildTaskListWhere(listId, filters);
 
     const [data, total] = await Promise.all([
       this.prisma.task.findMany({
-        where: { list_id: listId },
+        where,
         include: {
           assignees: { include: { user: true } },
           tags: { include: { tag: true } },
@@ -152,7 +167,7 @@ export class TasksService {
         take,
         orderBy: { created_at: 'desc' }, // Deterministic ordering
       }),
-      this.prisma.task.count({ where: { list_id: listId } }),
+      this.prisma.task.count({ where }),
     ]);
 
     return {
@@ -164,6 +179,64 @@ export class TasksService {
         lastPage: Math.ceil(total / safeLimit),
       },
     };
+  }
+
+  private buildTaskListWhere(
+    listId: string,
+    filters: {
+      status?: string;
+      priority?: string;
+      assigneeId?: string;
+      tagId?: string;
+      search?: string;
+      dueAfter?: string;
+      dueBefore?: string;
+    },
+  ): Prisma.TaskWhereInput {
+    const where: Prisma.TaskWhereInput = { list_id: listId };
+
+    if (filters.status) {
+      where.status = filters.status;
+    }
+
+    if (filters.priority) {
+      where.priority = filters.priority;
+    }
+
+    if (filters.assigneeId) {
+      where.assignees = { some: { user_id: filters.assigneeId } };
+    }
+
+    if (filters.tagId) {
+      where.tags = { some: { tag_id: filters.tagId } };
+    }
+
+    if (filters.search?.trim()) {
+      const term = filters.search.trim();
+      where.OR = [
+        { title: { contains: term, mode: 'insensitive' } },
+        { description: { contains: term, mode: 'insensitive' } },
+      ];
+    }
+
+    const deadline: Prisma.DateTimeNullableFilter = {};
+    if (filters.dueAfter) {
+      const dueAfter = new Date(filters.dueAfter);
+      if (!Number.isNaN(dueAfter.getTime())) {
+        deadline.gte = dueAfter;
+      }
+    }
+    if (filters.dueBefore) {
+      const dueBefore = new Date(filters.dueBefore);
+      if (!Number.isNaN(dueBefore.getTime())) {
+        deadline.lte = dueBefore;
+      }
+    }
+    if (Object.keys(deadline).length > 0) {
+      where.deadline = deadline;
+    }
+
+    return where;
   }
 
   async findAssignedTo(userId: string, page: number = 1, limit: number = 20) {
