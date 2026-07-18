@@ -1,4 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef, HostListener, NgZone } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  HostListener,
+  NgZone,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { KanbanBoardComponent } from '../../components/kanban-board/kanban-board.component';
@@ -12,8 +18,15 @@ import { DataService } from '../../services/data.service';
 @Component({
   selector: 'app-task-list-view',
   standalone: true,
-  imports: [CommonModule, KanbanBoardComponent, TaskTableComponent, TaskCalendarComponent, CreateTaskDialogComponent, InviteMemberDialogComponent],
-  templateUrl: './task-list-view.component.html'
+  imports: [
+    CommonModule,
+    KanbanBoardComponent,
+    TaskTableComponent,
+    TaskCalendarComponent,
+    CreateTaskDialogComponent,
+    InviteMemberDialogComponent,
+  ],
+  templateUrl: './task-list-view.component.html',
 })
 export class TaskListViewComponent implements OnInit {
   // ... properties
@@ -34,8 +47,8 @@ export class TaskListViewComponent implements OnInit {
     private route: ActivatedRoute,
     private dataService: DataService,
     private cdr: ChangeDetectorRef,
-    private ngZone: NgZone
-  ) { }
+    private ngZone: NgZone,
+  ) {}
 
   ngOnInit() {
     // ... params subscription
@@ -47,7 +60,7 @@ export class TaskListViewComponent implements OnInit {
     // ...
 
     // Subscribe to route params to get listId and spaceId
-    this.route.params.subscribe(params => {
+    this.route.params.subscribe((params) => {
       this.listId = params['listId'];
       this.spaceId = params['spaceId'];
 
@@ -58,7 +71,7 @@ export class TaskListViewComponent implements OnInit {
     });
 
     // Handle deep linking to task
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.subscribe((params) => {
       const openTaskId = params['openTask'];
       if (openTaskId) {
         this.dataService.getTask(openTaskId).subscribe({
@@ -68,19 +81,22 @@ export class TaskListViewComponent implements OnInit {
               // Clean up query param? Maybe not necessary, but good UX to avoid reopening on refresh
             }
           },
-          error: (err) => console.error('Error opening linked task:', err)
+          error: (err) => console.error('Error opening linked task:', err),
         });
       }
     });
   }
 
   loadListDetails() {
-    this.dataService.getList(this.listId).subscribe(list => {
+    this.dataService.getList(this.listId).subscribe((list) => {
       this.currentList = list;
       // Backup: Ensure spaceId is set if missing from route, assuming list has folder->space_id
       if (!this.spaceId && list.folder?.space_id) {
         this.spaceId = list.folder.space_id;
-        console.log('TaskListView: spaceId set from list details:', this.spaceId);
+        console.log(
+          'TaskListView: spaceId set from list details:',
+          this.spaceId,
+        );
       }
     });
   }
@@ -99,23 +115,25 @@ export class TaskListViewComponent implements OnInit {
     }
 
     this.isLoading = true;
-    this.dataService.getListTasks(this.listId, this.page, this.limit).subscribe({
-      next: (res) => {
-        if (reset) {
-          this.tasks = res.data;
-        } else {
-          this.tasks = [...this.tasks, ...res.data];
-        }
+    this.dataService
+      .getListTasks(this.listId, this.page, this.limit)
+      .subscribe({
+        next: (res) => {
+          if (reset) {
+            this.tasks = res.data;
+          } else {
+            this.tasks = [...this.tasks, ...res.data];
+          }
 
-        this.total = res.meta.total;
-        this.hasMore = this.page < res.meta.lastPage;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error loading tasks:', err);
-        this.isLoading = false;
-      }
-    });
+          this.total = res.meta.total;
+          this.hasMore = this.page < res.meta.lastPage;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Error loading tasks:', err);
+          this.isLoading = false;
+        },
+      });
   }
 
   loadMore() {
@@ -129,8 +147,8 @@ export class TaskListViewComponent implements OnInit {
   sortOrder: 'date' | 'name' = 'date';
 
   get filteredTasks() {
-    let result = this.tasks.filter(t =>
-      t.title.toLowerCase().includes(this.searchTerm.toLowerCase())
+    let result = this.tasks.filter((t) =>
+      t.title.toLowerCase().includes(this.searchTerm.toLowerCase()),
     );
 
     if (this.sortOrder === 'date') {
@@ -155,27 +173,27 @@ export class TaskListViewComponent implements OnInit {
 
   setView(view: 'list' | 'kanban' | 'calendar') {
     this.activeView = view;
-    const currentLimit = this.activeView === 'calendar' ? 1000 : this.limit;
-    if (view === 'calendar') {
-      this.loadTasks(true);
-    }
+    this.limit = view === 'calendar' ? 100 : 50;
+    this.loadTasks(true);
   }
 
   onCalendarDateClick(date: Date) {
     this.openTaskDialog(undefined, date);
   }
 
-  onTaskDrop(event: { task: any, newDate: Date }) {
-    const index = this.tasks.findIndex(t => t.id === event.task.id);
+  onTaskDrop(event: { task: any; newDate: Date }) {
+    const index = this.tasks.findIndex((t) => t.id === event.task.id);
     if (index !== -1) {
       const updatedTask = { ...this.tasks[index], deadline: event.newDate };
       this.tasks[index] = updatedTask;
       this.tasks = [...this.tasks];
     }
 
-    this.dataService.updateTask(event.task.id, { deadline: event.newDate }).subscribe({
-      error: (err) => console.error('Error rescheduling task', err)
-    });
+    this.dataService
+      .updateTask(event.task.id, { deadline: event.newDate })
+      .subscribe({
+        error: (err) => console.error('Error rescheduling task', err),
+      });
   }
 
   openTaskDialog(status?: string, date?: Date) {
