@@ -57,7 +57,7 @@
                     Espaços
                 </h3>
                 <button (click)="openCreateSpace()" class="text-gray-600 hover:text-brand-yellow transition-colors"
-                    title="Novo Espaço">+</button>
+                    title="Criar novo espaço"><span class="sr-only">Criar novo espaço</span>+</button>
             </div>
 
             <!-- Hierarchy Tree -->
@@ -79,7 +79,7 @@
                         <div class="flex items-center space-x-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
                             <button (click)="initiateCreateFolder(space.id!, $event)"
                                 class="p-1 hover:bg-white/10 rounded text-gray-400 hover:text-brand-yellow"
-                                title="Nova Pasta">
+                                title="Criar pasta neste espaço">
                                 <span class="text-xs">+</span>
                             </button>
                             <button (click)="initiateRenameSpace(space, $event)"
@@ -111,7 +111,7 @@
                                 <div class="flex items-center space-x-1 opacity-100 sm:opacity-0 sm:group-hover/folder:opacity-100 transition-opacity">
                                     <button (click)="initiateCreateList(folder, $event)"
                                         class="p-0.5 hover:bg-white/10 rounded text-gray-500 hover:text-brand-yellow"
-                                        title="Nova Lista">
+                                        title="Criar lista nesta pasta">
                                         <span class="text-xs">+</span>
                                     </button>
                                     <button (click)="initiateRenameFolder(folder, $event)"
@@ -146,7 +146,7 @@
                                         </button>
                                         <button (click)="initiateCreateTask(list, space.id!, $event)"
                                             class="p-0.5 hover:bg-white/10 rounded text-green-500 hover:text-green-400"
-                                            title="Nova Tarefa">
+                                            title="Criar tarefa nesta lista">
                                             <span class="text-[10px]">✓</span>
                                         </button>
                                         <button (click)="deleteList(list.id!, folder.id!, $event)"
@@ -159,14 +159,14 @@
                                 <!-- Empty State for Folder -->
                                 <div *ngIf="getListsForFolder(folder.id!).length === 0"
                                     class="px-3 py-1 text-xs text-gray-600 italic">
-                                    Sem listas
+                                    Sem listas — clique em +
                                 </div>
                             </div>
                         </div>
                         <!-- Empty State for Space -->
                         <div *ngIf="getFoldersForSpace(space.id!).length === 0"
                             class="px-3 py-1 text-xs text-gray-600 italic">
-                            Sem pastas
+                            Sem pastas — clique em +
                         </div>
                     </div>
                 </div>

@@ -13,7 +13,7 @@
                 </span>
                 <span class="text-gray-500 text-sm font-medium">{{ col.items.length }}</span>
             </div>
-            <button (click)="onAddClick(col.id)" class="text-gray-400 hover:text-gray-900 transition-colors">
+            <button (click)="onAddClick(col.id)" class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-900 transition-colors" [attr.aria-label]="'Criar tarefa em '+ col.title" title="Criar tarefa nesta etapa">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
@@ -22,6 +22,12 @@
         <div cdkDropList [id]="col.id" [cdkDropListData]="col.items"
             class="flex-1 space-y-3 overflow-y-auto min-h-[100px] pr-2 custom-scrollbar"
             (cdkDropListDropped)="drop($event, col.id)">
+
+            <button *ngIf="col.items.length === 0" type="button" (click)="onAddClick(col.id)"
+                class="w-full rounded-xl border-2 border-dashed border-gray-200 bg-gray-50 p-4 text-left text-sm text-gray-500 transition-colors hover:border-pink-200 hover:bg-pink-50 hover:text-pink-700">
+                <span class="block font-bold text-gray-700">Nenhuma tarefa aqui</span>
+                <span>Clique para criar uma tarefa em {{ col.title }}.</span>
+            </button>
 
             <div *ngFor="let item of col.items; trackBy: trackByTask" cdkDrag [cdkDragData]="item"
                 (click)="taskClick.emit(item)"
