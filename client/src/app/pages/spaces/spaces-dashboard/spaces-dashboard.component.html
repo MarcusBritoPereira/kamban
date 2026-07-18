@@ -1,12 +1,51 @@
-<div class="p-8 h-full bg-gray-50 font-sans overflow-y-auto">
-    <div class="max-w-7xl mx-auto">
-        <header class="flex justify-between items-center mb-10">
+<div class="p-4 sm:p-6 lg:p-8 h-full bg-gray-50 font-sans overflow-y-auto">
+    <div class="max-w-7xl mx-auto space-y-8">
+        <section class="overflow-hidden rounded-3xl border border-pink-100 bg-white shadow-sm">
+            <div class="grid gap-6 p-6 sm:p-8 lg:grid-cols-[1.4fr_1fr] lg:items-center">
+                <div>
+                    <span class="inline-flex items-center gap-2 rounded-full bg-pink-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-pink-700">
+                        <i class="fas fa-lightbulb"></i> Primeiro acesso
+                    </span>
+                    <h1 class="mt-4 text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Comece organizando seu trabalho em 3 passos</h1>
+                    <p class="mt-3 max-w-2xl text-base leading-7 text-gray-600">No Kamban, um <strong>Espaço</strong> representa uma área ou cliente. Dentro dele você cria <strong>Pastas</strong>, depois <strong>Listas</strong> e finalmente as tarefas do dia a dia.</p>
+                    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+                        <button (click)="openCreateSpaceDialog()"
+                            class="inline-flex items-center justify-center rounded-xl bg-pink-600 px-5 py-3 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-pink-700 hover:shadow-lg">
+                            <i class="fas fa-plus mr-2"></i> Criar primeiro espaço
+                        </button>
+                        <a href="#spaces-list" class="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-50">
+                            Ver espaços existentes
+                        </a>
+                    </div>
+                </div>
+
+                <div class="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                    <div class="rounded-2xl border border-gray-100 bg-gray-50 p-4">
+                        <div class="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-pink-100 font-bold text-pink-700">1</div>
+                        <h3 class="font-bold text-gray-900">Crie um Espaço</h3>
+                        <p class="mt-1 text-sm text-gray-500">Ex.: Marketing, Cliente XPTO ou Operação.</p>
+                    </div>
+                    <div class="rounded-2xl border border-gray-100 bg-gray-50 p-4">
+                        <div class="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-purple-100 font-bold text-purple-700">2</div>
+                        <h3 class="font-bold text-gray-900">Adicione Pastas e Listas</h3>
+                        <p class="mt-1 text-sm text-gray-500">Agrupe projetos e defina filas como Backlog, Fazer e Concluído.</p>
+                    </div>
+                    <div class="rounded-2xl border border-gray-100 bg-gray-50 p-4">
+                        <div class="mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-yellow-100 font-bold text-yellow-700">3</div>
+                        <h3 class="font-bold text-gray-900">Crie tarefas</h3>
+                        <p class="mt-1 text-sm text-gray-500">Atribua responsáveis, prazos e acompanhe tudo no quadro.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <header id="spaces-list" class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Meus Espaços</h1>
-                <p class="text-gray-500 mt-1">Gerencie seus projetos e equipes</p>
+                <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Meus Espaços</h2>
+                <p class="text-gray-500 mt-1">Escolha um espaço para continuar ou crie um novo para começar.</p>
             </div>
             <button (click)="openCreateSpaceDialog()"
-                class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 px-6 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 active:translate-y-0 flex items-center">
+                class="inline-flex items-center justify-center rounded-xl bg-pink-600 px-5 py-3 text-sm font-bold text-white shadow-md transition-all hover:-translate-y-0.5 hover:bg-pink-700 hover:shadow-lg">
                 <i class="fas fa-plus mr-2"></i> Novo Espaço
             </button>
         </header>
@@ -28,14 +67,14 @@
                         </div>
                         <div class="flex space-x-2">
                             <button (click)="$event.stopPropagation(); openEditDialog(space)"
-                                class="text-gray-400 hover:text-purple-600 p-1 rounded-md transition-colors">
+                                class="text-gray-400 hover:text-purple-600 p-1 rounded-md transition-colors" aria-label="Editar espaço">
                                 <i class="fas fa-cog"></i>
                             </button>
                         </div>
                     </div>
 
                     <h3 class="text-xl font-bold text-gray-900 mb-2 truncate pr-4">{{ space.name }}</h3>
-                    <p class="text-gray-500 text-sm mb-6 line-clamp-2 h-10">{{ space.description || 'Sem descrição' }}
+                    <p class="text-gray-500 text-sm mb-6 line-clamp-2 h-10">{{ space.description || 'Sem descrição — clique em editar para explicar o objetivo deste espaço.' }}
                     </p>
 
                     <div class="flex items-center justify-between pt-4 border-t border-gray-100">
@@ -44,7 +83,7 @@
                         </span>
                         <div
                             class="flex items-center text-purple-600 font-medium text-sm group-hover:translate-x-1 transition-transform">
-                            Acessar <i class="fas fa-arrow-right ml-2"></i>
+                            Abrir espaço <i class="fas fa-arrow-right ml-2"></i>
                         </div>
                     </div>
                 </div>
@@ -52,16 +91,15 @@
 
             <!-- Empty State -->
             <div *ngIf="spaces().length === 0"
-                class="col-span-full py-20 bg-white rounded-2xl border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-center">
-                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-                    <i class="fas fa-rocket text-2xl text-gray-400"></i>
+                class="col-span-full rounded-3xl border-2 border-dashed border-pink-200 bg-white px-6 py-16 text-center shadow-sm">
+                <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-pink-50">
+                    <i class="fas fa-rocket text-2xl text-pink-500"></i>
                 </div>
-                <h3 class="text-xl font-bold text-gray-900 mb-2">Nenhum espaço encontrado</h3>
-                <p class="text-gray-500 mb-6 max-w-md">Crie seu primeiro espaço para começar a organizar suas tarefas e
-                    projetos.</p>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">Você ainda não tem espaços</h3>
+                <p class="mx-auto mb-6 max-w-lg text-gray-500">Crie um espaço para separar um cliente, equipe ou projeto. Depois o sistema vai guiar você para criar uma pasta, uma lista e a primeira tarefa.</p>
                 <button (click)="openCreateSpaceDialog()"
-                    class="text-purple-600 hover:text-purple-700 font-medium transition-colors">
-                    Criar meu primeiro espaço
+                    class="inline-flex items-center justify-center rounded-xl bg-pink-600 px-5 py-3 text-sm font-bold text-white shadow-md transition-all hover:bg-pink-700">
+                    <i class="fas fa-plus mr-2"></i> Criar meu primeiro espaço
                 </button>
             </div>
         </div>

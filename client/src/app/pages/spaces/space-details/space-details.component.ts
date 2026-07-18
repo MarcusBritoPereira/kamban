@@ -10,15 +10,15 @@ import { SimpleInputDialogComponent } from '../../../components/dialogs/simple-i
     standalone: true,
     imports: [CommonModule, RouterModule, SimpleInputDialogComponent],
     template: `
-    <div class="h-full bg-white p-8 overflow-y-auto">
-       <header class="flex justify-between items-center mb-6">
+    <div class="h-full bg-white p-4 sm:p-6 lg:p-8 overflow-y-auto">
+       <header class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-6">
           <div class="flex items-center">
              <div class="mr-4 cursor-pointer text-gray-400 hover:text-gray-600" (click)="goBack()">
                 <i class="fas fa-arrow-left text-lg"></i>
              </div>
              <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ space()?.name || 'Espaço' }}</h1>
-                <p class="text-sm text-gray-500">Folders</p>
+                <p class="text-sm text-gray-500">Passo 2 de 3: crie uma pasta para agrupar listas e tarefas</p>
              </div>
           </div>
           <button *ngIf="canEdit()" (click)="openCreateFolderDialog()"
@@ -30,7 +30,7 @@ import { SimpleInputDialogComponent } from '../../../components/dialogs/simple-i
        <!-- Folders Grid -->
        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <div *ngFor="let folder of folders()" 
-               class="bg-white border border-gray-200 rounded-lg p-4 flex items-center hover:shadow-md cursor-pointer transition-shadow group"
+               class="bg-white border border-gray-200 rounded-xl p-5 flex items-center hover:shadow-md cursor-pointer transition-shadow group"
                (click)="openFolder(folder)">
              <i class="fas fa-folder text-xl text-gray-500 mr-3 group-hover:text-gray-700"></i>
              <span class="font-medium text-gray-700 group-hover:text-gray-900 truncate">{{ folder.name }}</span>
@@ -41,8 +41,8 @@ import { SimpleInputDialogComponent } from '../../../components/dialogs/simple-i
               <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
                 <i class="fas fa-folder-plus text-2xl text-pink-500"></i>
               </div>
-              <h3 class="text-lg font-bold text-gray-800 mb-2">Crie a primeira pasta deste espaço</h3>
-              <p class="text-gray-500 mb-6 max-w-md mx-auto">Pastas agrupam listas e mantêm seus projetos organizados antes da criação das tarefas.</p>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Próximo passo: crie a primeira pasta</h3>
+              <p class="text-gray-500 mb-6 max-w-md mx-auto">Use uma pasta para organizar um projeto, cliente ou etapa. Depois você vai criar listas dentro dela.</p>
               <button *ngIf="canEdit()" (click)="openCreateFolderDialog()"
                 class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 px-5 rounded-lg transition-all shadow-md hover:shadow-lg">
                 Criar pasta

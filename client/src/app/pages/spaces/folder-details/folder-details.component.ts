@@ -9,15 +9,15 @@ import { SimpleInputDialogComponent } from '../../../components/dialogs/simple-i
     standalone: true,
     imports: [CommonModule, RouterModule, SimpleInputDialogComponent],
     template: `
-    <div class="h-full bg-white p-8 overflow-y-auto">
-       <header class="flex justify-between items-center mb-6">
+    <div class="h-full bg-white p-4 sm:p-6 lg:p-8 overflow-y-auto">
+       <header class="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center mb-6">
           <div class="flex items-center">
              <div class="mr-4 cursor-pointer text-gray-400 hover:text-gray-600" (click)="goBack()">
                 <i class="fas fa-arrow-left text-lg"></i>
              </div>
              <div>
                 <h1 class="text-2xl font-bold text-gray-900">{{ folder()?.name || 'Pasta' }}</h1>
-                <p class="text-sm text-gray-500">{{ space()?.name }} / Listas</p>
+                <p class="text-sm text-gray-500">Passo 3 de 3: listas guardam as tarefas do quadro</p>
              </div>
           </div>
           <button (click)="openCreateListDialog()"
@@ -40,8 +40,8 @@ import { SimpleInputDialogComponent } from '../../../components/dialogs/simple-i
               <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
                 <i class="fas fa-list text-2xl text-pink-500"></i>
               </div>
-              <h3 class="text-lg font-bold text-gray-800 mb-2">Agora crie uma lista</h3>
-              <p class="text-gray-500 mb-6 max-w-md mx-auto">Listas são onde as tarefas e subtarefas serão criadas.</p>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Último passo: crie uma lista</h3>
+              <p class="text-gray-500 mb-6 max-w-md mx-auto">Comece com nomes simples como Backlog, Fazer, Em andamento ou Concluído. Em seguida, adicione a primeira tarefa.</p>
               <button (click)="openCreateListDialog()"
                 class="bg-pink-600 hover:bg-pink-700 text-white font-bold py-2.5 px-5 rounded-lg transition-all shadow-md hover:shadow-lg">
                 Criar lista
