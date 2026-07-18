@@ -31,7 +31,10 @@ export class TasksService {
       createTaskDto;
 
     // Validate list
-    const list = await this.prisma.list.findUnique({ where: { id: list_id } });
+    const list = await this.prisma.list.findUnique({
+      where: { id: list_id },
+      include: { folder: { select: { space_id: true } } },
+    });
     if (!list) {
       throw new NotFoundException(`List with ID ${list_id} not found`);
     }
@@ -62,6 +65,10 @@ export class TasksService {
     if (assigneeIds && Array.isArray(assigneeIds) && assigneeIds.length > 0) {
       const validIds = assigneeIds.filter((id) => id && id.length > 0);
       if (validIds.length > 0) {
+        await this.ensureUsersCanBeAssignedToSpace(
+          validIds,
+          list.folder.space_id,
+        );
         taskData.assignees = {
           create: validIds.map((userId) => ({
             user: { connect: { id: userId } },
@@ -91,6 +98,8 @@ export class TasksService {
     const task = await this.prisma.task.create({
       data: taskData,
       include: {
+        assignees: { include: { user: true } },
+        tags: { include: { tag: true } },
         list: {
           include: {
             folder: {
@@ -389,7 +398,11 @@ export class TasksService {
     // 1. Fetch current task to compare
     const currentTask = await this.prisma.task.findUnique({
       where: { id },
-      include: { assignees: true, tags: true },
+      include: {
+        assignees: true,
+        tags: true,
+        list: { include: { folder: true } },
+      },
     });
     if (!currentTask) throw new NotFoundException('Task not found');
 
@@ -398,6 +411,10 @@ export class TasksService {
 
     // Handle Assignees
     if (assigneeIds && Array.isArray(assigneeIds)) {
+      await this.ensureUsersCanBeAssignedToSpace(
+        assigneeIds,
+        currentTask.list.folder.space_id,
+      );
       const currentAssigneeIds =
         currentTask.assignees.map((a) => a.user_id) || [];
       newAssignees = assigneeIds.filter(
@@ -457,6 +474,11 @@ export class TasksService {
         where: { id },
         data: updateData,
         include: {
+          assignees: { include: { user: true } },
+          tags: { include: { tag: true } },
+          attachments: true,
+          subtasks: true,
+          checklists: { include: { items: { orderBy: { position: 'asc' } } } },
           list: {
             include: {
               folder: {
@@ -516,8 +538,6 @@ export class TasksService {
         });
       }
 
-      return updatedTask;
-
       // Notify Creator of generic update
       await this.notifyCreator(
         id,
@@ -533,6 +553,34 @@ export class TasksService {
     } catch (error) {
       console.error('Error updating task:', error);
       throw error;
+    }
+  }
+
+  private async ensureUsersCanBeAssignedToSpace(
+    userIds: string[],
+    spaceId: string,
+  ) {
+    const uniqueUserIds = [...new Set(userIds.filter(Boolean))];
+    if (uniqueUserIds.length === 0) return;
+
+    const space = await this.prisma.space.findUnique({
+      where: { id: spaceId },
+      select: { owner_id: true },
+    });
+    if (!space) throw new NotFoundException('Space not found');
+
+    const memberCount = await this.prisma.spaceMember.count({
+      where: {
+        space_id: spaceId,
+        user_id: { in: uniqueUserIds.filter((id) => id !== space.owner_id) },
+      },
+    });
+    const ownerIncluded = uniqueUserIds.includes(space.owner_id) ? 1 : 0;
+
+    if (memberCount + ownerIncluded !== uniqueUserIds.length) {
+      throw new BadRequestException(
+        'Assignees must be members of the task space',
+      );
     }
   }
 
